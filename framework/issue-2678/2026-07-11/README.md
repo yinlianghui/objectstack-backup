@@ -12,12 +12,19 @@
 This archive contains test evidence only. No product code was changed as part
 of this QA run.
 
-## Documents
+## Final deliverable
 
-- [Chinese test plan](test-plan.md)
-- [Chinese execution report](qa-report.md)
-- [Chinese issue reproducibility audit plan](issue-repro-audit-plan.md)
-- [Chinese issue reproducibility audit final report](issue-repro-audit-report.md)
+- [Final QA report (Chinese)](final-qa-report.md)
+
+## Archived working evidence
+
+The files below preserve execution and audit detail. They are not separate
+final deliverables and are not required to understand the final conclusion.
+
+- [Original test plan](test-plan.md)
+- [Detailed execution record](qa-report.md)
+- [Issue reproducibility audit plan](issue-repro-audit-plan.md)
+- [Issue reproducibility audit record](issue-repro-audit-report.md)
 - [Core write-path audit](audit-core.md)
 - [Cancellation audit](audit-cancellation.md)
 - [Peripheral findings audit](audit-peripheral.md)

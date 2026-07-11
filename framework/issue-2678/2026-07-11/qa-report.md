@@ -16,6 +16,8 @@
 - 活跃 PID：无
 - 最近更新时间：2026-07-11 11:17 CST
 
+归档说明：`commands/*`、`summary/*` 与 `/tmp/objectstack-*` 是执行期间的临时工作产物，已按清理要求删除且未收入公开存证仓库；相关命令结果、计数、Finding 和判定已汇总在本报告。公开耐久截图位于同目录的 `screenshots/`。
+
 ## #2678 验收矩阵
 
 | 验收条件 | 测试 ID | 状态 | 证据/结论 |
@@ -110,18 +112,18 @@
 
 | 截图 | 测试 ID | 证明内容 |
 |---|---|---|
-| [`assets/pr2680-ui/ui-01-field-mapping.png`](assets/pr2680-ui/ui-01-field-mapping.png) | UI-01 | CSV 的 `name/status/industry/annual_revenue` 四列被自动映射到客户名称、生命周期、行业、年收入。 |
-| [`assets/pr2680-ui/ui-01-success-result.png`](assets/pr2680-ui/ui-01-success-result.png) | UI-01 | 最小补证数据 5/5 成功，结果页显示“新建 5 条”。 |
-| [`assets/pr2680-ui/ui-03-upsert-invalid-result.png`](assets/pr2680-ui/ui-03-upsert-invalid-result.png) | UI-03 | Upsert 结果为新建 1、更新 1、跳过 2，并保留原 CSV 第 3 行非法 status 错误。 |
-| [`assets/pr2680-ui/ui-04-same-file-lookup-reference-not-found.png`](assets/pr2680-ui/ui-04-same-file-lookup-reference-not-found.png) | UI-04 / F-IMP-001 | 已有父项可解析、新父项可创建，但同文件后续子项引用新父项时报 `no showcase_category matches`，结果为新建 2、跳过 1。 |
-| [`assets/pr2680-ui/ui-05-cancel-button-visible.png`](assets/pr2680-ui/ui-05-cancel-button-visible.png) | UI-05 / F-UI-001 | 50,000 行后台任务运行期间，`导入中…` 左侧取消控件可见；截图后由本 Chat 自动化立即点击。 |
-| [`assets/pr2680-ui/ui-05-cancel-confirmed.png`](assets/pr2680-ui/ui-05-cancel-confirmed.png) | UI-05 / F-UI-001 | 点击后 UI 显示“导入已取消 / 已导入 0 条”，证明取消动作由本 Chat 完成。产品未弹出额外原生 confirm 对话框（`getJsDialog()` 返回空），因此不存在需要用户代点的确认框。 |
-| [`assets/pr2680-ui/ui-05-cancelled-job-history-succeeded.png`](assets/pr2680-ui/ui-05-cancelled-job-history-succeeded.png) | UI-05 / F-UI-001 | 同一补证栈的历史页仍显示 50,000/50,000、成功、新建 50,000 条；SQLite 对应最新作业 `imp_mrfrz30oyug0wjrv` 为 `succeeded`，业务表 `QA-EVID-UI05B-*` 为 50,000 条。 |
-| [`assets/pr2680-ui/ui-06-automation-off.png`](assets/pr2680-ui/ui-06-automation-off.png) | UI-06 | “运行自动化与触发器”处于关闭状态。 |
-| [`assets/pr2680-ui/ui-06-automation-on.png`](assets/pr2680-ui/ui-06-automation-on.png) | UI-06 | 同一预览数据下“运行自动化与触发器”处于开启状态。 |
-| [`assets/pr2680-ui/f-ui-002-capability-projects-page-not-found.png`](assets/pr2680-ui/f-ui-002-capability-projects-page-not-found.png) | F-UI-002 | 从 Capability Map 点击 `Projects (backbone)` 后进入嵌套错误 URL并显示 `Page not found`。 |
+| [`screenshots/ui-01-field-mapping.png`](screenshots/ui-01-field-mapping.png) | UI-01 | CSV 的 `name/status/industry/annual_revenue` 四列被自动映射到客户名称、生命周期、行业、年收入。 |
+| [`screenshots/ui-01-success-result.png`](screenshots/ui-01-success-result.png) | UI-01 | 最小补证数据 5/5 成功，结果页显示“新建 5 条”。 |
+| [`screenshots/ui-03-upsert-invalid-result.png`](screenshots/ui-03-upsert-invalid-result.png) | UI-03 | Upsert 结果为新建 1、更新 1、跳过 2，并保留原 CSV 第 3 行非法 status 错误。 |
+| [`screenshots/ui-04-same-file-lookup-reference-not-found.png`](screenshots/ui-04-same-file-lookup-reference-not-found.png) | UI-04 / F-IMP-001 | 已有父项可解析、新父项可创建，但同文件后续子项引用新父项时报 `no showcase_category matches`，结果为新建 2、跳过 1。 |
+| [`screenshots/ui-05-cancel-button-visible.png`](screenshots/ui-05-cancel-button-visible.png) | UI-05 / F-UI-001 | 50,000 行后台任务运行期间，`导入中…` 左侧取消控件可见；截图后由本 Chat 自动化立即点击。 |
+| [`screenshots/ui-05-cancel-confirmed.png`](screenshots/ui-05-cancel-confirmed.png) | UI-05 / F-UI-001 | 点击后 UI 显示“导入已取消 / 已导入 0 条”，证明取消动作由本 Chat 完成。产品未弹出额外原生 confirm 对话框（`getJsDialog()` 返回空），因此不存在需要用户代点的确认框。 |
+| [`screenshots/ui-05-cancelled-job-history-succeeded.png`](screenshots/ui-05-cancelled-job-history-succeeded.png) | UI-05 / F-UI-001 | 同一补证栈的历史页仍显示 50,000/50,000、成功、新建 50,000 条；SQLite 对应最新作业 `imp_mrfrz30oyug0wjrv` 为 `succeeded`，业务表 `QA-EVID-UI05B-*` 为 50,000 条。 |
+| [`screenshots/ui-06-automation-off.png`](screenshots/ui-06-automation-off.png) | UI-06 | “运行自动化与触发器”处于关闭状态。 |
+| [`screenshots/ui-06-automation-on.png`](screenshots/ui-06-automation-on.png) | UI-06 | 同一预览数据下“运行自动化与触发器”处于开启状态。 |
+| [`screenshots/f-ui-002-capability-projects-page-not-found.png`](screenshots/f-ui-002-capability-projects-page-not-found.png) | F-UI-002 | 从 Capability Map 点击 `Projects (backbone)` 后进入嵌套错误 URL并显示 `Page not found`。 |
 
-以上 10 张 PNG 永久保留在 `docs/superpowers/reports/assets/pr2680-ui/`，已逐张在本 Chat 展示；后续清理不得删除。
+以上 10 张 PNG 永久保留在本公开存证目录的 `screenshots/`，已逐张在本 Chat 展示；后续清理不得删除。
 
 | 测试 | UI 结果 | API/数据库对账 | 状态 |
 |---|---|---|---|
@@ -228,6 +230,6 @@ UI follow-up 收尾在停止 3000/5180 服务后再次执行同一组命令（20
 - 本轮只启动 PTY session `68683`（framework fresh backend）与 `20427`（ObjectUI Vite），只关闭这两个 session；3000/5180 最终均无监听。
 - fresh OS_HOME `/var/folders/h7/hkxx21nd4wx85njz64cl0ht00000gn/T/objectstack-dev-hZ4BhE` 因进程 SIGINT 后 exit 1 未自动清理，确认端口已释放后手工删除本任务专属目录（126 MiB）。
 - `/tmp/objectstack-pr2680-qa-screenshots` fixture/log 目录已删除；Codex 内置浏览器本轮唯一 localhost tab 已 finalize 关闭。
-- 永久保留 `docs/superpowers/reports/assets/pr2680-ui/` 的 10 张 1280×720 PNG；没有其他截图、fixture、日志或数据库残留。
+- 永久保留本公开存证目录 `screenshots/` 的 10 张 1280×720 PNG；没有其他截图、fixture、日志或数据库残留。
 - Framework 只保留既有计划、本报告和上述截图；ObjectUI 保持 detached `80901aad44ff3beeaf7882ec3367da934325b2f2` 且源码工作树无修改。
 - 截图补证未修改产品代码、测试代码、GitHub Issue/评论，也未创建提交。

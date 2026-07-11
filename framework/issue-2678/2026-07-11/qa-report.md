@@ -112,16 +112,16 @@
 
 | 截图 | 测试 ID | 证明内容 |
 |---|---|---|
-| [`screenshots/ui-01-field-mapping.png`](screenshots/ui-01-field-mapping.png) | UI-01 | CSV 的 `name/status/industry/annual_revenue` 四列被自动映射到客户名称、生命周期、行业、年收入。 |
-| [`screenshots/ui-01-success-result.png`](screenshots/ui-01-success-result.png) | UI-01 | 最小补证数据 5/5 成功，结果页显示“新建 5 条”。 |
-| [`screenshots/ui-03-upsert-invalid-result.png`](screenshots/ui-03-upsert-invalid-result.png) | UI-03 | Upsert 结果为新建 1、更新 1、跳过 2，并保留原 CSV 第 3 行非法 status 错误。 |
-| [`screenshots/ui-04-same-file-lookup-reference-not-found.png`](screenshots/ui-04-same-file-lookup-reference-not-found.png) | UI-04 / F-IMP-001 | 已有父项可解析、新父项可创建，但同文件后续子项引用新父项时报 `no showcase_category matches`，结果为新建 2、跳过 1。 |
-| [`screenshots/ui-05-cancel-button-visible.png`](screenshots/ui-05-cancel-button-visible.png) | UI-05 / F-UI-001 | 50,000 行后台任务运行期间，`导入中…` 左侧取消控件可见；截图后由本 Chat 自动化立即点击。 |
-| [`screenshots/ui-05-cancel-confirmed.png`](screenshots/ui-05-cancel-confirmed.png) | UI-05 / F-UI-001 | 点击后 UI 显示“导入已取消 / 已导入 0 条”，证明取消动作由本 Chat 完成。产品未弹出额外原生 confirm 对话框（`getJsDialog()` 返回空），因此不存在需要用户代点的确认框。 |
-| [`screenshots/ui-05-cancelled-job-history-succeeded.png`](screenshots/ui-05-cancelled-job-history-succeeded.png) | UI-05 / F-UI-001 | 同一补证栈的历史页仍显示 50,000/50,000、成功、新建 50,000 条；SQLite 对应最新作业 `imp_mrfrz30oyug0wjrv` 为 `succeeded`，业务表 `QA-EVID-UI05B-*` 为 50,000 条。 |
-| [`screenshots/ui-06-automation-off.png`](screenshots/ui-06-automation-off.png) | UI-06 | “运行自动化与触发器”处于关闭状态。 |
-| [`screenshots/ui-06-automation-on.png`](screenshots/ui-06-automation-on.png) | UI-06 | 同一预览数据下“运行自动化与触发器”处于开启状态。 |
-| [`screenshots/f-ui-002-capability-projects-page-not-found.png`](screenshots/f-ui-002-capability-projects-page-not-found.png) | F-UI-002 | 从 Capability Map 点击 `Projects (backbone)` 后进入嵌套错误 URL并显示 `Page not found`。 |
+| [![UI-01 field mapping](screenshots/ui-01-field-mapping.png)](screenshots/ui-01-field-mapping.png) | UI-01 | CSV 的 `name/status/industry/annual_revenue` 四列被自动映射到客户名称、生命周期、行业、年收入。 |
+| [![UI-01 success result](screenshots/ui-01-success-result.png)](screenshots/ui-01-success-result.png) | UI-01 | 最小补证数据 5/5 成功，结果页显示“新建 5 条”。 |
+| [![UI-03 upsert invalid result](screenshots/ui-03-upsert-invalid-result.png)](screenshots/ui-03-upsert-invalid-result.png) | UI-03 | Upsert 结果为新建 1、更新 1、跳过 2，并保留原 CSV 第 3 行非法 status 错误。 |
+| [![UI-04 same-file lookup failure](screenshots/ui-04-same-file-lookup-reference-not-found.png)](screenshots/ui-04-same-file-lookup-reference-not-found.png) | UI-04 / F-IMP-001 | 已有父项可解析、新父项可创建，但同文件后续子项引用新父项时报 `no showcase_category matches`，结果为新建 2、跳过 1。 |
+| [![UI-05 cancel button visible](screenshots/ui-05-cancel-button-visible.png)](screenshots/ui-05-cancel-button-visible.png) | UI-05 / F-UI-001 | 50,000 行后台任务运行期间，`导入中…` 左侧取消控件可见；截图后由本 Chat 自动化立即点击。 |
+| [![UI-05 cancel confirmed](screenshots/ui-05-cancel-confirmed.png)](screenshots/ui-05-cancel-confirmed.png) | UI-05 / F-UI-001 | 点击后 UI 显示“导入已取消 / 已导入 0 条”，证明取消动作由本 Chat 完成。产品未弹出额外原生 confirm 对话框（`getJsDialog()` 返回空），因此不存在需要用户代点的确认框。 |
+| [![UI-05 history succeeded](screenshots/ui-05-cancelled-job-history-succeeded.png)](screenshots/ui-05-cancelled-job-history-succeeded.png) | UI-05 / F-UI-001 | 同一补证栈的历史页仍显示 50,000/50,000、成功、新建 50,000 条；SQLite 对应最新作业 `imp_mrfrz30oyug0wjrv` 为 `succeeded`，业务表 `QA-EVID-UI05B-*` 为 50,000 条。 |
+| [![UI-06 automation off](screenshots/ui-06-automation-off.png)](screenshots/ui-06-automation-off.png) | UI-06 | “运行自动化与触发器”处于关闭状态。 |
+| [![UI-06 automation on](screenshots/ui-06-automation-on.png)](screenshots/ui-06-automation-on.png) | UI-06 | 同一预览数据下“运行自动化与触发器”处于开启状态。 |
+| [![Capability Map page not found](screenshots/f-ui-002-capability-projects-page-not-found.png)](screenshots/f-ui-002-capability-projects-page-not-found.png) | F-UI-002 | 从 Capability Map 点击 `Projects (backbone)` 后进入嵌套错误 URL并显示 `Page not found`。 |
 
 以上 10 张 PNG 永久保留在本公开存证目录的 `screenshots/`，已逐张在本 Chat 展示；后续清理不得删除。
 

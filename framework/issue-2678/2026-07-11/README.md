@@ -16,6 +16,7 @@ of this QA run.
 
 - [Chinese test plan](test-plan.md)
 - [Chinese execution report](qa-report.md)
+- [Chinese issue reproducibility audit plan](issue-repro-audit-plan.md)
 - [SHA-256 integrity manifest](SHA256SUMS)
 
 ## Screenshot mapping
@@ -43,4 +44,3 @@ of this QA run.
 The screenshots support the written reproductions; the expected/actual result,
 preconditions, and stability rules remain documented in the linked issues and
 the execution report.
-

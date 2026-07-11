@@ -17,6 +17,10 @@ of this QA run.
 - [Chinese test plan](test-plan.md)
 - [Chinese execution report](qa-report.md)
 - [Chinese issue reproducibility audit plan](issue-repro-audit-plan.md)
+- [Chinese issue reproducibility audit final report](issue-repro-audit-report.md)
+- [Core write-path audit](audit-core.md)
+- [Cancellation audit](audit-cancellation.md)
+- [Peripheral findings audit](audit-peripheral.md)
 - [SHA-256 integrity manifest](SHA256SUMS)
 
 ## Screenshot mapping

@@ -1,5 +1,9 @@
-ff57900afa91e976b3d8c71ae57a91ab3a676375b6448715ea152b852d6a396e  framework/issue-2678/2026-07-11/README.md
+315d1297b3c535a43b4c6444442f664e75b3e2881d42ce48d1ad15509d15b827  framework/issue-2678/2026-07-11/README.md
+37d05cb609d5ebe20e2c4555b9e4f7d88f0f506faff7a3ff27637ea07debed0f  framework/issue-2678/2026-07-11/audit-cancellation.md
+afbaf5e7e444972cbd53a2a11b3ae47741ad04dad9e07f1bf9e3384693f035ac  framework/issue-2678/2026-07-11/audit-core.md
+40bcacd4f47c1b4649b755d31a4010e33ff6e16e6d5e3a801c50ebefafda093b  framework/issue-2678/2026-07-11/audit-peripheral.md
 30753c80cde9cc450905b4308f332d397c8175ffb21d647742496a7058e7f496  framework/issue-2678/2026-07-11/issue-repro-audit-plan.md
+43dccdce3b5f991ff4ca5088f7ffb4f7864488a4c6e73e7d448171fbbd6dcfed  framework/issue-2678/2026-07-11/issue-repro-audit-report.md
 c17ea24b082cc5df8322ee6f402f691f8062f749aef1fe695d7ea18943762a78  framework/issue-2678/2026-07-11/qa-report.md
 7dbe55cf926397e3fdab6527c8ca8d81c52523c04539c7b0968200c1335996f6  framework/issue-2678/2026-07-11/screenshots/f-ui-002-capability-projects-page-not-found.png
 a7b0513dd8a6f08c052260704c79936211912a884ee702b9c20fdd8a921de0a4  framework/issue-2678/2026-07-11/screenshots/ui-01-field-mapping.png

@@ -7,5 +7,5 @@ not contain product fixes.
 ## Evidence sets
 
 - [`framework/issue-2678/2026-07-11/`](framework/issue-2678/2026-07-11/README.md)
-  — QA for objectstack-ai/framework issue #2678 and PR #2680.
-
+  — QA for objectstack-ai/framework issue #2678 and PR #2680, including the
+  final reproducibility audit of the 10 follow-up issues.

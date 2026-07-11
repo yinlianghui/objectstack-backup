@@ -1,0 +1,13 @@
+5f3190d652e16a56f636194c3a7b077198b2cca5e53f01ea363e0d83503ea5b5  framework/issue-2678/2026-07-11/README.md
+c17ea24b082cc5df8322ee6f402f691f8062f749aef1fe695d7ea18943762a78  framework/issue-2678/2026-07-11/qa-report.md
+7dbe55cf926397e3fdab6527c8ca8d81c52523c04539c7b0968200c1335996f6  framework/issue-2678/2026-07-11/screenshots/f-ui-002-capability-projects-page-not-found.png
+a7b0513dd8a6f08c052260704c79936211912a884ee702b9c20fdd8a921de0a4  framework/issue-2678/2026-07-11/screenshots/ui-01-field-mapping.png
+45c3d4358b6ad779636bf841fc704f5d885a5ce028fb5e89a95b048c0249b085  framework/issue-2678/2026-07-11/screenshots/ui-01-success-result.png
+e3a782008a9cb06b1b63d00de9b252969a2189d4b7889fde717eeddcc47fb72d  framework/issue-2678/2026-07-11/screenshots/ui-03-upsert-invalid-result.png
+eb336f830509ed781c4ac42cd35b09c13c6fa0318535525f5a3a261d370ee54a  framework/issue-2678/2026-07-11/screenshots/ui-04-same-file-lookup-reference-not-found.png
+b8eb788d30dfb1068c4398f84b99f763f73412e7e3cc3227411ece0f1b1812e1  framework/issue-2678/2026-07-11/screenshots/ui-05-cancel-button-visible.png
+e1173fb3e3f47cb18be31f5ec88327e8a25f410076a930fbec798fe063b8bad7  framework/issue-2678/2026-07-11/screenshots/ui-05-cancel-confirmed.png
+17a11c126c1f8f213b24b508d7a76ded0c1da13c3fcf899a974f21fab2d4d0c6  framework/issue-2678/2026-07-11/screenshots/ui-05-cancelled-job-history-succeeded.png
+7ce5248a3eafed7d085a7c7456aeba8e73b9276a725c13831c295ee61a90f73b  framework/issue-2678/2026-07-11/screenshots/ui-06-automation-off.png
+b4a8ec83cec001940ba45d1b9c90e5e794684888f552fc512cb6ef180b6b4702  framework/issue-2678/2026-07-11/screenshots/ui-06-automation-on.png
+93c2a0d17406ef9158fe37ddf51caf4e3b93ae0d63708dd14de08ee416ac7db4  framework/issue-2678/2026-07-11/test-plan.md

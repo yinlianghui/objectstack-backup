@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "frameworkCommit": "98874656ffc50ce1531af52346228ffcdda73fba",
+  "acceptanceBatchSize": 200,
+  "canonicalRun": "runs/run-002/results.json",
+  "executionHistory": [
+    {
+      "phase": "planning",
+      "status": "not_run"
+    },
+    {
+      "runId": "run-001",
+      "status": "harness_load_failed",
+      "businessScenariosExecuted": 0,
+      "result": "runs/run-001/results.json"
+    },
+    {
+      "runId": "run-002",
+      "status": "passed",
+      "businessScenariosExecuted": 4,
+      "result": "runs/run-002/results.json"
+    }
+  ],
+  "scenarios": {
+    "seed": {
+      "rows": 1000,
+      "inputColumns": 4,
+      "engineArrayInsert": 5,
+      "engineSingleInsert": 0,
+      "driverBulkCreate": 5,
+      "driverCreate": 0,
+      "persistedRows": 1000,
+      "sqliteIntegrity": "ok"
+    },
+    "import": {
+      "rows": 1000,
+      "inputColumns": 4,
+      "engineArrayInsert": 5,
+      "engineSingleInsert": 0,
+      "driverBulkCreate": 5,
+      "driverCreate": 0,
+      "created": 1000,
+      "errors": 0,
+      "persistedRows": 1000,
+      "sqliteIntegrity": "ok"
+    },
+    "summaryOneParent": {
+      "children": 1000,
+      "parents": 1,
+      "childBulkCreate": 5,
+      "parentSummaryUpdate": 5,
+      "totalAmount": 500500,
+      "sqliteIntegrity": "ok"
+    },
+    "summaryTenParents": {
+      "children": 1000,
+      "parents": 10,
+      "childBulkCreate": 5,
+      "parentSummaryUpdate": 50,
+      "childrenPerParent": 100,
+      "parentTotals": [49600, 49700, 49800, 49900, 50000, 50100, 50200, 50300, 50400, 50500],
+      "combinedTotal": 500500,
+      "sqliteIntegrity": "ok"
+    }
+  },
+  "dataReconciliation": {
+    "fullRowProjectionCompared": true,
+    "seedAmountTotal": 500500,
+    "importAmountTotal": 500500,
+    "activeTrue": 500,
+    "activeFalse": 500
+  },
+  "notes": [
+    "This supplement reconstructs missing durable evidence; it is not a full acceptance rerun.",
+    "Elapsed times are informational only and are not cloud-performance claims."
+  ]
+}

@@ -1,0 +1,1075 @@
+[
+  {
+    "sequence": 1,
+    "scenario": "seed",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_seed_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 2,
+    "scenario": "seed",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_seed_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 3,
+    "scenario": "seed",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_seed_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 4,
+    "scenario": "seed",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_seed_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 5,
+    "scenario": "seed",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_seed_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 6,
+    "scenario": "seed",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_seed_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 7,
+    "scenario": "seed",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_seed_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 8,
+    "scenario": "seed",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_seed_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 9,
+    "scenario": "seed",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_seed_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 10,
+    "scenario": "seed",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_seed_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 11,
+    "scenario": "import",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_import_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 12,
+    "scenario": "import",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_import_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 13,
+    "scenario": "import",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_import_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 14,
+    "scenario": "import",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_import_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 15,
+    "scenario": "import",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_import_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 16,
+    "scenario": "import",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_import_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 17,
+    "scenario": "import",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_import_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 18,
+    "scenario": "import",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_import_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 19,
+    "scenario": "import",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_import_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 20,
+    "scenario": "import",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_import_item",
+    "rowCount": 200,
+    "status": "success"
+  },
+  {
+    "sequence": 21,
+    "scenario": "summary-one-parent",
+    "layer": "driver",
+    "operation": "create",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 22,
+    "scenario": "summary-one-parent",
+    "layer": "engine",
+    "operation": "insert_single",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 23,
+    "scenario": "summary-one-parent",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 24,
+    "scenario": "summary-one-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 25,
+    "scenario": "summary-one-parent",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 26,
+    "scenario": "summary-one-parent",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 27,
+    "scenario": "summary-one-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 28,
+    "scenario": "summary-one-parent",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 29,
+    "scenario": "summary-one-parent",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 30,
+    "scenario": "summary-one-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 31,
+    "scenario": "summary-one-parent",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 32,
+    "scenario": "summary-one-parent",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 33,
+    "scenario": "summary-one-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 34,
+    "scenario": "summary-one-parent",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 35,
+    "scenario": "summary-one-parent",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 36,
+    "scenario": "summary-one-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 37,
+    "scenario": "summary-one-parent",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 38,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "create",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 39,
+    "scenario": "summary-ten-parent",
+    "layer": "engine",
+    "operation": "insert_single",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 40,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "create",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 41,
+    "scenario": "summary-ten-parent",
+    "layer": "engine",
+    "operation": "insert_single",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 42,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "create",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 43,
+    "scenario": "summary-ten-parent",
+    "layer": "engine",
+    "operation": "insert_single",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 44,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "create",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 45,
+    "scenario": "summary-ten-parent",
+    "layer": "engine",
+    "operation": "insert_single",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 46,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "create",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 47,
+    "scenario": "summary-ten-parent",
+    "layer": "engine",
+    "operation": "insert_single",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 48,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "create",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 49,
+    "scenario": "summary-ten-parent",
+    "layer": "engine",
+    "operation": "insert_single",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 50,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "create",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 51,
+    "scenario": "summary-ten-parent",
+    "layer": "engine",
+    "operation": "insert_single",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 52,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "create",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 53,
+    "scenario": "summary-ten-parent",
+    "layer": "engine",
+    "operation": "insert_single",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 54,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "create",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 55,
+    "scenario": "summary-ten-parent",
+    "layer": "engine",
+    "operation": "insert_single",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 56,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "create",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 57,
+    "scenario": "summary-ten-parent",
+    "layer": "engine",
+    "operation": "insert_single",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 58,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 10,
+    "status": "success"
+  },
+  {
+    "sequence": 59,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 60,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 61,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 62,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 63,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 64,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 65,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 66,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 67,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 68,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 69,
+    "scenario": "summary-ten-parent",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 10,
+    "status": "success"
+  },
+  {
+    "sequence": 70,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 10,
+    "status": "success"
+  },
+  {
+    "sequence": 71,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 72,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 73,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 74,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 75,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 76,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 77,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 78,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 79,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 80,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 81,
+    "scenario": "summary-ten-parent",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 10,
+    "status": "success"
+  },
+  {
+    "sequence": 82,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 10,
+    "status": "success"
+  },
+  {
+    "sequence": 83,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 84,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 85,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 86,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 87,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 88,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 89,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 90,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 91,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 92,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 93,
+    "scenario": "summary-ten-parent",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 10,
+    "status": "success"
+  },
+  {
+    "sequence": 94,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 10,
+    "status": "success"
+  },
+  {
+    "sequence": 95,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 96,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 97,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 98,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 99,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 100,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 101,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 102,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 103,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 104,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 105,
+    "scenario": "summary-ten-parent",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 10,
+    "status": "success"
+  },
+  {
+    "sequence": 106,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "bulkCreate",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 10,
+    "status": "success"
+  },
+  {
+    "sequence": 107,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 108,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 109,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 110,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 111,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 112,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 113,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 114,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 115,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 116,
+    "scenario": "summary-ten-parent",
+    "layer": "driver",
+    "operation": "update_summary",
+    "object": "qa_summary_parent",
+    "rowCount": 1,
+    "status": "success"
+  },
+  {
+    "sequence": 117,
+    "scenario": "summary-ten-parent",
+    "layer": "engine",
+    "operation": "insert_array",
+    "object": "qa_summary_child",
+    "rowCount": 200,
+    "uniqueParentCount": 10,
+    "status": "success"
+  }
+]

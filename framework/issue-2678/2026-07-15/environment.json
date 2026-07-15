@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-07-15T09:08:25Z",
+  "capturedAtLocal": "2026-07-15T17:08:25+0800",
+  "purpose": "Issue 2678 missing-evidence reconstruction",
+  "framework": {
+    "commit": "98874656ffc50ce1531af52346228ffcdda73fba",
+    "branch": "codex/issue-2678-minimal-evidence",
+    "worktree": "/Users/yinlianghui/Documents/GitHub/framework-issue-2678-evidence",
+    "linkedWorktree": true,
+    "productCodeModified": false
+  },
+  "runtime": {
+    "node": "v22.14.0",
+    "pnpm": "10.31.0",
+    "vitest": "4.1.10",
+    "betterSqlite3": "12.11.1",
+    "restPackage": "14.3.0",
+    "metadataProtocolPackage": "14.3.0",
+    "driverSqlPackage": "14.3.0"
+  },
+  "host": {
+    "os": "macOS 15.7.7",
+    "architecture": "arm64",
+    "hardwareReportedByOriginalQa": "Apple M1",
+    "database": "local SQLite via better-sqlite3"
+  },
+  "storage": {
+    "worktreeSizeAtStart": "1.2G",
+    "availableDiskAtStart": "25GiB",
+    "estimatedNewEvidence": "5-20MB"
+  },
+  "preExecutionContext": {
+    "command": "pnpm --filter @objectstack/core exec vitest run src/utils/bulk-write.test.ts",
+    "result": "1 file, 11/11 tests passed",
+    "classification": "context_only_not_rerun_by_this_supplement"
+  },
+  "retention": {
+    "deleteArtifacts": false,
+    "overwriteArtifacts": false,
+    "preserveFailedRuns": true,
+    "rerunPolicy": "use a new timestamped directory under runs/",
+    "cleanupAuthority": "explicit later user instruction only"
+  }
+}

@@ -1,0 +1,2277 @@
+• turbo 2.10.3
+
+   • Packages in scope: @objectstack/metadata-protocol, @objectstack/objectql
+   • Running build in 2 packages
+   • Remote caching disabled, using shared worktree cache
+
+@objectstack/spec:build: cache hit, replaying logs de5a973e4a96fb10
+@objectstack/spec:build: 
+@objectstack/spec:build: > @objectstack/spec@14.3.0 build /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/packages/spec
+@objectstack/spec:build: > pnpm gen:schema && pnpm gen:openapi && tsup && if [ -z "$OS_SKIP_DTS" ]; then NODE_OPTIONS="--max-old-space-size=12288" BUILD_DTS=true tsup; fi
+@objectstack/spec:build: 
+@objectstack/spec:build: 
+@objectstack/spec:build: > @objectstack/spec@14.3.0 gen:schema /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/packages/spec
+@objectstack/spec:build: > OS_EAGER_SCHEMAS=1 tsx scripts/build-schemas.ts
+@objectstack/spec:build: 
+@objectstack/spec:build: Cleaning output directory: /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/packages/spec/json-schema
+@objectstack/spec:build: Generating JSON Schemas to /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/packages/spec/json-schema...
+@objectstack/spec:build: 
+@objectstack/spec:build: [AI]
+@objectstack/spec:build:   ✓ ai/AIKnowledge.json
+@objectstack/spec:build:   ✓ ai/AIModelConfig.json
+@objectstack/spec:build:   ✓ ai/AITool.json
+@objectstack/spec:build:   ✓ ai/Agent.json
+@objectstack/spec:build:   ✓ ai/StructuredOutputConfig.json
+@objectstack/spec:build:   ✓ ai/StructuredOutputFormat.json
+@objectstack/spec:build:   ✓ ai/TransformPipelineStep.json
+@objectstack/spec:build:   ✓ ai/ToolCategory.json
+@objectstack/spec:build:   ✓ ai/Tool.json
+@objectstack/spec:build:   ✓ ai/Skill.json
+@objectstack/spec:build:   ✓ ai/SkillTriggerCondition.json
+@objectstack/spec:build:   ✓ ai/CodeContent.json
+@objectstack/spec:build:   ✓ ai/ConversationAnalytics.json
+@objectstack/spec:build:   ✓ ai/ConversationContext.json
+@objectstack/spec:build:   ✓ ai/ConversationMessage.json
+@objectstack/spec:build:   ✓ ai/ConversationSession.json
+@objectstack/spec:build:   ✓ ai/ConversationSummary.json
+@objectstack/spec:build:   ✓ ai/FileContent.json
+@objectstack/spec:build:   ✓ ai/FunctionCall.json
+@objectstack/spec:build:   ✓ ai/ImageContent.json
+@objectstack/spec:build:   ✓ ai/MessageContent.json
+@objectstack/spec:build:   ✓ ai/MessageContentType.json
+@objectstack/spec:build:   ✓ ai/MessagePruningEvent.json
+@objectstack/spec:build:   ✓ ai/MessageRole.json
+@objectstack/spec:build:   ✓ ai/TextContent.json
+@objectstack/spec:build:   ✓ ai/TokenBudgetConfig.json
+@objectstack/spec:build:   ✓ ai/TokenBudgetStrategy.json
+@objectstack/spec:build:   ✓ ai/TokenUsageStats.json
+@objectstack/spec:build:   ✓ ai/ToolCall.json
+@objectstack/spec:build:   ✓ ai/ModelCapability.json
+@objectstack/spec:build:   ✓ ai/ModelConfig.json
+@objectstack/spec:build:   ✓ ai/ModelLimits.json
+@objectstack/spec:build:   ✓ ai/ModelPricing.json
+@objectstack/spec:build:   ✓ ai/ModelProvider.json
+@objectstack/spec:build:   ✓ ai/ModelRegistryEntry.json
+@objectstack/spec:build:   ⊘ AI.ModelRegistrySchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ ai/ModelSelectionCriteria.json
+@objectstack/spec:build:   ⊘ AI.PromptTemplateSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ ai/PromptVariable.json
+@objectstack/spec:build:   ✓ ai/EmbeddingModel.json
+@objectstack/spec:build:   ✓ ai/VectorStoreProvider.json
+@objectstack/spec:build:   ✓ ai/VectorStore.json
+@objectstack/spec:build:   ✓ ai/AIUsageRecord.json
+@objectstack/spec:build:   ✓ ai/TokenUsage.json
+@objectstack/spec:build:   ✓ ai/MCPApprovalPolicy.json
+@objectstack/spec:build:   ✓ ai/MCPServerRef.json
+@objectstack/spec:build:   ✓ ai/MCPToolBinding.json
+@objectstack/spec:build:   ✓ ai/MCPTransport.json
+@objectstack/spec:build:   ✓ ai/FileKnowledgeSource.json
+@objectstack/spec:build:   ✓ ai/HttpKnowledgeSource.json
+@objectstack/spec:build:   ✓ ai/KnowledgeRefreshPolicy.json
+@objectstack/spec:build:   ✓ ai/KnowledgeSourceKind.json
+@objectstack/spec:build:   ✓ ai/KnowledgeSource.json
+@objectstack/spec:build:   ✓ ai/ObjectKnowledgeSource.json
+@objectstack/spec:build:   ✓ ai/KnowledgeChunk.json
+@objectstack/spec:build:   ✓ ai/KnowledgeDocument.json
+@objectstack/spec:build:   ✓ ai/KnowledgeHit.json
+@objectstack/spec:build:   ✓ ai/BlueprintApp.json
+@objectstack/spec:build:   ✓ ai/BlueprintDashboard.json
+@objectstack/spec:build:   ✓ ai/BlueprintField.json
+@objectstack/spec:build:   ✓ ai/BlueprintNavItem.json
+@objectstack/spec:build:   ✓ ai/BlueprintObject.json
+@objectstack/spec:build:   ✓ ai/BlueprintSeed.json
+@objectstack/spec:build:   ✓ ai/BlueprintView.json
+@objectstack/spec:build:   ✓ ai/BlueprintWidgetCondition.json
+@objectstack/spec:build:   ✓ ai/SolutionBlueprint.json
+@objectstack/spec:build:   ✓ ai/SolutionBlueprintStrict.json
+@objectstack/spec:build: 
+@objectstack/spec:build: [API]
+@objectstack/spec:build:   ✓ api/ApiError.json
+@objectstack/spec:build:   ✓ api/BaseResponse.json
+@objectstack/spec:build:   ✓ api/BatchLoadingStrategy.json
+@objectstack/spec:build:   ✓ api/BulkRequest.json
+@objectstack/spec:build:   ✓ api/BulkResponse.json
+@objectstack/spec:build:   ✓ api/CreateRequest.json
+@objectstack/spec:build:   ✓ api/DataLoaderConfig.json
+@objectstack/spec:build:   ✓ api/DeleteResponse.json
+@objectstack/spec:build:   ✓ api/ExportRequest.json
+@objectstack/spec:build:   ✓ api/IdRequest.json
+@objectstack/spec:build:   ✓ api/ListRecordResponse.json
+@objectstack/spec:build:   ✓ api/ModificationResult.json
+@objectstack/spec:build:   ✓ api/QueryOptimizationConfig.json
+@objectstack/spec:build:   ✓ api/RecordData.json
+@objectstack/spec:build:   ✓ api/SingleRecordResponse.json
+@objectstack/spec:build:   ✓ api/UpdateRequest.json
+@objectstack/spec:build:   ✓ api/ApiEndpoint.json
+@objectstack/spec:build:   ✓ api/ApiEndpoint.json
+@objectstack/spec:build:   ✓ api/ApiMapping.json
+@objectstack/spec:build:   ✓ api/ApiRoutes.json
+@objectstack/spec:build:   ✓ api/Discovery.json
+@objectstack/spec:build:   ✓ api/RouteHealthEntry.json
+@objectstack/spec:build:   ✓ api/RouteHealthReport.json
+@objectstack/spec:build:   ✓ api/ServiceInfo.json
+@objectstack/spec:build:   ✓ api/ServiceStatus.json
+@objectstack/spec:build:   ✓ api/WellKnownCapabilities.json
+@objectstack/spec:build:   ✓ api/DataEvent.json
+@objectstack/spec:build:   ✓ api/DataEventType.json
+@objectstack/spec:build:   ✓ api/MetadataEvent.json
+@objectstack/spec:build:   ✓ api/MetadataEventType.json
+@objectstack/spec:build:   ✓ api/BasePresence.json
+@objectstack/spec:build:   ✓ api/PresenceStatus.json
+@objectstack/spec:build:   ✓ api/RealtimeRecordAction.json
+@objectstack/spec:build:   ✓ api/RealtimeConfig.json
+@objectstack/spec:build:   ✓ api/RealtimeEvent.json
+@objectstack/spec:build:   ✓ api/RealtimeEventType.json
+@objectstack/spec:build:   ✓ api/RealtimePresence.json
+@objectstack/spec:build:   ✓ api/SubscriptionEvent.json
+@objectstack/spec:build:   ✓ api/Subscription.json
+@objectstack/spec:build:   ✓ api/TransportProtocol.json
+@objectstack/spec:build:   ✓ api/AckMessage.json
+@objectstack/spec:build:   ✓ api/CursorMessage.json
+@objectstack/spec:build:   ✓ api/CursorPosition.json
+@objectstack/spec:build:   ✓ api/DocumentState.json
+@objectstack/spec:build:   ✓ api/EditMessage.json
+@objectstack/spec:build:   ✓ api/EditOperation.json
+@objectstack/spec:build:   ✓ api/EditOperationType.json
+@objectstack/spec:build:   ✓ api/ErrorMessage.json
+@objectstack/spec:build:   ✓ api/EventFilterCondition.json
+@objectstack/spec:build:   ✓ api/EventFilter.json
+@objectstack/spec:build:   ✓ api/EventMessage.json
+@objectstack/spec:build:   ✓ api/EventPattern.json
+@objectstack/spec:build:   ✓ api/EventSubscription.json
+@objectstack/spec:build:   ✓ api/FilterOperator.json
+@objectstack/spec:build:   ✓ api/PingMessage.json
+@objectstack/spec:build:   ✓ api/PongMessage.json
+@objectstack/spec:build:   ✓ api/PresenceMessage.json
+@objectstack/spec:build:   ✓ api/PresenceState.json
+@objectstack/spec:build:   ✓ api/PresenceUpdate.json
+@objectstack/spec:build:   ✓ api/SimpleCursorPosition.json
+@objectstack/spec:build:   ✓ api/SimplePresenceState.json
+@objectstack/spec:build:   ✓ api/SubscribeMessage.json
+@objectstack/spec:build:   ✓ api/UnsubscribeMessage.json
+@objectstack/spec:build:   ✓ api/UnsubscribeRequest.json
+@objectstack/spec:build:   ✓ api/WebSocketConfig.json
+@objectstack/spec:build:   ✓ api/WebSocketEvent.json
+@objectstack/spec:build:   ✓ api/WebSocketMessage.json
+@objectstack/spec:build:   ✓ api/WebSocketMessageType.json
+@objectstack/spec:build:   ✓ api/WebSocketPresenceStatus.json
+@objectstack/spec:build:   ✓ api/WebSocketServerConfig.json
+@objectstack/spec:build:   ✓ api/HttpMethod.json
+@objectstack/spec:build:   ✓ api/RouteCategory.json
+@objectstack/spec:build:   ✓ api/RouteDefinition.json
+@objectstack/spec:build:   ✓ api/RouterConfig.json
+@objectstack/spec:build:   ✓ api/ODataConfig.json
+@objectstack/spec:build:   ✓ api/ODataError.json
+@objectstack/spec:build:   ✓ api/ODataFilterFunction.json
+@objectstack/spec:build:   ✓ api/ODataFilterOperator.json
+@objectstack/spec:build:   ✓ api/ODataMetadata.json
+@objectstack/spec:build:   ✓ api/ODataQuery.json
+@objectstack/spec:build:   ✓ api/ODataResponse.json
+@objectstack/spec:build:   ✓ api/FederationEntityKey.json
+@objectstack/spec:build:   ✓ api/FederationEntity.json
+@objectstack/spec:build:   ✓ api/FederationExternalField.json
+@objectstack/spec:build:   ✓ api/FederationGateway.json
+@objectstack/spec:build:   ✓ api/FederationProvides.json
+@objectstack/spec:build:   ✓ api/FederationRequires.json
+@objectstack/spec:build:   ⊘ API.GraphQLConfig: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ API.GraphQLConfigSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/GraphQLDataLoaderConfig.json
+@objectstack/spec:build:   ✓ api/GraphQLDirectiveConfig.json
+@objectstack/spec:build:   ✓ api/GraphQLDirectiveLocation.json
+@objectstack/spec:build:   ✓ api/GraphQLMutationConfig.json
+@objectstack/spec:build:   ✓ api/GraphQLPersistedQuery.json
+@objectstack/spec:build:   ✓ api/GraphQLQueryComplexity.json
+@objectstack/spec:build:   ⊘ API.GraphQLQueryConfigSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/GraphQLQueryDepthLimit.json
+@objectstack/spec:build:   ✓ api/GraphQLRateLimit.json
+@objectstack/spec:build:   ⊘ API.GraphQLResolverConfigSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/GraphQLScalarType.json
+@objectstack/spec:build:   ✓ api/GraphQLSubscriptionConfig.json
+@objectstack/spec:build:   ✓ api/GraphQLTypeConfig.json
+@objectstack/spec:build:   ✓ api/SubgraphConfig.json
+@objectstack/spec:build:   ✓ api/BatchConfig.json
+@objectstack/spec:build:   ✓ api/BatchOperationResult.json
+@objectstack/spec:build:   ✓ api/BatchOperationType.json
+@objectstack/spec:build:   ✓ api/BatchOptions.json
+@objectstack/spec:build:   ✓ api/BatchRecord.json
+@objectstack/spec:build:   ✓ api/BatchUpdateRequest.json
+@objectstack/spec:build:   ✓ api/BatchUpdateResponse.json
+@objectstack/spec:build:   ✓ api/DeleteManyRequest.json
+@objectstack/spec:build:   ✓ api/UpdateManyRequest.json
+@objectstack/spec:build:   ✓ api/CacheControl.json
+@objectstack/spec:build:   ✓ api/CacheDirective.json
+@objectstack/spec:build:   ✓ api/CacheInvalidationRequest.json
+@objectstack/spec:build:   ✓ api/CacheInvalidationResponse.json
+@objectstack/spec:build:   ✓ api/CacheInvalidationTarget.json
+@objectstack/spec:build:   ✓ api/ETag.json
+@objectstack/spec:build:   ✓ api/MetadataCacheRequest.json
+@objectstack/spec:build:   ✓ api/MetadataCacheResponse.json
+@objectstack/spec:build:   ✓ api/EnhancedApiError.json
+@objectstack/spec:build:   ✓ api/ErrorCategory.json
+@objectstack/spec:build:   ✓ api/ErrorResponse.json
+@objectstack/spec:build:   ✓ api/FieldError.json
+@objectstack/spec:build:   ✓ api/RetryStrategy.json
+@objectstack/spec:build:   ✓ api/StandardErrorCode.json
+@objectstack/spec:build:   ✓ api/AiInsightsRequest.json
+@objectstack/spec:build:   ✓ api/AiInsightsResponse.json
+@objectstack/spec:build:   ✓ api/AiNlqRequest.json
+@objectstack/spec:build:   ✓ api/AiNlqResponse.json
+@objectstack/spec:build:   ✓ api/AiSuggestRequest.json
+@objectstack/spec:build:   ✓ api/AiSuggestResponse.json
+@objectstack/spec:build:   ✓ api/AutomationActionsResponse.json
+@objectstack/spec:build:   ✓ api/AutomationTriggerRequest.json
+@objectstack/spec:build:   ✓ api/AutomationTriggerResponse.json
+@objectstack/spec:build:   ✓ api/BatchDataRequest.json
+@objectstack/spec:build:   ✓ api/BatchDataResponse.json
+@objectstack/spec:build:   ✓ api/CheckPermissionRequest.json
+@objectstack/spec:build:   ✓ api/CheckPermissionResponse.json
+@objectstack/spec:build:   ✓ api/CreateDataRequest.json
+@objectstack/spec:build:   ✓ api/CreateDataResponse.json
+@objectstack/spec:build:   ✓ api/CreateManyDataRequest.json
+@objectstack/spec:build:   ✓ api/CreateManyDataResponse.json
+@objectstack/spec:build:   ⊘ API.CreateViewRequestSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ API.CreateViewResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/DeleteDataRequest.json
+@objectstack/spec:build:   ✓ api/DeleteDataResponse.json
+@objectstack/spec:build:   ✓ api/DeleteManyDataRequest.json
+@objectstack/spec:build:   ✓ api/DeleteManyDataResponse.json
+@objectstack/spec:build:   ✓ api/DeleteMetaItemRequest.json
+@objectstack/spec:build:   ✓ api/DeleteMetaItemResponse.json
+@objectstack/spec:build:   ✓ api/DeleteViewRequest.json
+@objectstack/spec:build:   ✓ api/DeleteViewResponse.json
+@objectstack/spec:build:   ✓ api/DisablePackageRequest.json
+@objectstack/spec:build:   ⊘ API.DisablePackageResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/EnablePackageRequest.json
+@objectstack/spec:build:   ⊘ API.EnablePackageResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/FindDataRequest.json
+@objectstack/spec:build:   ✓ api/FindDataResponse.json
+@objectstack/spec:build:   ✓ api/GetDataRequest.json
+@objectstack/spec:build:   ✓ api/GetDataResponse.json
+@objectstack/spec:build:   ✓ api/GetDiscoveryRequest.json
+@objectstack/spec:build:   ✓ api/GetDiscoveryResponse.json
+@objectstack/spec:build:   ✓ api/GetEffectivePermissionsRequest.json
+@objectstack/spec:build:   ✓ api/GetEffectivePermissionsResponse.json
+@objectstack/spec:build:   ✓ api/GetFieldLabelsRequest.json
+@objectstack/spec:build:   ✓ api/GetFieldLabelsResponse.json
+@objectstack/spec:build:   ✓ api/GetLocalesRequest.json
+@objectstack/spec:build:   ✓ api/GetLocalesResponse.json
+@objectstack/spec:build:   ✓ api/GetMetaItemCachedRequest.json
+@objectstack/spec:build:   ✓ api/GetMetaItemCachedResponse.json
+@objectstack/spec:build:   ✓ api/GetMetaItemRequest.json
+@objectstack/spec:build:   ✓ api/GetMetaItemResponse.json
+@objectstack/spec:build:   ✓ api/GetMetaItemsRequest.json
+@objectstack/spec:build:   ✓ api/GetMetaItemsResponse.json
+@objectstack/spec:build:   ✓ api/GetMetaTypesRequest.json
+@objectstack/spec:build:   ✓ api/GetMetaTypesResponse.json
+@objectstack/spec:build:   ✓ api/GetNotificationPreferencesRequest.json
+@objectstack/spec:build:   ✓ api/GetNotificationPreferencesResponse.json
+@objectstack/spec:build:   ✓ api/GetObjectPermissionsRequest.json
+@objectstack/spec:build:   ✓ api/GetObjectPermissionsResponse.json
+@objectstack/spec:build:   ✓ api/GetPackageRequest.json
+@objectstack/spec:build:   ✓ api/GetPresenceRequest.json
+@objectstack/spec:build:   ✓ api/GetPresenceResponse.json
+@objectstack/spec:build:   ⊘ API.GetPackageResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/GetTranslationsRequest.json
+@objectstack/spec:build:   ✓ api/GetTranslationsResponse.json
+@objectstack/spec:build:   ✓ api/GetUiViewRequest.json
+@objectstack/spec:build:   ⊘ API.GetUiViewResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/GetViewRequest.json
+@objectstack/spec:build:   ⊘ API.GetViewResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/GetWorkflowConfigRequest.json
+@objectstack/spec:build:   ✓ api/GetWorkflowConfigResponse.json
+@objectstack/spec:build:   ✓ api/GetWorkflowStateRequest.json
+@objectstack/spec:build:   ✓ api/GetWorkflowStateResponse.json
+@objectstack/spec:build:   ✓ api/HttpFindQueryParams.json
+@objectstack/spec:build:   ⊘ API.InstallPackageRequestSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ API.InstallPackageResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/ListNotificationsRequest.json
+@objectstack/spec:build:   ✓ api/ListNotificationsResponse.json
+@objectstack/spec:build:   ✓ api/ListPackagesRequest.json
+@objectstack/spec:build:   ⊘ API.ListPackagesResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/ListViewsRequest.json
+@objectstack/spec:build:   ⊘ API.ListViewsResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/MarkAllNotificationsReadRequest.json
+@objectstack/spec:build:   ✓ api/MarkAllNotificationsReadResponse.json
+@objectstack/spec:build:   ✓ api/MarkNotificationsReadRequest.json
+@objectstack/spec:build:   ✓ api/MarkNotificationsReadResponse.json
+@objectstack/spec:build:   ✓ api/NotificationPreferences.json
+@objectstack/spec:build:   ✓ api/Notification.json
+@objectstack/spec:build:   ⊘ API.ObjectStackProtocolSchema: Function types cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/RealtimeConnectRequest.json
+@objectstack/spec:build:   ✓ api/RealtimeConnectResponse.json
+@objectstack/spec:build:   ✓ api/RealtimeDisconnectRequest.json
+@objectstack/spec:build:   ✓ api/RealtimeDisconnectResponse.json
+@objectstack/spec:build:   ✓ api/RealtimeSubscribeRequest.json
+@objectstack/spec:build:   ✓ api/RealtimeSubscribeResponse.json
+@objectstack/spec:build:   ✓ api/RealtimeUnsubscribeRequest.json
+@objectstack/spec:build:   ✓ api/RealtimeUnsubscribeResponse.json
+@objectstack/spec:build:   ✓ api/RegisterDeviceRequest.json
+@objectstack/spec:build:   ✓ api/RegisterDeviceResponse.json
+@objectstack/spec:build:   ✓ api/SaveMetaItemRequest.json
+@objectstack/spec:build:   ✓ api/SaveMetaItemResponse.json
+@objectstack/spec:build:   ✓ api/SetPresenceRequest.json
+@objectstack/spec:build:   ✓ api/SetPresenceResponse.json
+@objectstack/spec:build:   ✓ api/UninstallPackageRequest.json
+@objectstack/spec:build:   ✓ api/UninstallPackageResponse.json
+@objectstack/spec:build:   ✓ api/UnregisterDeviceRequest.json
+@objectstack/spec:build:   ✓ api/UnregisterDeviceResponse.json
+@objectstack/spec:build:   ✓ api/UpdateDataRequest.json
+@objectstack/spec:build:   ✓ api/UpdateDataResponse.json
+@objectstack/spec:build:   ✓ api/UpdateManyDataRequest.json
+@objectstack/spec:build:   ✓ api/UpdateManyDataResponse.json
+@objectstack/spec:build:   ✓ api/UpdateNotificationPreferencesRequest.json
+@objectstack/spec:build:   ✓ api/UpdateNotificationPreferencesResponse.json
+@objectstack/spec:build:   ⊘ API.UpdateViewRequestSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ API.UpdateViewResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/WorkflowState.json
+@objectstack/spec:build:   ✓ api/WorkflowTransitionRequest.json
+@objectstack/spec:build:   ✓ api/WorkflowTransitionResponse.json
+@objectstack/spec:build:   ✓ api/BatchEndpointsConfig.json
+@objectstack/spec:build:   ✓ api/Callback.json
+@objectstack/spec:build:   ✓ api/CrudEndpointPattern.json
+@objectstack/spec:build:   ✓ api/CrudEndpointsConfig.json
+@objectstack/spec:build:   ✓ api/CrudOperation.json
+@objectstack/spec:build:   ✓ api/EndpointRegistry.json
+@objectstack/spec:build:   ✓ api/GeneratedEndpoint.json
+@objectstack/spec:build:   ✓ api/MetadataEndpointsConfig.json
+@objectstack/spec:build:   ✓ api/OpenApi31Extensions.json
+@objectstack/spec:build:   ✓ api/RestApiConfig.json
+@objectstack/spec:build:   ✓ api/RestApiConfig.json
+@objectstack/spec:build:   ✓ api/RestServerConfig.json
+@objectstack/spec:build:   ✓ api/RestServerConfig.json
+@objectstack/spec:build:   ✓ api/RouteGenerationConfig.json
+@objectstack/spec:build:   ✓ api/WebhookConfig.json
+@objectstack/spec:build:   ✓ api/WebhookEvent.json
+@objectstack/spec:build:   ✓ api/ApiDiscoveryQuery.json
+@objectstack/spec:build:   ✓ api/ApiDiscoveryResponse.json
+@objectstack/spec:build:   ✓ api/ApiEndpointRegistration.json
+@objectstack/spec:build:   ✓ api/ApiEndpointRegistration.json
+@objectstack/spec:build:   ✓ api/ApiMetadata.json
+@objectstack/spec:build:   ✓ api/ApiParameter.json
+@objectstack/spec:build:   ✓ api/ApiProtocolType.json
+@objectstack/spec:build:   ✓ api/ApiRegistry.json
+@objectstack/spec:build:   ✓ api/ApiRegistryEntry.json
+@objectstack/spec:build:   ✓ api/ApiRegistryEntry.json
+@objectstack/spec:build:   ✓ api/ApiRegistry.json
+@objectstack/spec:build:   ✓ api/ApiResponse.json
+@objectstack/spec:build:   ✓ api/ConflictResolutionStrategy.json
+@objectstack/spec:build:   ✓ api/HttpStatusCode.json
+@objectstack/spec:build:   ✓ api/ObjectQLReference.json
+@objectstack/spec:build:   ✓ api/SchemaDefinition.json
+@objectstack/spec:build:   ✓ api/ApiChangelogEntry.json
+@objectstack/spec:build:   ✓ api/ApiDocumentationConfig.json
+@objectstack/spec:build:   ✓ api/ApiDocumentationConfig.json
+@objectstack/spec:build:   ✓ api/ApiTestCollection.json
+@objectstack/spec:build:   ✓ api/ApiTestCollection.json
+@objectstack/spec:build:   ✓ api/ApiTestRequest.json
+@objectstack/spec:build:   ✓ api/ApiTestingUiConfig.json
+@objectstack/spec:build:   ✓ api/ApiTestingUiType.json
+@objectstack/spec:build:   ✓ api/CodeGenerationTemplate.json
+@objectstack/spec:build:   ✓ api/GeneratedApiDocumentation.json
+@objectstack/spec:build:   ✓ api/OpenApiSecurityScheme.json
+@objectstack/spec:build:   ✓ api/OpenApiServer.json
+@objectstack/spec:build:   ✓ api/OpenApiSpec.json
+@objectstack/spec:build:   ✓ api/OpenApiSpec.json
+@objectstack/spec:build:   ✓ api/AnalyticsEndpoint.json
+@objectstack/spec:build:   ✓ api/AnalyticsMetadataResponse.json
+@objectstack/spec:build:   ✓ api/AnalyticsQueryRequest.json
+@objectstack/spec:build:   ✓ api/AnalyticsResultResponse.json
+@objectstack/spec:build:   ✓ api/AnalyticsSqlResponse.json
+@objectstack/spec:build:   ✓ api/GetAnalyticsMetaRequest.json
+@objectstack/spec:build:   ✓ api/VersionDefinition.json
+@objectstack/spec:build:   ✓ api/VersionNegotiationResponse.json
+@objectstack/spec:build:   ✓ api/VersionStatus.json
+@objectstack/spec:build:   ✓ api/VersioningConfig.json
+@objectstack/spec:build:   ✓ api/VersioningStrategy.json
+@objectstack/spec:build:   ✓ api/AuthProvider.json
+@objectstack/spec:build:   ✓ api/LoginRequest.json
+@objectstack/spec:build:   ✓ api/LoginType.json
+@objectstack/spec:build:   ✓ api/RefreshTokenRequest.json
+@objectstack/spec:build:   ✓ api/RegisterRequest.json
+@objectstack/spec:build:   ✓ api/SessionResponse.json
+@objectstack/spec:build:   ✓ api/Session.json
+@objectstack/spec:build:   ✓ api/SessionUser.json
+@objectstack/spec:build:   ✓ api/UserProfileResponse.json
+@objectstack/spec:build:   ✓ api/AuthEndpoint.json
+@objectstack/spec:build:   ✓ api/AuthFeaturesConfig.json
+@objectstack/spec:build:   ✓ api/AuthProviderInfo.json
+@objectstack/spec:build:   ✓ api/DeviceRequestResponse.json
+@objectstack/spec:build:   ✓ api/DeviceTokenResponse.json
+@objectstack/spec:build:   ✓ api/EmailPasswordConfigPublic.json
+@objectstack/spec:build:   ✓ api/GetAuthConfigResponse.json
+@objectstack/spec:build:   ✓ api/CompleteChunkedUploadRequest.json
+@objectstack/spec:build:   ✓ api/CompleteChunkedUploadResponse.json
+@objectstack/spec:build:   ✓ api/CompleteUploadRequest.json
+@objectstack/spec:build:   ✓ api/FileTypeValidation.json
+@objectstack/spec:build:   ✓ api/FileUploadResponse.json
+@objectstack/spec:build:   ✓ api/GetPresignedUrlRequest.json
+@objectstack/spec:build:   ✓ api/InitiateChunkedUploadRequest.json
+@objectstack/spec:build:   ✓ api/InitiateChunkedUploadResponse.json
+@objectstack/spec:build:   ✓ api/PresignedUrlResponse.json
+@objectstack/spec:build:   ✓ api/UploadChunkRequest.json
+@objectstack/spec:build:   ✓ api/UploadChunkResponse.json
+@objectstack/spec:build:   ✓ api/UploadProgress.json
+@objectstack/spec:build:   ⊘ API.AppDefinitionResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/ConceptListResponse.json
+@objectstack/spec:build:   ✓ api/MetadataBulkRegisterRequest.json
+@objectstack/spec:build:   ✓ api/MetadataBulkResponse.json
+@objectstack/spec:build:   ✓ api/MetadataBulkUnregisterRequest.json
+@objectstack/spec:build:   ✓ api/MetadataDeleteResponse.json
+@objectstack/spec:build:   ✓ api/MetadataDependenciesResponse.json
+@objectstack/spec:build:   ✓ api/MetadataDependentsResponse.json
+@objectstack/spec:build:   ✓ api/MetadataEffectiveResponse.json
+@objectstack/spec:build:   ✓ api/MetadataExistsResponse.json
+@objectstack/spec:build:   ✓ api/MetadataExportRequest.json
+@objectstack/spec:build:   ✓ api/MetadataExportResponse.json
+@objectstack/spec:build:   ✓ api/MetadataImportRequest.json
+@objectstack/spec:build:   ✓ api/MetadataImportResponse.json
+@objectstack/spec:build:   ✓ api/MetadataItemResponse.json
+@objectstack/spec:build:   ✓ api/MetadataListResponse.json
+@objectstack/spec:build:   ✓ api/MetadataNamesResponse.json
+@objectstack/spec:build:   ✓ api/MetadataOverlayResponse.json
+@objectstack/spec:build:   ✓ api/MetadataOverlaySaveRequest.json
+@objectstack/spec:build:   ✓ api/MetadataQueryRequest.json
+@objectstack/spec:build:   ✓ api/MetadataQueryResponse.json
+@objectstack/spec:build:   ✓ api/MetadataRegisterRequest.json
+@objectstack/spec:build:   ⊘ API.MetadataTypeInfoResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/MetadataTypesResponse.json
+@objectstack/spec:build:   ✓ api/MetadataValidateRequest.json
+@objectstack/spec:build:   ✓ api/MetadataValidateResponse.json
+@objectstack/spec:build:   ⊘ API.ObjectDefinitionResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/DispatcherConfig.json
+@objectstack/spec:build:   ✓ api/DispatcherErrorCode.json
+@objectstack/spec:build:   ✓ api/DispatcherErrorResponse.json
+@objectstack/spec:build:   ✓ api/DispatcherRoute.json
+@objectstack/spec:build:   ✓ api/ErrorHandlingConfig.json
+@objectstack/spec:build:   ✓ api/HandlerStatus.json
+@objectstack/spec:build:   ✓ api/OpenApiGenerationConfig.json
+@objectstack/spec:build:   ✓ api/RequestValidationConfig.json
+@objectstack/spec:build:   ✓ api/ResponseEnvelopeConfig.json
+@objectstack/spec:build:   ✓ api/RestApiEndpoint.json
+@objectstack/spec:build:   ✓ api/RestApiPluginConfig.json
+@objectstack/spec:build:   ✓ api/RestApiPluginConfig.json
+@objectstack/spec:build:   ✓ api/RestApiRouteCategory.json
+@objectstack/spec:build:   ✓ api/RestApiRouteRegistration.json
+@objectstack/spec:build:   ✓ api/RestApiRouteRegistration.json
+@objectstack/spec:build:   ✓ api/RouteCoverageEntry.json
+@objectstack/spec:build:   ✓ api/RouteCoverageReport.json
+@objectstack/spec:build:   ✓ api/ValidationMode.json
+@objectstack/spec:build:   ✓ api/GraphQLQueryAdapter.json
+@objectstack/spec:build:   ✓ api/ODataQueryAdapter.json
+@objectstack/spec:build:   ✓ api/OperatorMapping.json
+@objectstack/spec:build:   ✓ api/QueryAdapterConfig.json
+@objectstack/spec:build:   ✓ api/QueryAdapterTarget.json
+@objectstack/spec:build:   ✓ api/RestQueryAdapter.json
+@objectstack/spec:build:   ✓ api/AddReactionRequest.json
+@objectstack/spec:build:   ✓ api/AddReactionResponse.json
+@objectstack/spec:build:   ✓ api/ChangelogEntry.json
+@objectstack/spec:build:   ✓ api/CreateFeedItemRequest.json
+@objectstack/spec:build:   ✓ api/CreateFeedItemResponse.json
+@objectstack/spec:build:   ✓ api/DeleteFeedItemRequest.json
+@objectstack/spec:build:   ✓ api/DeleteFeedItemResponse.json
+@objectstack/spec:build:   ✓ api/FeedApiErrorCode.json
+@objectstack/spec:build:   ✓ api/FeedItemPathParams.json
+@objectstack/spec:build:   ✓ api/FeedListFilterType.json
+@objectstack/spec:build:   ✓ api/FeedPathParams.json
+@objectstack/spec:build:   ✓ api/FeedUnsubscribeRequest.json
+@objectstack/spec:build:   ✓ api/GetChangelogRequest.json
+@objectstack/spec:build:   ✓ api/GetChangelogResponse.json
+@objectstack/spec:build:   ✓ api/GetFeedRequest.json
+@objectstack/spec:build:   ✓ api/GetFeedResponse.json
+@objectstack/spec:build:   ✓ api/PinFeedItemRequest.json
+@objectstack/spec:build:   ✓ api/PinFeedItemResponse.json
+@objectstack/spec:build:   ✓ api/RemoveReactionRequest.json
+@objectstack/spec:build:   ✓ api/RemoveReactionResponse.json
+@objectstack/spec:build:   ✓ api/SearchFeedRequest.json
+@objectstack/spec:build:   ✓ api/SearchFeedResponse.json
+@objectstack/spec:build:   ✓ api/StarFeedItemRequest.json
+@objectstack/spec:build:   ✓ api/StarFeedItemResponse.json
+@objectstack/spec:build:   ✓ api/SubscribeRequest.json
+@objectstack/spec:build:   ✓ api/SubscribeResponse.json
+@objectstack/spec:build:   ✓ api/UnpinFeedItemRequest.json
+@objectstack/spec:build:   ✓ api/UnpinFeedItemResponse.json
+@objectstack/spec:build:   ✓ api/UnstarFeedItemRequest.json
+@objectstack/spec:build:   ✓ api/UnstarFeedItemResponse.json
+@objectstack/spec:build:   ✓ api/UnsubscribeResponse.json
+@objectstack/spec:build:   ✓ api/UpdateFeedItemRequest.json
+@objectstack/spec:build:   ✓ api/UpdateFeedItemResponse.json
+@objectstack/spec:build:   ✓ api/CreateExportJobRequest.json
+@objectstack/spec:build:   ✓ api/CreateExportJobResponse.json
+@objectstack/spec:build:   ✓ api/CreateImportJobRequest.json
+@objectstack/spec:build:   ✓ api/CreateImportJobResponse.json
+@objectstack/spec:build:   ✓ api/DeduplicationStrategy.json
+@objectstack/spec:build:   ✓ api/ExportFormat.json
+@objectstack/spec:build:   ✓ api/ExportImportTemplate.json
+@objectstack/spec:build:   ✓ api/ExportJobProgress.json
+@objectstack/spec:build:   ✓ api/ExportJobStatus.json
+@objectstack/spec:build:   ✓ api/ExportJobSummary.json
+@objectstack/spec:build:   ✓ api/FieldMappingEntry.json
+@objectstack/spec:build:   ✓ api/GetExportJobDownloadRequest.json
+@objectstack/spec:build:   ✓ api/GetExportJobDownloadResponse.json
+@objectstack/spec:build:   ✓ api/ImportJobProgress.json
+@objectstack/spec:build:   ✓ api/ImportJobResults.json
+@objectstack/spec:build:   ✓ api/ImportJobStatus.json
+@objectstack/spec:build:   ✓ api/ImportJobSummary.json
+@objectstack/spec:build:   ✓ api/ImportMapping.json
+@objectstack/spec:build:   ✓ api/ImportRequest.json
+@objectstack/spec:build:   ✓ api/ImportResponse.json
+@objectstack/spec:build:   ✓ api/ImportRowResult.json
+@objectstack/spec:build:   ✓ api/ImportValidationConfig.json
+@objectstack/spec:build:   ✓ api/ImportValidationMode.json
+@objectstack/spec:build:   ✓ api/ImportValidationResult.json
+@objectstack/spec:build:   ✓ api/ImportWriteMode.json
+@objectstack/spec:build:   ✓ api/ListExportJobsRequest.json
+@objectstack/spec:build:   ✓ api/ListExportJobsResponse.json
+@objectstack/spec:build:   ✓ api/ListImportJobsRequest.json
+@objectstack/spec:build:   ✓ api/ListImportJobsResponse.json
+@objectstack/spec:build:   ⊘ API.ScheduleExportRequestSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/ScheduleExportResponse.json
+@objectstack/spec:build:   ⊘ API.ScheduledExportSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/UndoImportJobResponse.json
+@objectstack/spec:build:   ✓ api/AutomationApiErrorCode.json
+@objectstack/spec:build:   ✓ api/AutomationFlowPathParams.json
+@objectstack/spec:build:   ✓ api/AutomationRunPathParams.json
+@objectstack/spec:build:   ⊘ API.CreateFlowRequestSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ API.CreateFlowResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/DeleteFlowRequest.json
+@objectstack/spec:build:   ✓ api/DeleteFlowResponse.json
+@objectstack/spec:build:   ✓ api/FlowSummary.json
+@objectstack/spec:build:   ✓ api/GetFlowRequest.json
+@objectstack/spec:build:   ⊘ API.GetFlowResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/GetRunRequest.json
+@objectstack/spec:build:   ✓ api/GetRunResponse.json
+@objectstack/spec:build:   ✓ api/ListFlowsRequest.json
+@objectstack/spec:build:   ✓ api/ListFlowsResponse.json
+@objectstack/spec:build:   ✓ api/ListRunsRequest.json
+@objectstack/spec:build:   ✓ api/ListRunsResponse.json
+@objectstack/spec:build:   ✓ api/ToggleFlowRequest.json
+@objectstack/spec:build:   ✓ api/ToggleFlowResponse.json
+@objectstack/spec:build:   ✓ api/TriggerFlowRequest.json
+@objectstack/spec:build:   ✓ api/TriggerFlowResponse.json
+@objectstack/spec:build:   ⊘ API.UpdateFlowRequestSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ API.UpdateFlowResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/GetInstalledPackageRequest.json
+@objectstack/spec:build:   ⊘ API.GetInstalledPackageResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/ListInstalledPackagesRequest.json
+@objectstack/spec:build:   ⊘ API.ListInstalledPackagesResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/PackageApiErrorCode.json
+@objectstack/spec:build:   ⊘ API.PackageInstallRequestSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ API.PackageInstallResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/PackagePathParams.json
+@objectstack/spec:build:   ✓ api/PackageRollbackRequest.json
+@objectstack/spec:build:   ✓ api/PackageRollbackResponse.json
+@objectstack/spec:build:   ⊘ API.PackageUpgradeRequestSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/PackageUpgradeResponse.json
+@objectstack/spec:build:   ⊘ API.ResolveDependenciesRequestSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ api/ResolveDependenciesResponse.json
+@objectstack/spec:build:   ✓ api/UninstallPackageApiRequest.json
+@objectstack/spec:build:   ✓ api/UninstallPackageApiResponse.json
+@objectstack/spec:build:   ✓ api/UploadArtifactRequest.json
+@objectstack/spec:build:   ✓ api/UploadArtifactResponse.json
+@objectstack/spec:build: 
+@objectstack/spec:build: [Automation]
+@objectstack/spec:build:   ⊘ Automation.FlowEdgeSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ automation/FlowNodeAction.json
+@objectstack/spec:build:   ✓ automation/FlowNode.json
+@objectstack/spec:build:   ⊘ Automation.FlowSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ automation/FlowVariable.json
+@objectstack/spec:build:   ⊘ Automation.FlowVersionHistorySchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ Automation.FlowRegionSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ Automation.LoopConfigSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ Automation.ParallelBranchSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ Automation.ParallelConfigSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ automation/RetryPolicy.json
+@objectstack/spec:build:   ⊘ Automation.TryCatchConfigSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ automation/Checkpoint.json
+@objectstack/spec:build:   ✓ automation/ConcurrencyPolicy.json
+@objectstack/spec:build:   ✓ automation/ExecutionError.json
+@objectstack/spec:build:   ✓ automation/ExecutionErrorSeverity.json
+@objectstack/spec:build:   ✓ automation/ExecutionLog.json
+@objectstack/spec:build:   ✓ automation/ExecutionStatus.json
+@objectstack/spec:build:   ✓ automation/ExecutionStepLog.json
+@objectstack/spec:build:   ⊘ Automation.ScheduleStateSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ automation/WebhookReceiver.json
+@objectstack/spec:build:   ✓ automation/Webhook.json
+@objectstack/spec:build:   ✓ automation/WebhookTriggerType.json
+@objectstack/spec:build:   ✓ automation/ApprovalDecision.json
+@objectstack/spec:build:   ✓ automation/ApprovalEscalation.json
+@objectstack/spec:build:   ✓ automation/ApprovalNodeApprover.json
+@objectstack/spec:build:   ✓ automation/ApprovalNodeConfig.json
+@objectstack/spec:build:   ✓ automation/ApproverType.json
+@objectstack/spec:build:   ✓ automation/ETLDestination.json
+@objectstack/spec:build:   ✓ automation/ETLEndpointType.json
+@objectstack/spec:build:   ✓ automation/ETLPipelineRun.json
+@objectstack/spec:build:   ⊘ Automation.ETLPipelineSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ automation/ETLRunStatus.json
+@objectstack/spec:build:   ✓ automation/ETLSource.json
+@objectstack/spec:build:   ✓ automation/ETLSyncMode.json
+@objectstack/spec:build:   ✓ automation/ETLTransformation.json
+@objectstack/spec:build:   ✓ automation/ETLTransformationType.json
+@objectstack/spec:build:   ✓ automation/AuthField.json
+@objectstack/spec:build:   ✓ automation/Authentication.json
+@objectstack/spec:build:   ✓ automation/AuthenticationType.json
+@objectstack/spec:build:   ✓ automation/ConnectorCategory.json
+@objectstack/spec:build:   ✓ automation/ConnectorInstance.json
+@objectstack/spec:build:   ✓ automation/ConnectorOperation.json
+@objectstack/spec:build:   ✓ automation/Connector.json
+@objectstack/spec:build:   ✓ automation/ConnectorTrigger.json
+@objectstack/spec:build:   ✓ automation/OAuth2Config.json
+@objectstack/spec:build:   ✓ automation/OperationParameter.json
+@objectstack/spec:build:   ✓ automation/OperationType.json
+@objectstack/spec:build:   ✓ automation/ConflictResolution.json
+@objectstack/spec:build:   ⊘ Automation.DataDestinationConfigSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ automation/DataSourceConfig.json
+@objectstack/spec:build:   ⊘ Automation.DataSyncConfigSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ automation/SyncDirection.json
+@objectstack/spec:build:   ✓ automation/SyncExecutionResult.json
+@objectstack/spec:build:   ✓ automation/SyncExecutionStatus.json
+@objectstack/spec:build:   ✓ automation/SyncMode.json
+@objectstack/spec:build:   ✓ automation/ActionRef.json
+@objectstack/spec:build:   ✓ automation/Event.json
+@objectstack/spec:build:   ✓ automation/GuardRef.json
+@objectstack/spec:build:   ✓ automation/StateMachine.json
+@objectstack/spec:build:   ✓ automation/StateNode.json
+@objectstack/spec:build:   ✓ automation/Transition.json
+@objectstack/spec:build:   ✓ automation/ActionCategory.json
+@objectstack/spec:build:   ✓ automation/ActionDescriptor.json
+@objectstack/spec:build:   ✓ automation/ActionParadigm.json
+@objectstack/spec:build:   ✓ automation/NodeExecutorDescriptor.json
+@objectstack/spec:build:   ✓ automation/WaitEventType.json
+@objectstack/spec:build:   ✓ automation/WaitExecutorConfig.json
+@objectstack/spec:build:   ✓ automation/WaitResumePayload.json
+@objectstack/spec:build:   ✓ automation/WaitTimeoutBehavior.json
+@objectstack/spec:build:   ✓ automation/BpmnDiagnostic.json
+@objectstack/spec:build:   ✓ automation/BpmnElementMapping.json
+@objectstack/spec:build:   ✓ automation/BpmnExportOptions.json
+@objectstack/spec:build:   ✓ automation/BpmnImportOptions.json
+@objectstack/spec:build:   ✓ automation/BpmnInteropResult.json
+@objectstack/spec:build:   ✓ automation/BpmnUnmappedStrategy.json
+@objectstack/spec:build:   ✓ automation/BpmnVersion.json
+@objectstack/spec:build: 
+@objectstack/spec:build: [Cloud]
+@objectstack/spec:build:   ✓ cloud/ArtifactDownloadResponse.json
+@objectstack/spec:build:   ✓ cloud/ArtifactReference.json
+@objectstack/spec:build:   ✓ cloud/ListingStatus.json
+@objectstack/spec:build:   ✓ cloud/MarketplaceCategory.json
+@objectstack/spec:build:   ✓ cloud/MarketplaceInstallRequest.json
+@objectstack/spec:build:   ✓ cloud/MarketplaceInstallResponse.json
+@objectstack/spec:build:   ✓ cloud/MarketplaceListing.json
+@objectstack/spec:build:   ✓ cloud/MarketplaceSearchRequest.json
+@objectstack/spec:build:   ✓ cloud/MarketplaceSearchResponse.json
+@objectstack/spec:build:   ✓ cloud/PackageSubmission.json
+@objectstack/spec:build:   ✓ cloud/PricingModel.json
+@objectstack/spec:build:   ✓ cloud/Publisher.json
+@objectstack/spec:build:   ✓ cloud/PublisherVerification.json
+@objectstack/spec:build:   ✓ cloud/AnalyticsTimeRange.json
+@objectstack/spec:build:   ✓ cloud/CreateListingRequest.json
+@objectstack/spec:build:   ✓ cloud/ListingActionRequest.json
+@objectstack/spec:build:   ✓ cloud/PublisherProfile.json
+@objectstack/spec:build:   ✓ cloud/PublishingAnalyticsRequest.json
+@objectstack/spec:build:   ✓ cloud/PublishingAnalyticsResponse.json
+@objectstack/spec:build:   ✓ cloud/ReleaseChannel.json
+@objectstack/spec:build:   ✓ cloud/TimeSeriesPoint.json
+@objectstack/spec:build:   ✓ cloud/UpdateListingRequest.json
+@objectstack/spec:build:   ✓ cloud/VersionRelease.json
+@objectstack/spec:build:   ✓ cloud/CuratedCollection.json
+@objectstack/spec:build:   ✓ cloud/FeaturedListing.json
+@objectstack/spec:build:   ✓ cloud/MarketplaceHealthMetrics.json
+@objectstack/spec:build:   ✓ cloud/PolicyAction.json
+@objectstack/spec:build:   ✓ cloud/PolicyViolationType.json
+@objectstack/spec:build:   ✓ cloud/RejectionReason.json
+@objectstack/spec:build:   ✓ cloud/ReviewCriterion.json
+@objectstack/spec:build:   ✓ cloud/ReviewDecision.json
+@objectstack/spec:build:   ✓ cloud/SubmissionReview.json
+@objectstack/spec:build:   ✓ cloud/TrendingListing.json
+@objectstack/spec:build:   ✓ cloud/AppDiscoveryRequest.json
+@objectstack/spec:build:   ✓ cloud/AppDiscoveryResponse.json
+@objectstack/spec:build:   ✓ cloud/AppSubscription.json
+@objectstack/spec:build:   ✓ cloud/InstalledAppSummary.json
+@objectstack/spec:build:   ✓ cloud/ListInstalledAppsRequest.json
+@objectstack/spec:build:   ✓ cloud/ListInstalledAppsResponse.json
+@objectstack/spec:build:   ✓ cloud/ListReviewsRequest.json
+@objectstack/spec:build:   ✓ cloud/ListReviewsResponse.json
+@objectstack/spec:build:   ✓ cloud/RecommendationReason.json
+@objectstack/spec:build:   ✓ cloud/RecommendedApp.json
+@objectstack/spec:build:   ✓ cloud/ReviewModerationStatus.json
+@objectstack/spec:build:   ✓ cloud/SubmitReviewRequest.json
+@objectstack/spec:build:   ✓ cloud/SubscriptionStatus.json
+@objectstack/spec:build:   ✓ cloud/UserReview.json
+@objectstack/spec:build:   ✓ cloud/PackageInstallation.json
+@objectstack/spec:build:   ✓ cloud/PackageInstallationStatus.json
+@objectstack/spec:build:   ✓ cloud/ProvisionTenantRequest.json
+@objectstack/spec:build:   ✓ cloud/ProvisionTenantResponse.json
+@objectstack/spec:build:   ✓ cloud/TenantContext.json
+@objectstack/spec:build:   ✓ cloud/TenantDatabase.json
+@objectstack/spec:build:   ✓ cloud/TenantDatabaseStatus.json
+@objectstack/spec:build:   ✓ cloud/TenantIdentificationSource.json
+@objectstack/spec:build:   ✓ cloud/TenantPlan.json
+@objectstack/spec:build:   ✓ cloud/TenantRoutingConfig.json
+@objectstack/spec:build:   ✓ cloud/EnvironmentCredential.json
+@objectstack/spec:build:   ✓ cloud/EnvironmentCredentialStatus.json
+@objectstack/spec:build:   ✓ cloud/EnvironmentDriver.json
+@objectstack/spec:build:   ✓ cloud/EnvironmentMember.json
+@objectstack/spec:build:   ✓ cloud/EnvironmentRole.json
+@objectstack/spec:build:   ✓ cloud/Environment.json
+@objectstack/spec:build:   ✓ cloud/EnvironmentStatus.json
+@objectstack/spec:build:   ✓ cloud/EnvironmentType.json
+@objectstack/spec:build:   ✓ cloud/EnvironmentVisibility.json
+@objectstack/spec:build:   ✓ cloud/ProvisionEnvironmentRequest.json
+@objectstack/spec:build:   ✓ cloud/ProvisionEnvironmentResponse.json
+@objectstack/spec:build:   ✓ cloud/ProvisionOrganizationRequest.json
+@objectstack/spec:build:   ✓ cloud/ProvisionOrganizationResponse.json
+@objectstack/spec:build:   ✓ cloud/EnvironmentPackageInstallation.json
+@objectstack/spec:build:   ✓ cloud/EnvironmentPackageStatus.json
+@objectstack/spec:build:   ✓ cloud/InstallPackageToEnvironmentRequest.json
+@objectstack/spec:build:   ✓ cloud/ListEnvironmentPackagesResponse.json
+@objectstack/spec:build:   ✓ cloud/RollbackEnvironmentPackageRequest.json
+@objectstack/spec:build:   ✓ cloud/UpgradeEnvironmentPackageRequest.json
+@objectstack/spec:build:   ✓ cloud/CreatePackageRequest.json
+@objectstack/spec:build:   ✓ cloud/PackageCategory.json
+@objectstack/spec:build:   ✓ cloud/PackageLocale.json
+@objectstack/spec:build:   ✓ cloud/PackagePublisher.json
+@objectstack/spec:build:   ✓ cloud/Package.json
+@objectstack/spec:build:   ✓ cloud/PackageTranslation.json
+@objectstack/spec:build:   ✓ cloud/PackageTranslations.json
+@objectstack/spec:build:   ✓ cloud/PackageVisibility.json
+@objectstack/spec:build:   ✓ cloud/UpdatePackageRequest.json
+@objectstack/spec:build:   ✓ cloud/CreatePackageVersionRequest.json
+@objectstack/spec:build:   ✓ cloud/PackageDependency.json
+@objectstack/spec:build:   ✓ cloud/PackageManifest.json
+@objectstack/spec:build:   ✓ cloud/PackageVersion.json
+@objectstack/spec:build:   ✓ cloud/PackageVersionStatus.json
+@objectstack/spec:build:   ✓ cloud/PublishPackageVersionRequest.json
+@objectstack/spec:build:   ✓ cloud/UpdatePackageVersionRequest.json
+@objectstack/spec:build:   ⊘ Cloud.EnvironmentArtifactSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ cloud/Sha256Digest.json
+@objectstack/spec:build:   ✓ cloud/TemplateManifest.json
+@objectstack/spec:build: 
+@objectstack/spec:build: [Contracts]
+@objectstack/spec:build: 
+@objectstack/spec:build: [Data]
+@objectstack/spec:build:   ✓ data/AggregationFunction.json
+@objectstack/spec:build:   ✓ data/AggregationNode.json
+@objectstack/spec:build:   ✓ data/DateGranularity.json
+@objectstack/spec:build:   ✓ data/FieldNode.json
+@objectstack/spec:build:   ✓ data/FullTextSearch.json
+@objectstack/spec:build:   ✓ data/GroupByNode.json
+@objectstack/spec:build:   ✓ data/JoinNode.json
+@objectstack/spec:build:   ✓ data/JoinStrategy.json
+@objectstack/spec:build:   ✓ data/JoinType.json
+@objectstack/spec:build:   ✓ data/Query.json
+@objectstack/spec:build:   ✓ data/SortNode.json
+@objectstack/spec:build:   ✓ data/WindowFunction.json
+@objectstack/spec:build:   ✓ data/WindowFunctionNode.json
+@objectstack/spec:build:   ✓ data/WindowSpec.json
+@objectstack/spec:build:   ⊘ Data.ComparisonOperatorSchema: Date cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ data/EqualityOperator.json
+@objectstack/spec:build:   ⊘ Data.FieldOperatorsSchema: Date cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ data/FieldReference.json
+@objectstack/spec:build:   ✓ data/FilterCondition.json
+@objectstack/spec:build:   ⊘ Data.NormalizedFilterSchema: Date cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ data/QueryFilter.json
+@objectstack/spec:build:   ⊘ Data.RangeOperatorSchema: Date cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ data/SetOperator.json
+@objectstack/spec:build:   ✓ data/SpecialOperator.json
+@objectstack/spec:build:   ✓ data/StringOperator.json
+@objectstack/spec:build:   ✓ data/DateMacroPlaceholder.json
+@objectstack/spec:build:   ✓ data/DateMacroToken.json
+@objectstack/spec:build:   ✓ data/ApiMethod.json
+@objectstack/spec:build:   ✓ data/Index.json
+@objectstack/spec:build:   ✓ data/ObjectAccessConfig.json
+@objectstack/spec:build:   ✓ data/ObjectCapabilities.json
+@objectstack/spec:build:   ⊘ Data.ObjectExtensionSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ data/ObjectExternalBinding.json
+@objectstack/spec:build:   ✓ data/ObjectFieldGroup.json
+@objectstack/spec:build:   ✓ data/ObjectOwnershipEnum.json
+@objectstack/spec:build:   ✓ data/ObjectRequiredPermissions.json
+@objectstack/spec:build:   ⊘ Data.ObjectSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ data/PerOperationRequiredPermissions.json
+@objectstack/spec:build:   ✓ data/SearchConfig.json
+@objectstack/spec:build:   ✓ data/SoftDeleteConfig.json
+@objectstack/spec:build:   ✓ data/TenancyConfig.json
+@objectstack/spec:build:   ✓ data/VersioningConfig.json
+@objectstack/spec:build:   ✓ data/Address.json
+@objectstack/spec:build:   ✓ data/ComputedFieldCache.json
+@objectstack/spec:build:   ✓ data/CurrencyConfig.json
+@objectstack/spec:build:   ✓ data/CurrencyValue.json
+@objectstack/spec:build:   ✓ data/DataQualityRules.json
+@objectstack/spec:build:   ⊘ Data.FieldSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ data/FieldType.json
+@objectstack/spec:build:   ✓ data/FileAttachmentConfig.json
+@objectstack/spec:build:   ✓ data/LocationCoordinates.json
+@objectstack/spec:build:   ⊘ Data.SelectOptionSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ data/VectorConfig.json
+@objectstack/spec:build:   ⊘ Data.ConditionalValidationSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ Data.CrossFieldValidationSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ data/FormatValidation.json
+@objectstack/spec:build:   ✓ data/JSONValidation.json
+@objectstack/spec:build:   ⊘ Data.ScriptValidationSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ data/StateMachineValidation.json
+@objectstack/spec:build:   ⊘ Data.ValidationRuleSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ data/HookContext.json
+@objectstack/spec:build:   ✓ data/HookEvent.json
+@objectstack/spec:build:   ⊘ Data.HookSchema: Custom types cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ data/ExpressionBody.json
+@objectstack/spec:build:   ✓ data/HookBodyCapability.json
+@objectstack/spec:build:   ✓ data/HookBody.json
+@objectstack/spec:build:   ✓ data/ScriptBody.json
+@objectstack/spec:build:   ✓ data/FieldMapping.json
+@objectstack/spec:build:   ✓ data/Mapping.json
+@objectstack/spec:build:   ✓ data/TransformType.json
+@objectstack/spec:build:   ✓ data/BaseEngineOptions.json
+@objectstack/spec:build:   ✓ data/DataEngineAggregateOptions.json
+@objectstack/spec:build:   ✓ data/DataEngineAggregateRequest.json
+@objectstack/spec:build:   ✓ data/DataEngineBatchRequest.json
+@objectstack/spec:build:   ⊘ Data.DataEngineContractSchema: Function types cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ data/DataEngineCountOptions.json
+@objectstack/spec:build:   ✓ data/DataEngineCountRequest.json
+@objectstack/spec:build:   ✓ data/DataEngineDeleteOptions.json
+@objectstack/spec:build:   ✓ data/DataEngineDeleteRequest.json
+@objectstack/spec:build:   ✓ data/DataEngineExecuteRequest.json
+@objectstack/spec:build:   ✓ data/DataEngineFilter.json
+@objectstack/spec:build:   ✓ data/DataEngineFindOneRequest.json
+@objectstack/spec:build:   ✓ data/DataEngineFindRequest.json
+@objectstack/spec:build:   ✓ data/DataEngineInsertOptions.json
+@objectstack/spec:build:   ✓ data/DataEngineInsertRequest.json
+@objectstack/spec:build:   ✓ data/DataEngineQueryOptions.json
+@objectstack/spec:build:   ✓ data/DataEngineRequest.json
+@objectstack/spec:build:   ✓ data/DataEngineSort.json
+@objectstack/spec:build:   ✓ data/DataEngineUpdateOptions.json
+@objectstack/spec:build:   ✓ data/DataEngineUpdateRequest.json
+@objectstack/spec:build:   ✓ data/DataEngineVectorFindRequest.json
+@objectstack/spec:build:   ✓ data/EngineAggregateOptions.json
+@objectstack/spec:build:   ✓ data/EngineCountOptions.json
+@objectstack/spec:build:   ✓ data/EngineDeleteOptions.json
+@objectstack/spec:build:   ✓ data/EngineQueryOptions.json
+@objectstack/spec:build:   ✓ data/EngineUpdateOptions.json
+@objectstack/spec:build:   ✓ data/DriverCapabilities.json
+@objectstack/spec:build:   ✓ data/DriverConfig.json
+@objectstack/spec:build:   ⊘ Data.DriverInterfaceSchema: Function types cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ data/DriverOptions.json
+@objectstack/spec:build:   ✓ data/PoolConfig.json
+@objectstack/spec:build:   ✓ data/DataTypeMapping.json
+@objectstack/spec:build:   ✓ data/SQLDialect.json
+@objectstack/spec:build:   ✓ data/SQLDriverConfig.json
+@objectstack/spec:build:   ✓ data/SSLConfig.json
+@objectstack/spec:build:   ✓ data/AggregationPipeline.json
+@objectstack/spec:build:   ✓ data/AggregationStage.json
+@objectstack/spec:build:   ✓ data/ConsistencyLevel.json
+@objectstack/spec:build:   ✓ data/DocumentValidationSchema.json
+@objectstack/spec:build:   ✓ data/NoSQLDataTypeMapping.json
+@objectstack/spec:build:   ✓ data/NoSQLDatabaseType.json
+@objectstack/spec:build:   ✓ data/NoSQLDriverConfig.json
+@objectstack/spec:build:   ✓ data/NoSQLIndex.json
+@objectstack/spec:build:   ✓ data/NoSQLIndexType.json
+@objectstack/spec:build:   ✓ data/NoSQLOperationType.json
+@objectstack/spec:build:   ✓ data/NoSQLQueryOptions.json
+@objectstack/spec:build:   ✓ data/NoSQLTransactionOptions.json
+@objectstack/spec:build:   ✓ data/ReplicationConfig.json
+@objectstack/spec:build:   ✓ data/ShardingConfig.json
+@objectstack/spec:build:   ✓ data/SeedMode.json
+@objectstack/spec:build:   ✓ data/Seed.json
+@objectstack/spec:build:   ✓ data/ObjectDependencyGraph.json
+@objectstack/spec:build:   ✓ data/ObjectDependencyNode.json
+@objectstack/spec:build:   ✓ data/ReferenceResolutionError.json
+@objectstack/spec:build:   ✓ data/ReferenceResolution.json
+@objectstack/spec:build:   ✓ data/SeedIdentity.json
+@objectstack/spec:build:   ✓ data/SeedLoadResult.json
+@objectstack/spec:build:   ✓ data/SeedLoaderConfig.json
+@objectstack/spec:build:   ✓ data/SeedLoaderRequest.json
+@objectstack/spec:build:   ✓ data/SeedLoaderResult.json
+@objectstack/spec:build:   ✓ data/Document.json
+@objectstack/spec:build:   ✓ data/DocumentTemplate.json
+@objectstack/spec:build:   ✓ data/DocumentVersion.json
+@objectstack/spec:build:   ✓ data/ESignatureConfig.json
+@objectstack/spec:build:   ✓ data/ExternalDataSource.json
+@objectstack/spec:build:   ⊘ Data.ExternalFieldMappingSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ Data.ExternalLookupSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ data/DatasourceCapabilities.json
+@objectstack/spec:build:   ✓ data/Datasource.json
+@objectstack/spec:build:   ✓ data/DriverDefinition.json
+@objectstack/spec:build:   ✓ data/DriverType.json
+@objectstack/spec:build:   ✓ data/ExternalDatasourceSettings.json
+@objectstack/spec:build:   ✓ data/ModeSchema.json
+@objectstack/spec:build:   ✓ data/ExternalCatalog.json
+@objectstack/spec:build:   ✓ data/ExternalColumn.json
+@objectstack/spec:build:   ✓ data/ExternalTable.json
+@objectstack/spec:build:   ✓ data/AggregationMetricType.json
+@objectstack/spec:build:   ✓ data/AnalyticsQuery.json
+@objectstack/spec:build:   ✓ data/CubeJoin.json
+@objectstack/spec:build:   ✓ data/Cube.json
+@objectstack/spec:build:   ✓ data/Dimension.json
+@objectstack/spec:build:   ✓ data/DimensionType.json
+@objectstack/spec:build:   ✓ data/Metric.json
+@objectstack/spec:build:   ✓ data/TimeUpdateInterval.json
+@objectstack/spec:build:   ✓ data/FeedActor.json
+@objectstack/spec:build:   ✓ data/FeedFilterMode.json
+@objectstack/spec:build:   ✓ data/FeedItem.json
+@objectstack/spec:build:   ✓ data/FeedItemType.json
+@objectstack/spec:build:   ✓ data/FeedVisibility.json
+@objectstack/spec:build:   ✓ data/FieldChangeEntry.json
+@objectstack/spec:build:   ✓ data/Mention.json
+@objectstack/spec:build:   ✓ data/Reaction.json
+@objectstack/spec:build:   ✓ data/NotificationChannel.json
+@objectstack/spec:build:   ✓ data/RecordSubscription.json
+@objectstack/spec:build:   ✓ data/SubscriptionEventType.json
+@objectstack/spec:build: 
+@objectstack/spec:build: [Identity]
+@objectstack/spec:build:   ✓ identity/Account.json
+@objectstack/spec:build:   ✓ identity/ApiKey.json
+@objectstack/spec:build:   ✓ identity/Session.json
+@objectstack/spec:build:   ✓ identity/User.json
+@objectstack/spec:build:   ✓ identity/VerificationToken.json
+@objectstack/spec:build:   ✓ identity/Position.json
+@objectstack/spec:build:   ✓ identity/Invitation.json
+@objectstack/spec:build:   ✓ identity/InvitationStatus.json
+@objectstack/spec:build:   ✓ identity/Member.json
+@objectstack/spec:build:   ✓ identity/Organization.json
+@objectstack/spec:build:   ✓ identity/SCIMAddress.json
+@objectstack/spec:build:   ✓ identity/SCIMBulkOperation.json
+@objectstack/spec:build:   ✓ identity/SCIMBulkRequest.json
+@objectstack/spec:build:   ✓ identity/SCIMBulkResponseOperation.json
+@objectstack/spec:build:   ✓ identity/SCIMBulkResponse.json
+@objectstack/spec:build:   ✓ identity/SCIMEmail.json
+@objectstack/spec:build:   ✓ identity/SCIMEnterpriseUser.json
+@objectstack/spec:build:   ✓ identity/SCIMError.json
+@objectstack/spec:build:   ✓ identity/SCIMGroupReference.json
+@objectstack/spec:build:   ✓ identity/SCIMGroup.json
+@objectstack/spec:build:   ✓ identity/SCIMListResponse.json
+@objectstack/spec:build:   ✓ identity/SCIMMemberReference.json
+@objectstack/spec:build:   ✓ identity/SCIMMeta.json
+@objectstack/spec:build:   ✓ identity/SCIMName.json
+@objectstack/spec:build:   ✓ identity/SCIMPatchOperation.json
+@objectstack/spec:build:   ✓ identity/SCIMPatchRequest.json
+@objectstack/spec:build:   ✓ identity/SCIMPhoneNumber.json
+@objectstack/spec:build:   ✓ identity/SCIMUser.json
+@objectstack/spec:build:   ✓ identity/EvalUser.json
+@objectstack/spec:build: 
+@objectstack/spec:build: [Integration]
+@objectstack/spec:build:   ✓ integration/CircuitBreakerConfig.json
+@objectstack/spec:build:   ✓ integration/ConflictResolution.json
+@objectstack/spec:build:   ✓ integration/ConnectorAction.json
+@objectstack/spec:build:   ✓ integration/ConnectorHealth.json
+@objectstack/spec:build:   ⊘ Integration.ConnectorSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ integration/ConnectorStatus.json
+@objectstack/spec:build:   ✓ integration/ConnectorTrigger.json
+@objectstack/spec:build:   ✓ integration/ConnectorType.json
+@objectstack/spec:build:   ⊘ Integration.DataSyncConfigSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ integration/ErrorCategory.json
+@objectstack/spec:build:   ✓ integration/ErrorMappingConfig.json
+@objectstack/spec:build:   ✓ integration/ErrorMappingRule.json
+@objectstack/spec:build:   ⊘ Integration.FieldMappingSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ integration/HealthCheckConfig.json
+@objectstack/spec:build:   ✓ integration/RateLimitConfig.json
+@objectstack/spec:build:   ✓ integration/RateLimitStrategy.json
+@objectstack/spec:build:   ✓ integration/RetryConfig.json
+@objectstack/spec:build:   ✓ integration/RetryStrategy.json
+@objectstack/spec:build:   ✓ integration/SyncStrategy.json
+@objectstack/spec:build:   ✓ integration/WebhookConfig.json
+@objectstack/spec:build:   ✓ integration/WebhookEvent.json
+@objectstack/spec:build:   ✓ integration/WebhookSignatureAlgorithm.json
+@objectstack/spec:build:   ✓ integration/ApiVersionConfig.json
+@objectstack/spec:build:   ⊘ Integration.SaasConnectorSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ Integration.SaasObjectTypeSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ integration/SaasProvider.json
+@objectstack/spec:build:   ✓ integration/CdcConfig.json
+@objectstack/spec:build:   ⊘ Integration.DatabaseConnectorSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ integration/DatabasePoolConfig.json
+@objectstack/spec:build:   ✓ integration/DatabaseProvider.json
+@objectstack/spec:build:   ⊘ Integration.DatabaseTableSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ integration/SslConfig.json
+@objectstack/spec:build:   ✓ integration/FileAccessPattern.json
+@objectstack/spec:build:   ✓ integration/FileFilterConfig.json
+@objectstack/spec:build:   ✓ integration/FileMetadataConfig.json
+@objectstack/spec:build:   ⊘ Integration.FileStorageConnectorSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ integration/FileStorageProvider.json
+@objectstack/spec:build:   ✓ integration/FileVersioningConfig.json
+@objectstack/spec:build:   ✓ integration/MultipartUploadConfig.json
+@objectstack/spec:build:   ✓ integration/StorageBucket.json
+@objectstack/spec:build:   ✓ integration/AckMode.json
+@objectstack/spec:build:   ✓ integration/ConsumerConfig.json
+@objectstack/spec:build:   ✓ integration/DeliveryGuarantee.json
+@objectstack/spec:build:   ✓ integration/DlqConfig.json
+@objectstack/spec:build:   ✓ integration/MessageFormat.json
+@objectstack/spec:build:   ⊘ Integration.MessageQueueConnectorSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ integration/MessageQueueProvider.json
+@objectstack/spec:build:   ✓ integration/ProducerConfig.json
+@objectstack/spec:build:   ✓ integration/TopicQueue.json
+@objectstack/spec:build:   ✓ integration/GitHubActionsWorkflow.json
+@objectstack/spec:build:   ✓ integration/GitHubCommitConfig.json
+@objectstack/spec:build:   ⊘ Integration.GitHubConnectorSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ integration/GitHubIssueTracking.json
+@objectstack/spec:build:   ✓ integration/GitHubProvider.json
+@objectstack/spec:build:   ⊘ Integration.GitHubPullRequestConfigSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ integration/GitHubReleaseConfig.json
+@objectstack/spec:build:   ✓ integration/GitHubRepository.json
+@objectstack/spec:build:   ✓ integration/BuildConfig.json
+@objectstack/spec:build:   ✓ integration/DeploymentConfig.json
+@objectstack/spec:build:   ✓ integration/DomainConfig.json
+@objectstack/spec:build:   ✓ integration/EdgeFunctionConfig.json
+@objectstack/spec:build:   ✓ integration/EnvironmentVariables.json
+@objectstack/spec:build:   ✓ integration/GitRepositoryConfig.json
+@objectstack/spec:build:   ⊘ Integration.VercelConnectorSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ integration/VercelFramework.json
+@objectstack/spec:build:   ✓ integration/VercelMonitoring.json
+@objectstack/spec:build:   ✓ integration/VercelProject.json
+@objectstack/spec:build:   ✓ integration/VercelProvider.json
+@objectstack/spec:build:   ✓ integration/VercelTeam.json
+@objectstack/spec:build: 
+@objectstack/spec:build: [Kernel]
+@objectstack/spec:build:   ✓ kernel/CLICommandContribution.json
+@objectstack/spec:build:   ✓ kernel/OclifPluginConfig.json
+@objectstack/spec:build:   ✓ kernel/ClusterCapabilityConfig.json
+@objectstack/spec:build:   ✓ kernel/ClusterDriver.json
+@objectstack/spec:build:   ✓ kernel/ClusterTenantIsolation.json
+@objectstack/spec:build:   ✓ kernel/EventClusterOptions.json
+@objectstack/spec:build:   ✓ kernel/EventDeliverySemantics.json
+@objectstack/spec:build:   ✓ kernel/EventScope.json
+@objectstack/spec:build:   ✓ kernel/MetadataChangeOperation.json
+@objectstack/spec:build:   ⊘ Kernel.MetadataChangedEventPayloadSchema: BigInt cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ kernel/ServiceClusterAnnotations.json
+@objectstack/spec:build:   ✓ kernel/ServiceClusterScope.json
+@objectstack/spec:build:   ✓ kernel/ServiceLeaderStrategy.json
+@objectstack/spec:build:   ✓ kernel/KernelContext.json
+@objectstack/spec:build:   ✓ kernel/PreviewModeConfig.json
+@objectstack/spec:build:   ✓ kernel/RuntimeMode.json
+@objectstack/spec:build:   ✓ kernel/TenantRuntimeContext.json
+@objectstack/spec:build:   ✓ kernel/DependencyResolutionResult.json
+@objectstack/spec:build:   ✓ kernel/DependencyStatusEnum.json
+@objectstack/spec:build:   ✓ kernel/RequiredAction.json
+@objectstack/spec:build:   ✓ kernel/ResolvedDependency.json
+@objectstack/spec:build:   ✓ kernel/DevFixtureConfig.json
+@objectstack/spec:build:   ✓ kernel/DevPluginConfig.json
+@objectstack/spec:build:   ✓ kernel/DevPluginPreset.json
+@objectstack/spec:build:   ✓ kernel/DevServiceOverride.json
+@objectstack/spec:build:   ✓ kernel/DevToolsConfig.json
+@objectstack/spec:build:   ✓ kernel/EventMetadata.json
+@objectstack/spec:build:   ✓ kernel/EventPriority.json
+@objectstack/spec:build:   ✓ kernel/Event.json
+@objectstack/spec:build:   ✓ kernel/EventTypeDefinition.json
+@objectstack/spec:build:   ✓ kernel/EventHandler.json
+@objectstack/spec:build:   ✓ kernel/EventPersistence.json
+@objectstack/spec:build:   ✓ kernel/EventRoute.json
+@objectstack/spec:build:   ✓ kernel/EventQueueConfig.json
+@objectstack/spec:build:   ✓ kernel/EventReplayConfig.json
+@objectstack/spec:build:   ✓ kernel/EventSourcingConfig.json
+@objectstack/spec:build:   ✓ kernel/DeadLetterQueueEntry.json
+@objectstack/spec:build:   ✓ kernel/EventLogEntry.json
+@objectstack/spec:build:   ✓ kernel/EventMessageQueueConfig.json
+@objectstack/spec:build:   ✓ kernel/EventWebhookConfig.json
+@objectstack/spec:build:   ✓ kernel/RealTimeNotificationConfig.json
+@objectstack/spec:build:   ✓ kernel/EventBusConfig.json
+@objectstack/spec:build:   ⊘ Kernel.FeatureFlag: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ Kernel.FeatureFlagSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ kernel/FeatureStrategy.json
+@objectstack/spec:build:   ✓ kernel/ManifestPermissions.json
+@objectstack/spec:build:   ⊘ Kernel.ManifestSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ kernel/PluginEngines.json
+@objectstack/spec:build:   ✓ kernel/PluginIntegrity.json
+@objectstack/spec:build:   ✓ kernel/PluginPackaging.json
+@objectstack/spec:build:   ✓ kernel/PluginPermissions.json
+@objectstack/spec:build:   ✓ kernel/PluginRuntime.json
+@objectstack/spec:build:   ✓ kernel/CustomizationOrigin.json
+@objectstack/spec:build:   ✓ kernel/CustomizationPolicy.json
+@objectstack/spec:build:   ✓ kernel/FieldChange.json
+@objectstack/spec:build:   ✓ kernel/MergeConflict.json
+@objectstack/spec:build:   ✓ kernel/MergeResult.json
+@objectstack/spec:build:   ✓ kernel/MergeStrategyConfig.json
+@objectstack/spec:build:   ✓ kernel/MetadataOverlay.json
+@objectstack/spec:build:   ✓ kernel/MetadataCollectionInfo.json
+@objectstack/spec:build:   ⊘ Kernel.MetadataExportOptionsSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ kernel/MetadataFallbackStrategy.json
+@objectstack/spec:build:   ✓ kernel/MetadataFormat.json
+@objectstack/spec:build:   ✓ kernel/MetadataImportOptions.json
+@objectstack/spec:build:   ⊘ Kernel.MetadataLoadOptionsSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ kernel/MetadataLoadResult.json
+@objectstack/spec:build:   ✓ kernel/MetadataLoaderContract.json
+@objectstack/spec:build:   ✓ kernel/MetadataManagerConfig.json
+@objectstack/spec:build:   ✓ kernel/MetadataSaveOptions.json
+@objectstack/spec:build:   ✓ kernel/MetadataSaveResult.json
+@objectstack/spec:build:   ✓ kernel/MetadataStats.json
+@objectstack/spec:build:   ✓ kernel/MetadataWatchEvent.json
+@objectstack/spec:build:   ✓ kernel/MetadataBulkRegisterRequest.json
+@objectstack/spec:build:   ✓ kernel/MetadataBulkResult.json
+@objectstack/spec:build:   ✓ kernel/MetadataDependency.json
+@objectstack/spec:build:   ✓ kernel/MetadataEvent.json
+@objectstack/spec:build:   ⊘ Kernel.MetadataPluginConfigSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ Kernel.MetadataPluginManifestSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ kernel/MetadataQueryResult.json
+@objectstack/spec:build:   ✓ kernel/MetadataQuery.json
+@objectstack/spec:build:   ⊘ Kernel.MetadataTypeRegistryEntrySchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ kernel/MetadataType.json
+@objectstack/spec:build:   ✓ kernel/MetadataValidationResult.json
+@objectstack/spec:build:   ✓ kernel/MetadataLock.json
+@objectstack/spec:build:   ✓ kernel/MetadataLockSource.json
+@objectstack/spec:build:   ✓ kernel/MetadataProvenance.json
+@objectstack/spec:build:   ✓ kernel/ArtifactChecksum.json
+@objectstack/spec:build:   ✓ kernel/ArtifactFileEntry.json
+@objectstack/spec:build:   ✓ kernel/ArtifactSignature.json
+@objectstack/spec:build:   ✓ kernel/MetadataCategoryEnum.json
+@objectstack/spec:build:   ✓ kernel/PackageArtifact.json
+@objectstack/spec:build:   ✓ kernel/DisablePackageRequest.json
+@objectstack/spec:build:   ⊘ Kernel.DisablePackageResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ kernel/EnablePackageRequest.json
+@objectstack/spec:build:   ⊘ Kernel.EnablePackageResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ kernel/GetPackageRequest.json
+@objectstack/spec:build:   ⊘ Kernel.GetPackageResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ Kernel.InstallPackageRequestSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ Kernel.InstallPackageResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ Kernel.InstalledPackageSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ kernel/ListPackagesRequest.json
+@objectstack/spec:build:   ⊘ Kernel.ListPackagesResponseSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ kernel/NamespaceConflictError.json
+@objectstack/spec:build:   ✓ kernel/NamespaceRegistryEntry.json
+@objectstack/spec:build:   ✓ kernel/PackageStatusEnum.json
+@objectstack/spec:build:   ✓ kernel/UninstallPackageRequest.json
+@objectstack/spec:build:   ✓ kernel/UninstallPackageResponse.json
+@objectstack/spec:build:   ✓ kernel/MetadataChangeType.json
+@objectstack/spec:build:   ✓ kernel/MetadataDiffItem.json
+@objectstack/spec:build:   ✓ kernel/RollbackPackageRequest.json
+@objectstack/spec:build:   ✓ kernel/RollbackPackageResponse.json
+@objectstack/spec:build:   ✓ kernel/UpgradeImpactLevel.json
+@objectstack/spec:build:   ⊘ Kernel.UpgradePackageRequestSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ kernel/UpgradePackageResponse.json
+@objectstack/spec:build:   ✓ kernel/UpgradePhase.json
+@objectstack/spec:build:   ✓ kernel/UpgradePlan.json
+@objectstack/spec:build:   ⊘ Kernel.UpgradeSnapshotSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ kernel/CapabilityConformanceLevel.json
+@objectstack/spec:build:   ✓ kernel/ExtensionPoint.json
+@objectstack/spec:build:   ✓ kernel/PluginCapabilityManifest.json
+@objectstack/spec:build:   ✓ kernel/PluginCapability.json
+@objectstack/spec:build:   ✓ kernel/PluginDependency.json
+@objectstack/spec:build:   ✓ kernel/PluginInterface.json
+@objectstack/spec:build:   ✓ kernel/ProtocolFeature.json
+@objectstack/spec:build:   ✓ kernel/ProtocolReference.json
+@objectstack/spec:build:   ✓ kernel/ProtocolVersion.json
+@objectstack/spec:build:   ✓ kernel/AdvancedPluginLifecycleConfig.json
+@objectstack/spec:build:   ✓ kernel/DistributedStateConfig.json
+@objectstack/spec:build:   ✓ kernel/GracefulDegradation.json
+@objectstack/spec:build:   ✓ kernel/HotReloadConfig.json
+@objectstack/spec:build:   ✓ kernel/PluginHealthCheck.json
+@objectstack/spec:build:   ✓ kernel/PluginHealthReport.json
+@objectstack/spec:build:   ✓ kernel/PluginHealthStatus.json
+@objectstack/spec:build:   ✓ kernel/PluginStateSnapshot.json
+@objectstack/spec:build:   ✓ kernel/PluginUpdateStrategy.json
+@objectstack/spec:build:   ✓ kernel/EventPhase.json
+@objectstack/spec:build:   ✓ kernel/HookRegisteredEvent.json
+@objectstack/spec:build:   ✓ kernel/HookTriggeredEvent.json
+@objectstack/spec:build:   ✓ kernel/KernelEventBase.json
+@objectstack/spec:build:   ✓ kernel/KernelReadyEvent.json
+@objectstack/spec:build:   ✓ kernel/KernelShutdownEvent.json
+@objectstack/spec:build:   ✓ kernel/PluginErrorEvent.json
+@objectstack/spec:build:   ✓ kernel/PluginEventBase.json
+@objectstack/spec:build:   ✓ kernel/PluginLifecycleEventType.json
+@objectstack/spec:build:   ✓ kernel/PluginLifecyclePhaseEvent.json
+@objectstack/spec:build:   ✓ kernel/PluginRegisteredEvent.json
+@objectstack/spec:build:   ✓ kernel/ServiceRegisteredEvent.json
+@objectstack/spec:build:   ✓ kernel/ServiceUnregisteredEvent.json
+@objectstack/spec:build:   ✓ kernel/PluginCaching.json
+@objectstack/spec:build:   ✓ kernel/PluginCodeSplitting.json
+@objectstack/spec:build:   ✓ kernel/PluginDependencyResolution.json
+@objectstack/spec:build:   ✓ kernel/PluginDynamicImport.json
+@objectstack/spec:build:   ✓ kernel/PluginHotReload.json
+@objectstack/spec:build:   ✓ kernel/PluginInitialization.json
+@objectstack/spec:build:   ✓ kernel/PluginLoadingConfig.json
+@objectstack/spec:build:   ✓ kernel/PluginLoadingEvent.json
+@objectstack/spec:build:   ✓ kernel/PluginLoadingState.json
+@objectstack/spec:build:   ✓ kernel/PluginLoadingStrategy.json
+@objectstack/spec:build:   ✓ kernel/PluginPerformanceMonitoring.json
+@objectstack/spec:build:   ✓ kernel/PluginPreloadConfig.json
+@objectstack/spec:build:   ✓ kernel/PluginSandboxing.json
+@objectstack/spec:build:   ✓ kernel/ActivationEvent.json
+@objectstack/spec:build:   ✓ kernel/DynamicLoadRequest.json
+@objectstack/spec:build:   ✓ kernel/DynamicLoadingConfig.json
+@objectstack/spec:build:   ✓ kernel/DynamicPluginOperation.json
+@objectstack/spec:build:   ✓ kernel/DynamicPluginResult.json
+@objectstack/spec:build:   ✓ kernel/DynamicUnloadRequest.json
+@objectstack/spec:build:   ✓ kernel/PluginDiscoveryConfig.json
+@objectstack/spec:build:   ✓ kernel/PluginDiscoverySource.json
+@objectstack/spec:build:   ✓ kernel/PluginSource.json
+@objectstack/spec:build:   ✓ kernel/KernelSecurityPolicy.json
+@objectstack/spec:build:   ✓ kernel/KernelSecurityScanResult.json
+@objectstack/spec:build:   ✓ kernel/KernelSecurityVulnerability.json
+@objectstack/spec:build:   ✓ kernel/PermissionAction.json
+@objectstack/spec:build:   ✓ kernel/PermissionScope.json
+@objectstack/spec:build:   ⊘ Kernel.PluginPermissionSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ Kernel.PluginPermissionSetSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ Kernel.PluginSecurityManifestSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ kernel/PluginTrustLevel.json
+@objectstack/spec:build:   ✓ kernel/ResourceType.json
+@objectstack/spec:build:   ✓ kernel/RuntimeConfig.json
+@objectstack/spec:build:   ✓ kernel/SandboxConfig.json
+@objectstack/spec:build:   ✓ kernel/OpsDomainModule.json
+@objectstack/spec:build:   ✓ kernel/OpsFilePath.json
+@objectstack/spec:build:   ✓ kernel/OpsPluginStructure.json
+@objectstack/spec:build:   ✓ kernel/PluginMetadata.json
+@objectstack/spec:build:   ✓ kernel/ValidationError.json
+@objectstack/spec:build:   ✓ kernel/ValidationResult.json
+@objectstack/spec:build:   ✓ kernel/ValidationWarning.json
+@objectstack/spec:build:   ✓ kernel/BreakingChange.json
+@objectstack/spec:build:   ✓ kernel/CompatibilityLevel.json
+@objectstack/spec:build:   ✓ kernel/CompatibilityMatrixEntry.json
+@objectstack/spec:build:   ✓ kernel/DependencyConflict.json
+@objectstack/spec:build:   ✓ kernel/DeprecationNotice.json
+@objectstack/spec:build:   ⊘ Kernel.MultiVersionSupportSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ kernel/PluginCompatibilityMatrix.json
+@objectstack/spec:build:   ✓ kernel/PluginDependencyResolutionResult.json
+@objectstack/spec:build:   ✓ kernel/PluginVersionMetadata.json
+@objectstack/spec:build:   ✓ kernel/SemanticVersion.json
+@objectstack/spec:build:   ✓ kernel/VersionConstraint.json
+@objectstack/spec:build:   ⊘ Kernel.PluginContextSchema: Function types cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ Kernel.PluginLifecycleSchema: Function types cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ Kernel.PluginSchema: Function types cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ kernel/UpgradeContext.json
+@objectstack/spec:build:   ✓ kernel/ScopeConfig.json
+@objectstack/spec:build:   ✓ kernel/ScopeInfo.json
+@objectstack/spec:build:   ✓ kernel/ServiceFactoryRegistration.json
+@objectstack/spec:build:   ✓ kernel/ServiceMetadata.json
+@objectstack/spec:build:   ✓ kernel/ServiceRegistryConfig.json
+@objectstack/spec:build:   ✓ kernel/ServiceScopeType.json
+@objectstack/spec:build:   ✓ kernel/HealthStatus.json
+@objectstack/spec:build:   ✓ kernel/PluginStartupResult.json
+@objectstack/spec:build:   ✓ kernel/StartupOptions.json
+@objectstack/spec:build:   ✓ kernel/StartupOrchestrationResult.json
+@objectstack/spec:build:   ✓ kernel/PluginInstallConfig.json
+@objectstack/spec:build:   ✓ kernel/PluginQualityMetrics.json
+@objectstack/spec:build:   ✓ kernel/PluginRegistryEntry.json
+@objectstack/spec:build:   ✓ kernel/PluginSearchFilters.json
+@objectstack/spec:build:   ✓ kernel/PluginStatistics.json
+@objectstack/spec:build:   ✓ kernel/PluginVendor.json
+@objectstack/spec:build:   ✓ kernel/DependencyGraphNode.json
+@objectstack/spec:build:   ✓ kernel/DependencyGraph.json
+@objectstack/spec:build:   ✓ kernel/PackageDependencyConflict.json
+@objectstack/spec:build:   ✓ kernel/PackageDependencyResolutionResult.json
+@objectstack/spec:build:   ✓ kernel/PackageDependency.json
+@objectstack/spec:build:   ✓ kernel/PluginProvenance.json
+@objectstack/spec:build:   ✓ kernel/PluginTrustScore.json
+@objectstack/spec:build:   ✓ kernel/SBOMEntry.json
+@objectstack/spec:build:   ✓ kernel/SBOM.json
+@objectstack/spec:build:   ✓ kernel/SecurityPolicy.json
+@objectstack/spec:build:   ✓ kernel/SecurityScanResult.json
+@objectstack/spec:build:   ✓ kernel/SecurityVulnerability.json
+@objectstack/spec:build:   ✓ kernel/VulnerabilitySeverity.json
+@objectstack/spec:build:   ✓ kernel/ExecutionContext.json
+@objectstack/spec:build: 
+@objectstack/spec:build: [QA]
+@objectstack/spec:build:   ✓ qa/TestAction.json
+@objectstack/spec:build:   ✓ qa/TestActionType.json
+@objectstack/spec:build:   ✓ qa/TestAssertion.json
+@objectstack/spec:build:   ✓ qa/TestAssertionType.json
+@objectstack/spec:build:   ✓ qa/TestContext.json
+@objectstack/spec:build:   ✓ qa/TestScenario.json
+@objectstack/spec:build:   ✓ qa/TestStep.json
+@objectstack/spec:build:   ✓ qa/TestSuite.json
+@objectstack/spec:build: 
+@objectstack/spec:build: [Security]
+@objectstack/spec:build:   ✓ security/AdminScope.json
+@objectstack/spec:build:   ✓ security/FieldPermission.json
+@objectstack/spec:build:   ✓ security/ObjectAccessScope.json
+@objectstack/spec:build:   ✓ security/ObjectPermission.json
+@objectstack/spec:build:   ✓ security/PermissionSet.json
+@objectstack/spec:build:   ✓ security/AccessMatrixEntry.json
+@objectstack/spec:build:   ✓ security/AccessMatrix.json
+@objectstack/spec:build:   ✓ security/ExplainDecision.json
+@objectstack/spec:build:   ✓ security/ExplainLayer.json
+@objectstack/spec:build:   ✓ security/ExplainOperation.json
+@objectstack/spec:build:   ✓ security/ExplainRequest.json
+@objectstack/spec:build:   ⊘ Security.CriteriaSharingRuleSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ security/OWDModel.json
+@objectstack/spec:build:   ✓ security/OwnerSharingRule.json
+@objectstack/spec:build:   ✓ security/ShareRecipientType.json
+@objectstack/spec:build:   ✓ security/SharingLevel.json
+@objectstack/spec:build:   ⊘ Security.SharingRuleSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ security/SharingRuleType.json
+@objectstack/spec:build:   ✓ security/TerritoryModel.json
+@objectstack/spec:build:   ✓ security/Territory.json
+@objectstack/spec:build:   ✓ security/TerritoryType.json
+@objectstack/spec:build:   ✓ security/RLSEvaluationResult.json
+@objectstack/spec:build:   ✓ security/RLSOperation.json
+@objectstack/spec:build:   ✓ security/RLSUserContext.json
+@objectstack/spec:build:   ✓ security/RowLevelSecurityPolicy.json
+@objectstack/spec:build: 
+@objectstack/spec:build: [Shared]
+@objectstack/spec:build:   ✓ shared/EventName.json
+@objectstack/spec:build:   ✓ shared/SnakeCaseIdentifier.json
+@objectstack/spec:build:   ✓ shared/SystemIdentifier.json
+@objectstack/spec:build:   ⊘ Shared.FieldMappingSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ Shared.TransformTypeSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ shared/CorsConfig.json
+@objectstack/spec:build:   ✓ shared/HttpMethod.json
+@objectstack/spec:build:   ✓ shared/HttpMethod.json
+@objectstack/spec:build:   ✓ shared/HttpRequest.json
+@objectstack/spec:build:   ✓ shared/RateLimitConfig.json
+@objectstack/spec:build:   ✓ shared/StaticMount.json
+@objectstack/spec:build:   ✓ shared/AggregationFunctionEnum.json
+@objectstack/spec:build:   ✓ shared/CacheStrategyEnum.json
+@objectstack/spec:build:   ✓ shared/IsolationLevelEnum.json
+@objectstack/spec:build:   ✓ shared/MutationEventEnum.json
+@objectstack/spec:build:   ✓ shared/SortDirectionEnum.json
+@objectstack/spec:build:   ✓ shared/SortItem.json
+@objectstack/spec:build:   ✓ shared/BaseMetadataRecord.json
+@objectstack/spec:build:   ✓ shared/MetadataFormat.json
+@objectstack/spec:build:   ✓ shared/AppName.json
+@objectstack/spec:build:   ✓ shared/FieldName.json
+@objectstack/spec:build:   ✓ shared/FlowName.json
+@objectstack/spec:build:   ✓ shared/ObjectName.json
+@objectstack/spec:build:   ✓ shared/RoleName.json
+@objectstack/spec:build:   ✓ shared/ViewName.json
+@objectstack/spec:build:   ⊘ Shared.CronExpressionInputSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ shared/ExpressionDialect.json
+@objectstack/spec:build:   ⊘ Shared.ExpressionInputSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ shared/ExpressionMeta.json
+@objectstack/spec:build:   ✓ shared/Expression.json
+@objectstack/spec:build:   ⊘ Shared.PredicateInputSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ shared/Predicate.json
+@objectstack/spec:build:   ⊘ Shared.TemplateExpressionInputSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ shared/Protection.json
+@objectstack/spec:build: 
+@objectstack/spec:build: [Studio]
+@objectstack/spec:build:   ✓ studio/ActionContribution.json
+@objectstack/spec:build:   ✓ studio/ActionLocation.json
+@objectstack/spec:build:   ✓ studio/ActivationEvent.json
+@objectstack/spec:build:   ✓ studio/CommandContribution.json
+@objectstack/spec:build:   ✓ studio/ERDiagramConfig.json
+@objectstack/spec:build:   ✓ studio/ERLayoutAlgorithm.json
+@objectstack/spec:build:   ✓ studio/ERNodeDisplay.json
+@objectstack/spec:build:   ✓ studio/FieldEditorConfig.json
+@objectstack/spec:build:   ✓ studio/FieldGroup.json
+@objectstack/spec:build:   ✓ studio/FieldPropertySection.json
+@objectstack/spec:build:   ✓ studio/FlowBuilderConfig.json
+@objectstack/spec:build:   ✓ studio/FlowCanvasEdge.json
+@objectstack/spec:build:   ✓ studio/FlowCanvasEdgeStyle.json
+@objectstack/spec:build:   ✓ studio/FlowCanvasNode.json
+@objectstack/spec:build:   ✓ studio/FlowLayoutAlgorithm.json
+@objectstack/spec:build:   ✓ studio/FlowLayoutDirection.json
+@objectstack/spec:build:   ✓ studio/FlowNodeRenderDescriptor.json
+@objectstack/spec:build:   ✓ studio/FlowNodeShape.json
+@objectstack/spec:build:   ✓ studio/MetadataIconContribution.json
+@objectstack/spec:build:   ✓ studio/MetadataViewerContribution.json
+@objectstack/spec:build:   ✓ studio/ObjectDesignerConfig.json
+@objectstack/spec:build:   ✓ studio/ObjectDesignerDefaultView.json
+@objectstack/spec:build:   ✓ studio/ObjectFilter.json
+@objectstack/spec:build:   ✓ studio/ObjectListDisplayMode.json
+@objectstack/spec:build:   ✓ studio/ObjectManagerConfig.json
+@objectstack/spec:build:   ✓ studio/ObjectPreviewConfig.json
+@objectstack/spec:build:   ✓ studio/ObjectPreviewTab.json
+@objectstack/spec:build:   ✓ studio/ObjectSortField.json
+@objectstack/spec:build:   ✓ studio/PanelContribution.json
+@objectstack/spec:build:   ✓ studio/PanelLocation.json
+@objectstack/spec:build:   ✓ studio/RelationshipDisplay.json
+@objectstack/spec:build:   ✓ studio/RelationshipMapperConfig.json
+@objectstack/spec:build:   ✓ studio/SidebarGroupContribution.json
+@objectstack/spec:build:   ✓ studio/StudioPluginContributions.json
+@objectstack/spec:build:   ✓ studio/StudioPluginManifest.json
+@objectstack/spec:build:   ✓ studio/ViewMode.json
+@objectstack/spec:build: 
+@objectstack/spec:build: [System]
+@objectstack/spec:build:   ✓ system/CacheAvalanchePrevention.json
+@objectstack/spec:build:   ✓ system/CacheConfig.json
+@objectstack/spec:build:   ✓ system/CacheConsistency.json
+@objectstack/spec:build:   ✓ system/CacheInvalidation.json
+@objectstack/spec:build:   ✓ system/CacheStrategy.json
+@objectstack/spec:build:   ✓ system/CacheTier.json
+@objectstack/spec:build:   ⊘ System.CacheWarmupSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ System.DistributedCacheConfigSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ System.BackupConfigSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ system/BackupRetention.json
+@objectstack/spec:build:   ✓ system/BackupStrategy.json
+@objectstack/spec:build:   ⊘ System.DisasterRecoveryPlanSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ system/FailoverConfig.json
+@objectstack/spec:build:   ✓ system/FailoverMode.json
+@objectstack/spec:build:   ✓ system/RPO.json
+@objectstack/spec:build:   ✓ system/RTO.json
+@objectstack/spec:build:   ✓ system/ConsumerConfig.json
+@objectstack/spec:build:   ✓ system/DeadLetterQueue.json
+@objectstack/spec:build:   ✓ system/MessageQueueConfig.json
+@objectstack/spec:build:   ✓ system/MessageQueueProvider.json
+@objectstack/spec:build:   ✓ system/TopicConfig.json
+@objectstack/spec:build:   ✓ system/AccessControlConfig.json
+@objectstack/spec:build:   ✓ system/BucketConfig.json
+@objectstack/spec:build:   ✓ system/FileMetadata.json
+@objectstack/spec:build:   ✓ system/LifecycleAction.json
+@objectstack/spec:build:   ✓ system/LifecyclePolicyConfig.json
+@objectstack/spec:build:   ✓ system/LifecyclePolicyRule.json
+@objectstack/spec:build:   ✓ system/MultipartUploadConfig.json
+@objectstack/spec:build:   ✓ system/ObjectMetadata.json
+@objectstack/spec:build:   ✓ system/ObjectStorageConfig.json
+@objectstack/spec:build:   ✓ system/PresignedUrlConfig.json
+@objectstack/spec:build:   ✓ system/StorageAcl.json
+@objectstack/spec:build:   ✓ system/StorageClass.json
+@objectstack/spec:build:   ✓ system/StorageConnection.json
+@objectstack/spec:build:   ✓ system/StorageProvider.json
+@objectstack/spec:build:   ✓ system/StorageScope.json
+@objectstack/spec:build:   ✓ system/AnalyzerConfig.json
+@objectstack/spec:build:   ✓ system/FacetConfig.json
+@objectstack/spec:build:   ✓ system/SearchConfig.json
+@objectstack/spec:build:   ✓ system/SearchIndexConfig.json
+@objectstack/spec:build:   ✓ system/SearchProvider.json
+@objectstack/spec:build:   ✓ system/HttpServerConfig.json
+@objectstack/spec:build:   ✓ system/HttpServerConfig.json
+@objectstack/spec:build:   ✓ system/MiddlewareConfig.json
+@objectstack/spec:build:   ✓ system/MiddlewareConfig.json
+@objectstack/spec:build:   ✓ system/MiddlewareType.json
+@objectstack/spec:build:   ✓ system/RouteHandlerMetadata.json
+@objectstack/spec:build:   ✓ system/ServerCapabilities.json
+@objectstack/spec:build:   ✓ system/ServerEvent.json
+@objectstack/spec:build:   ✓ system/ServerEventType.json
+@objectstack/spec:build:   ✓ system/ServerStatus.json
+@objectstack/spec:build:   ⊘ System.AuditConfigSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ system/AuditEventActor.json
+@objectstack/spec:build:   ✓ system/AuditEventChange.json
+@objectstack/spec:build:   ✓ system/AuditEventFilter.json
+@objectstack/spec:build:   ✓ system/AuditEvent.json
+@objectstack/spec:build:   ✓ system/AuditEventSeverity.json
+@objectstack/spec:build:   ✓ system/AuditEventTarget.json
+@objectstack/spec:build:   ✓ system/AuditEventType.json
+@objectstack/spec:build:   ✓ system/AuditRetentionPolicy.json
+@objectstack/spec:build:   ✓ system/AuditStorageConfig.json
+@objectstack/spec:build:   ⊘ System.SuspiciousActivityRuleSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ system/ConsoleDestinationConfig.json
+@objectstack/spec:build:   ✓ system/ExtendedLogLevel.json
+@objectstack/spec:build:   ✓ system/ExternalServiceDestinationConfig.json
+@objectstack/spec:build:   ✓ system/FileDestinationConfig.json
+@objectstack/spec:build:   ✓ system/HttpDestinationConfig.json
+@objectstack/spec:build:   ✓ system/LogDestination.json
+@objectstack/spec:build:   ✓ system/LogDestinationType.json
+@objectstack/spec:build:   ✓ system/LogEnrichmentConfig.json
+@objectstack/spec:build:   ✓ system/LogEntry.json
+@objectstack/spec:build:   ✓ system/LogFormat.json
+@objectstack/spec:build:   ✓ system/LogLevel.json
+@objectstack/spec:build:   ✓ system/LoggerConfig.json
+@objectstack/spec:build:   ✓ system/LoggingConfig.json
+@objectstack/spec:build:   ✓ system/StructuredLogEntry.json
+@objectstack/spec:build:   ✓ system/HistogramBucketConfig.json
+@objectstack/spec:build:   ✓ system/MetricAggregationConfig.json
+@objectstack/spec:build:   ✓ system/MetricAggregationType.json
+@objectstack/spec:build:   ✓ system/MetricDataPoint.json
+@objectstack/spec:build:   ✓ system/MetricDefinition.json
+@objectstack/spec:build:   ✓ system/MetricExportConfig.json
+@objectstack/spec:build:   ✓ system/MetricLabels.json
+@objectstack/spec:build:   ✓ system/MetricType.json
+@objectstack/spec:build:   ✓ system/MetricUnit.json
+@objectstack/spec:build:   ⊘ System.MetricsConfigSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ System.ServiceLevelIndicatorSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ system/ServiceLevelObjective.json
+@objectstack/spec:build:   ✓ system/TimeSeriesDataPoint.json
+@objectstack/spec:build:   ✓ system/TimeSeries.json
+@objectstack/spec:build:   ✓ system/OpenTelemetryCompatibility.json
+@objectstack/spec:build:   ✓ system/OtelExporterType.json
+@objectstack/spec:build:   ✓ system/SamplingDecision.json
+@objectstack/spec:build:   ✓ system/SamplingStrategyType.json
+@objectstack/spec:build:   ✓ system/SpanAttributeValue.json
+@objectstack/spec:build:   ✓ system/SpanAttributes.json
+@objectstack/spec:build:   ✓ system/SpanEvent.json
+@objectstack/spec:build:   ✓ system/SpanKind.json
+@objectstack/spec:build:   ✓ system/SpanLink.json
+@objectstack/spec:build:   ✓ system/Span.json
+@objectstack/spec:build:   ✓ system/SpanStatus.json
+@objectstack/spec:build:   ✓ system/TraceContextPropagation.json
+@objectstack/spec:build:   ✓ system/TraceContext.json
+@objectstack/spec:build:   ✓ system/TraceFlags.json
+@objectstack/spec:build:   ✓ system/TracePropagationFormat.json
+@objectstack/spec:build:   ✓ system/TraceState.json
+@objectstack/spec:build:   ⊘ System.TraceSamplingConfigSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ System.TracingConfigSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ system/ChangeImpact.json
+@objectstack/spec:build:   ✓ system/ChangePriority.json
+@objectstack/spec:build:   ✓ system/ChangeRequest.json
+@objectstack/spec:build:   ✓ system/ChangeStatus.json
+@objectstack/spec:build:   ✓ system/ChangeType.json
+@objectstack/spec:build:   ✓ system/RollbackPlan.json
+@objectstack/spec:build:   ⊘ System.AddFieldOperation: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ System.ChangeSetSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ System.CreateObjectOperation: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ system/DeleteObjectOperation.json
+@objectstack/spec:build:   ✓ system/ExecuteSqlOperation.json
+@objectstack/spec:build:   ✓ system/MigrationDependency.json
+@objectstack/spec:build:   ⊘ System.MigrationOperationSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ system/ModifyFieldOperation.json
+@objectstack/spec:build:   ✓ system/RemoveFieldOperation.json
+@objectstack/spec:build:   ✓ system/RenameObjectOperation.json
+@objectstack/spec:build:   ✓ system/AdvancedAuthConfig.json
+@objectstack/spec:build:   ✓ system/AuthConfig.json
+@objectstack/spec:build:   ✓ system/AuthPluginConfig.json
+@objectstack/spec:build:   ✓ system/AuthProviderConfig.json
+@objectstack/spec:build:   ✓ system/EmailAndPasswordConfig.json
+@objectstack/spec:build:   ✓ system/EmailVerificationConfig.json
+@objectstack/spec:build:   ✓ system/MutualTLSConfig.json
+@objectstack/spec:build:   ✓ system/OidcProviderConfig.json
+@objectstack/spec:build:   ✓ system/OidcProvidersConfig.json
+@objectstack/spec:build:   ✓ system/SocialProviderConfig.json
+@objectstack/spec:build:   ✓ system/Doc.json
+@objectstack/spec:build:   ✓ system/BookAudience.json
+@objectstack/spec:build:   ✓ system/BookGroup.json
+@objectstack/spec:build:   ✓ system/BookInclude.json
+@objectstack/spec:build:   ✓ system/BookNode.json
+@objectstack/spec:build:   ✓ system/Book.json
+@objectstack/spec:build:   ✓ system/EmailAddressConfig.json
+@objectstack/spec:build:   ✓ system/EmailProvider.json
+@objectstack/spec:build:   ✓ system/EmailServiceConfig.json
+@objectstack/spec:build:   ✓ system/EmailTemplateDefinitionCategory.json
+@objectstack/spec:build:   ✓ system/EmailTemplateDefinition.json
+@objectstack/spec:build:   ✓ system/EmailTemplateDefinitionVariable.json
+@objectstack/spec:build:   ✓ system/EncryptionAlgorithm.json
+@objectstack/spec:build:   ✓ system/EncryptionConfig.json
+@objectstack/spec:build:   ✓ system/FieldEncryption.json
+@objectstack/spec:build:   ✓ system/KeyManagementProvider.json
+@objectstack/spec:build:   ✓ system/KeyRotationPolicy.json
+@objectstack/spec:build:   ✓ system/ComplianceAuditRequirement.json
+@objectstack/spec:build:   ✓ system/ComplianceEncryptionRequirement.json
+@objectstack/spec:build:   ✓ system/ComplianceFramework.json
+@objectstack/spec:build:   ✓ system/DataClassificationPolicy.json
+@objectstack/spec:build:   ✓ system/DataClassification.json
+@objectstack/spec:build:   ✓ system/MaskingVisibilityRule.json
+@objectstack/spec:build:   ✓ system/SecurityContextConfig.json
+@objectstack/spec:build:   ✓ system/SecurityEventCorrelation.json
+@objectstack/spec:build:   ✓ system/IncidentCategory.json
+@objectstack/spec:build:   ✓ system/IncidentNotificationMatrix.json
+@objectstack/spec:build:   ✓ system/IncidentNotificationRule.json
+@objectstack/spec:build:   ✓ system/IncidentResponsePhase.json
+@objectstack/spec:build:   ✓ system/IncidentResponsePolicy.json
+@objectstack/spec:build:   ✓ system/Incident.json
+@objectstack/spec:build:   ✓ system/IncidentSeverity.json
+@objectstack/spec:build:   ✓ system/IncidentStatus.json
+@objectstack/spec:build:   ✓ system/SupplierAssessmentStatus.json
+@objectstack/spec:build:   ✓ system/SupplierRiskLevel.json
+@objectstack/spec:build:   ✓ system/SupplierSecurityAssessment.json
+@objectstack/spec:build:   ✓ system/SupplierSecurityPolicy.json
+@objectstack/spec:build:   ✓ system/SupplierSecurityRequirement.json
+@objectstack/spec:build:   ✓ system/TrainingCategory.json
+@objectstack/spec:build:   ✓ system/TrainingCompletionStatus.json
+@objectstack/spec:build:   ✓ system/TrainingCourse.json
+@objectstack/spec:build:   ✓ system/TrainingPlan.json
+@objectstack/spec:build:   ✓ system/TrainingRecord.json
+@objectstack/spec:build:   ✓ system/ResolvedSettingValue.json
+@objectstack/spec:build:   ✓ system/SettingsActionResult.json
+@objectstack/spec:build:   ⊘ System.SettingsManifestSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ System.SettingsNamespacePayloadSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ system/SpecifierHandler.json
+@objectstack/spec:build:   ✓ system/SpecifierOption.json
+@objectstack/spec:build:   ⊘ System.SpecifierSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ system/SpecifierScope.json
+@objectstack/spec:build:   ✓ system/SpecifierType.json
+@objectstack/spec:build:   ✓ system/SettingsChangeEvent.json
+@objectstack/spec:build:   ⊘ System.CronScheduleSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ system/IntervalSchedule.json
+@objectstack/spec:build:   ✓ system/JobExecution.json
+@objectstack/spec:build:   ✓ system/JobExecutionStatus.json
+@objectstack/spec:build:   ⊘ System.JobSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ system/OnceSchedule.json
+@objectstack/spec:build:   ✓ system/RetryPolicy.json
+@objectstack/spec:build:   ⊘ System.ScheduleSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ system/BatchProgress.json
+@objectstack/spec:build:   ⊘ System.BatchTask: Function types cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ System.BatchTaskSchema: Function types cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ system/QueueConfig.json
+@objectstack/spec:build:   ✓ system/QueueConfig.json
+@objectstack/spec:build:   ✓ system/Task.json
+@objectstack/spec:build:   ✓ system/TaskExecutionResult.json
+@objectstack/spec:build:   ✓ system/TaskPriority.json
+@objectstack/spec:build:   ✓ system/TaskRetryPolicy.json
+@objectstack/spec:build:   ✓ system/Task.json
+@objectstack/spec:build:   ✓ system/TaskStatus.json
+@objectstack/spec:build:   ⊘ System.WorkerConfig: Function types cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ System.WorkerConfigSchema: Function types cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ system/WorkerStats.json
+@objectstack/spec:build:   ⊘ System.EmailTemplateSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ System.InAppNotificationSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ system/NotificationChannel.json
+@objectstack/spec:build:   ⊘ System.NotificationConfigSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ System.PushNotificationSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ System.SMSTemplateSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ system/AppTranslationBundle.json
+@objectstack/spec:build:   ✓ system/CoverageBreakdownEntry.json
+@objectstack/spec:build:   ✓ system/FieldTranslation.json
+@objectstack/spec:build:   ✓ system/Locale.json
+@objectstack/spec:build:   ✓ system/MessageFormat.json
+@objectstack/spec:build:   ✓ system/ObjectTranslationData.json
+@objectstack/spec:build:   ✓ system/ObjectTranslationNode.json
+@objectstack/spec:build:   ✓ system/TranslationBundle.json
+@objectstack/spec:build:   ✓ system/TranslationConfig.json
+@objectstack/spec:build:   ✓ system/TranslationCoverageResult.json
+@objectstack/spec:build:   ✓ system/TranslationData.json
+@objectstack/spec:build:   ✓ system/TranslationDiffItem.json
+@objectstack/spec:build:   ✓ system/TranslationDiffStatus.json
+@objectstack/spec:build:   ✓ system/TranslationFileOrganization.json
+@objectstack/spec:build:   ✓ system/AwarenessEvent.json
+@objectstack/spec:build:   ✓ system/AwarenessSession.json
+@objectstack/spec:build:   ✓ system/AwarenessUpdate.json
+@objectstack/spec:build:   ✓ system/AwarenessUserState.json
+@objectstack/spec:build:   ✓ system/CRDTMergeResult.json
+@objectstack/spec:build:   ✓ system/CRDTState.json
+@objectstack/spec:build:   ✓ system/CRDTType.json
+@objectstack/spec:build:   ✓ system/CollaborationMode.json
+@objectstack/spec:build:   ✓ system/CollaborationSessionConfig.json
+@objectstack/spec:build:   ✓ system/CollaborationSession.json
+@objectstack/spec:build:   ✓ system/CollaborativeCursor.json
+@objectstack/spec:build:   ✓ system/CounterOperation.json
+@objectstack/spec:build:   ✓ system/CursorColorPreset.json
+@objectstack/spec:build:   ✓ system/CursorSelection.json
+@objectstack/spec:build:   ✓ system/CursorStyle.json
+@objectstack/spec:build:   ✓ system/CursorUpdate.json
+@objectstack/spec:build:   ✓ system/GCounter.json
+@objectstack/spec:build:   ✓ system/LWWRegister.json
+@objectstack/spec:build:   ✓ system/ORSetElement.json
+@objectstack/spec:build:   ✓ system/ORSet.json
+@objectstack/spec:build:   ✓ system/OTComponent.json
+@objectstack/spec:build:   ✓ system/OTOperation.json
+@objectstack/spec:build:   ✓ system/OTOperationType.json
+@objectstack/spec:build:   ✓ system/OTTransformResult.json
+@objectstack/spec:build:   ✓ system/PNCounter.json
+@objectstack/spec:build:   ✓ system/TextCRDTOperation.json
+@objectstack/spec:build:   ✓ system/TextCRDTState.json
+@objectstack/spec:build:   ✓ system/UserActivityStatus.json
+@objectstack/spec:build:   ✓ system/VectorClock.json
+@objectstack/spec:build:   ✓ system/MetadataCollectionInfo.json
+@objectstack/spec:build:   ✓ system/MetadataDiffResult.json
+@objectstack/spec:build:   ✓ system/MetadataExportOptions.json
+@objectstack/spec:build:   ✓ system/MetadataFallbackStrategy.json
+@objectstack/spec:build:   ✓ system/MetadataFormat.json
+@objectstack/spec:build:   ✓ system/MetadataHistoryQueryOptions.json
+@objectstack/spec:build:   ✓ system/MetadataHistoryQueryResult.json
+@objectstack/spec:build:   ✓ system/MetadataHistoryRecord.json
+@objectstack/spec:build:   ✓ system/MetadataHistoryRetentionPolicy.json
+@objectstack/spec:build:   ✓ system/MetadataImportOptions.json
+@objectstack/spec:build:   ✓ system/MetadataLoadOptions.json
+@objectstack/spec:build:   ✓ system/MetadataLoadResult.json
+@objectstack/spec:build:   ✓ system/MetadataLoaderContract.json
+@objectstack/spec:build:   ✓ system/MetadataManagerConfig.json
+@objectstack/spec:build:   ✓ system/MetadataRecord.json
+@objectstack/spec:build:   ✓ system/MetadataSaveOptions.json
+@objectstack/spec:build:   ✓ system/MetadataSaveResult.json
+@objectstack/spec:build:   ✓ system/MetadataScope.json
+@objectstack/spec:build:   ✓ system/MetadataSource.json
+@objectstack/spec:build:   ✓ system/MetadataState.json
+@objectstack/spec:build:   ✓ system/MetadataStats.json
+@objectstack/spec:build:   ✓ system/MetadataWatchEvent.json
+@objectstack/spec:build:   ✓ system/PackagePublishResult.json
+@objectstack/spec:build:   ✓ system/CoreServiceName.json
+@objectstack/spec:build:   ✓ system/KernelServiceMap.json
+@objectstack/spec:build:   ✓ system/ServiceConfig.json
+@objectstack/spec:build:   ✓ system/ServiceCriticality.json
+@objectstack/spec:build:   ✓ system/ServiceStatus.json
+@objectstack/spec:build:   ✓ system/DatabaseLevelIsolationStrategy.json
+@objectstack/spec:build:   ✓ system/DatabaseProvider.json
+@objectstack/spec:build:   ✓ system/QuotaEnforcementResult.json
+@objectstack/spec:build:   ✓ system/RowLevelIsolationStrategy.json
+@objectstack/spec:build:   ✓ system/LevelIsolationStrategySchema.json
+@objectstack/spec:build:   ✓ system/TenantConnectionConfig.json
+@objectstack/spec:build:   ✓ system/TenantIsolationConfig.json
+@objectstack/spec:build:   ✓ system/TenantIsolationLevel.json
+@objectstack/spec:build:   ✓ system/TenantQuota.json
+@objectstack/spec:build:   ✓ system/Tenant.json
+@objectstack/spec:build:   ✓ system/TenantSecurityPolicy.json
+@objectstack/spec:build:   ✓ system/TenantUsage.json
+@objectstack/spec:build:   ✓ system/Feature.json
+@objectstack/spec:build:   ✓ system/LicenseMetricType.json
+@objectstack/spec:build:   ✓ system/License.json
+@objectstack/spec:build:   ✓ system/Plan.json
+@objectstack/spec:build:   ✓ system/RegistryConfig.json
+@objectstack/spec:build:   ✓ system/RegistrySyncPolicy.json
+@objectstack/spec:build:   ✓ system/RegistryUpstream.json
+@objectstack/spec:build:   ✓ system/ProvisioningStep.json
+@objectstack/spec:build:   ✓ system/TenantPlan.json
+@objectstack/spec:build:   ✓ system/TenantProvisioningRequest.json
+@objectstack/spec:build:   ✓ system/TenantProvisioningResult.json
+@objectstack/spec:build:   ✓ system/TenantProvisioningStatusEnum.json
+@objectstack/spec:build:   ✓ system/TenantRegion.json
+@objectstack/spec:build:   ✓ system/DeployBundle.json
+@objectstack/spec:build:   ✓ system/DeployDiff.json
+@objectstack/spec:build:   ✓ system/DeployManifest.json
+@objectstack/spec:build:   ✓ system/DeployStatusEnum.json
+@objectstack/spec:build:   ✓ system/DeployValidationIssue.json
+@objectstack/spec:build:   ✓ system/DeployValidationResult.json
+@objectstack/spec:build:   ✓ system/MigrationPlan.json
+@objectstack/spec:build:   ✓ system/MigrationStatement.json
+@objectstack/spec:build:   ✓ system/ChangeSchema.json
+@objectstack/spec:build:   ✓ system/AppCompatibilityCheck.json
+@objectstack/spec:build:   ✓ system/AppInstallRequest.json
+@objectstack/spec:build:   ✓ system/AppInstallResult.json
+@objectstack/spec:build:   ✓ system/AppManifest.json
+@objectstack/spec:build:   ✓ system/EnvironmentArtifactChecksum.json
+@objectstack/spec:build:   ✓ system/EnvironmentArtifactFunctionLanguageEnum.json
+@objectstack/spec:build:   ✓ system/EnvironmentArtifactFunction.json
+@objectstack/spec:build:   ✓ system/EnvironmentArtifactHashAlgorithmEnum.json
+@objectstack/spec:build:   ✓ system/EnvironmentArtifactManifest.json
+@objectstack/spec:build:   ✓ system/EnvironmentArtifactMetadata.json
+@objectstack/spec:build:   ✓ system/EnvironmentArtifactPayloadRef.json
+@objectstack/spec:build:   ✓ system/EnvironmentArtifactRequirement.json
+@objectstack/spec:build:   ✓ system/EnvironmentArtifact.json
+@objectstack/spec:build: 
+@objectstack/spec:build: [UI]
+@objectstack/spec:build:   ✓ ui/ChartAnnotation.json
+@objectstack/spec:build:   ✓ ui/ChartAxis.json
+@objectstack/spec:build:   ✓ ui/ChartConfig.json
+@objectstack/spec:build:   ✓ ui/ChartInteraction.json
+@objectstack/spec:build:   ✓ ui/ChartSeries.json
+@objectstack/spec:build:   ✓ ui/ChartType.json
+@objectstack/spec:build:   ✓ ui/AriaProps.json
+@objectstack/spec:build:   ✓ ui/DateFormat.json
+@objectstack/spec:build:   ✓ ui/I18nLabel.json
+@objectstack/spec:build:   ✓ ui/I18nObject.json
+@objectstack/spec:build:   ✓ ui/LocaleConfig.json
+@objectstack/spec:build:   ✓ ui/NumberFormat.json
+@objectstack/spec:build:   ✓ ui/PluralRule.json
+@objectstack/spec:build:   ✓ ui/BreakpointColumnMap.json
+@objectstack/spec:build:   ✓ ui/BreakpointName.json
+@objectstack/spec:build:   ✓ ui/BreakpointOrderMap.json
+@objectstack/spec:build:   ✓ ui/PerformanceConfig.json
+@objectstack/spec:build:   ✓ ui/ResponsiveConfig.json
+@objectstack/spec:build:   ✓ ui/ResponsiveStyles.json
+@objectstack/spec:build:   ✓ ui/StyleMap.json
+@objectstack/spec:build:   ⊘ UI.ActionNavItemSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ ui/AppBranding.json
+@objectstack/spec:build:   ✓ ui/AppContextSelector.json
+@objectstack/spec:build:   ⊘ UI.AppSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ UI.ComponentNavItemSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ UI.DashboardNavItemSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ UI.GroupNavItemSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ UI.NavigationAreaSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ UI.NavigationContributionSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ UI.NavigationItemSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ UI.ObjectNavItemSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ UI.PageNavItemSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ UI.ReportNavItemSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ UI.UrlNavItemSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ ui/AddRecordConfig.json
+@objectstack/spec:build:   ✓ ui/AppearanceConfig.json
+@objectstack/spec:build:   ✓ ui/CalendarConfig.json
+@objectstack/spec:build:   ✓ ui/ColumnSummary.json
+@objectstack/spec:build:   ⊘ UI.FormFieldSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ UI.FormSectionSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ UI.FormViewSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ ui/GalleryConfig.json
+@objectstack/spec:build:   ✓ ui/GanttConfig.json
+@objectstack/spec:build:   ✓ ui/GanttQuickFilter.json
+@objectstack/spec:build:   ✓ ui/GroupingConfig.json
+@objectstack/spec:build:   ✓ ui/GroupingField.json
+@objectstack/spec:build:   ✓ ui/HttpMethod.json
+@objectstack/spec:build:   ✓ ui/HttpRequest.json
+@objectstack/spec:build:   ✓ ui/KanbanConfig.json
+@objectstack/spec:build:   ✓ ui/ListChartConfig.json
+@objectstack/spec:build:   ✓ ui/ListColumn.json
+@objectstack/spec:build:   ⊘ UI.ListViewSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ ui/NavigationConfig.json
+@objectstack/spec:build:   ✓ ui/NavigationMode.json
+@objectstack/spec:build:   ⊘ UI.ObjectListViewSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ ui/ObjectUserFilters.json
+@objectstack/spec:build:   ✓ ui/PaginationConfig.json
+@objectstack/spec:build:   ✓ ui/RowColorConfig.json
+@objectstack/spec:build:   ✓ ui/RowHeight.json
+@objectstack/spec:build:   ✓ ui/SelectionConfig.json
+@objectstack/spec:build:   ✓ ui/TimelineConfig.json
+@objectstack/spec:build:   ✓ ui/TreeConfig.json
+@objectstack/spec:build:   ✓ ui/UserActionsConfig.json
+@objectstack/spec:build:   ✓ ui/UserFilterField.json
+@objectstack/spec:build:   ✓ ui/UserFilters.json
+@objectstack/spec:build:   ✓ ui/ViewData.json
+@objectstack/spec:build:   ✓ ui/ViewFilterRule.json
+@objectstack/spec:build:   ✓ ui/ViewItemName.json
+@objectstack/spec:build:   ⊘ UI.ViewItemSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ ui/ViewKind.json
+@objectstack/spec:build:   ⊘ UI.ViewSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ ui/ViewScope.json
+@objectstack/spec:build:   ✓ ui/ViewSharing.json
+@objectstack/spec:build:   ✓ ui/ViewTab.json
+@objectstack/spec:build:   ✓ ui/VisualizationType.json
+@objectstack/spec:build:   ✓ ui/DashboardHeaderAction.json
+@objectstack/spec:build:   ✓ ui/DashboardHeader.json
+@objectstack/spec:build:   ✓ ui/Dashboard.json
+@objectstack/spec:build:   ✓ ui/DashboardWidget.json
+@objectstack/spec:build:   ✓ ui/GlobalFilterOptionsFrom.json
+@objectstack/spec:build:   ✓ ui/GlobalFilter.json
+@objectstack/spec:build:   ✓ ui/WidgetActionType.json
+@objectstack/spec:build:   ✓ ui/WidgetColorVariant.json
+@objectstack/spec:build:   ✓ ui/JoinedReportBlock.json
+@objectstack/spec:build:   ✓ ui/ReportChart.json
+@objectstack/spec:build:   ✓ ui/ReportColumn.json
+@objectstack/spec:build:   ✓ ui/ReportGrouping.json
+@objectstack/spec:build:   ✓ ui/Report.json
+@objectstack/spec:build:   ✓ ui/ReportType.json
+@objectstack/spec:build:   ✓ ui/DatasetDimension.json
+@objectstack/spec:build:   ✓ ui/DatasetMeasure.json
+@objectstack/spec:build:   ✓ ui/Dataset.json
+@objectstack/spec:build:   ✓ ui/DerivedMeasureOp.json
+@objectstack/spec:build:   ✓ ui/ActionAi.json
+@objectstack/spec:build:   ✓ ui/ActionLocation.json
+@objectstack/spec:build:   ✓ ui/ActionParam.json
+@objectstack/spec:build:   ⊘ UI.ActionSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ ui/ActionType.json
+@objectstack/spec:build:   ✓ ui/ElementDataSource.json
+@objectstack/spec:build:   ✓ ui/InterfacePageConfig.json
+@objectstack/spec:build:   ⊘ UI.PageComponentSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ ui/PageComponentType.json
+@objectstack/spec:build:   ⊘ UI.PageRegionSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ⊘ UI.PageSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ ui/PageType.json
+@objectstack/spec:build:   ✓ ui/PageVariable.json
+@objectstack/spec:build:   ⊘ UI.FieldWidgetPropsSchema: Function types cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ ui/WidgetEvent.json
+@objectstack/spec:build:   ✓ ui/WidgetLifecycle.json
+@objectstack/spec:build:   ✓ ui/WidgetManifest.json
+@objectstack/spec:build:   ✓ ui/WidgetProperty.json
+@objectstack/spec:build:   ✓ ui/WidgetSource.json
+@objectstack/spec:build:   ✓ ui/AIChatWindowProps.json
+@objectstack/spec:build:   ✓ ui/ElementButtonProps.json
+@objectstack/spec:build:   ✓ ui/ElementFilterProps.json
+@objectstack/spec:build:   ⊘ UI.ElementFormPropsSchema: Transforms cannot be represented in JSON Schema (skipped)
+@objectstack/spec:build:   ✓ ui/ElementImageProps.json
+@objectstack/spec:build:   ✓ ui/ElementMetadataViewerProps.json
+@objectstack/spec:build:   ✓ ui/ElementNumberProps.json
+@objectstack/spec:build:   ✓ ui/ElementRecordPickerProps.json
+@objectstack/spec:build:   ✓ ui/ElementTextInputProps.json
+@objectstack/spec:build:   ✓ ui/ElementTextProps.json
+@objectstack/spec:build:   ✓ ui/PageAccordionProps.json
+@objectstack/spec:build:   ✓ ui/PageCardProps.json
+@objectstack/spec:build:   ✓ ui/PageHeaderProps.json
+@objectstack/spec:build:   ✓ ui/PageTabsProps.json
+@objectstack/spec:build:   ✓ ui/RecordActivityProps.json
+@objectstack/spec:build:   ✓ ui/RecordChatterProps.json
+@objectstack/spec:build:   ✓ ui/RecordDetailsProps.json
+@objectstack/spec:build:   ✓ ui/RecordHighlightsField.json
+@objectstack/spec:build:   ✓ ui/RecordHighlightsProps.json
+@objectstack/spec:build:   ✓ ui/RecordPathProps.json
+@objectstack/spec:build:   ✓ ui/RecordRelatedListProps.json
+@objectstack/spec:build:   ✓ ui/Animation.json
+@objectstack/spec:build:   ✓ ui/BorderRadius.json
+@objectstack/spec:build:   ✓ ui/Breakpoints.json
+@objectstack/spec:build:   ✓ ui/ColorPalette.json
+@objectstack/spec:build:   ✓ ui/DensityMode.json
+@objectstack/spec:build:   ✓ ui/DensityMode.json
+@objectstack/spec:build:   ✓ ui/Shadow.json
+@objectstack/spec:build:   ✓ ui/Spacing.json
+@objectstack/spec:build:   ✓ ui/ThemeMode.json
+@objectstack/spec:build:   ✓ ui/ThemeMode.json
+@objectstack/spec:build:   ✓ ui/Theme.json
+@objectstack/spec:build:   ✓ ui/Typography.json
+@objectstack/spec:build:   ✓ ui/WcagContrastLevel.json
+@objectstack/spec:build:   ✓ ui/WcagContrastLevel.json
+@objectstack/spec:build:   ✓ ui/ZIndex.json
+@objectstack/spec:build:   ✓ ui/GestureConfig.json
+@objectstack/spec:build:   ✓ ui/GestureType.json
+@objectstack/spec:build:   ✓ ui/LongPressGestureConfig.json
+@objectstack/spec:build:   ✓ ui/PinchGestureConfig.json
+@objectstack/spec:build:   ✓ ui/SwipeDirection.json
+@objectstack/spec:build:   ✓ ui/SwipeGestureConfig.json
+@objectstack/spec:build:   ✓ ui/TouchInteraction.json
+@objectstack/spec:build:   ✓ ui/TouchTargetConfig.json
+@objectstack/spec:build:   ✓ ui/ConflictResolution.json
+@objectstack/spec:build:   ✓ ui/EvictionPolicy.json
+@objectstack/spec:build:   ✓ ui/OfflineCacheConfig.json
+@objectstack/spec:build:   ✓ ui/OfflineConfig.json
+@objectstack/spec:build:   ✓ ui/OfflineStrategy.json
+@objectstack/spec:build:   ✓ ui/PersistStorage.json
+@objectstack/spec:build:   ✓ ui/SyncConfig.json
+@objectstack/spec:build:   ✓ ui/FocusManagement.json
+@objectstack/spec:build:   ✓ ui/FocusTrapConfig.json
+@objectstack/spec:build:   ✓ ui/KeyboardNavigationConfig.json
+@objectstack/spec:build:   ✓ ui/KeyboardShortcut.json
+@objectstack/spec:build:   ✓ ui/AnimationTrigger.json
+@objectstack/spec:build:   ✓ ui/ComponentAnimation.json
+@objectstack/spec:build:   ✓ ui/EasingFunction.json
+@objectstack/spec:build:   ✓ ui/MotionConfig.json
+@objectstack/spec:build:   ✓ ui/PageTransition.json
+@objectstack/spec:build:   ✓ ui/TransitionConfig.json
+@objectstack/spec:build:   ✓ ui/TransitionPreset.json
+@objectstack/spec:build:   ✓ ui/NotificationAction.json
+@objectstack/spec:build:   ✓ ui/NotificationConfig.json
+@objectstack/spec:build:   ✓ ui/NotificationPosition.json
+@objectstack/spec:build:   ✓ ui/Notification.json
+@objectstack/spec:build:   ✓ ui/NotificationSeverity.json
+@objectstack/spec:build:   ✓ ui/NotificationType.json
+@objectstack/spec:build:   ✓ ui/DndConfig.json
+@objectstack/spec:build:   ✓ ui/DragConstraint.json
+@objectstack/spec:build:   ✓ ui/DragHandle.json
+@objectstack/spec:build:   ✓ ui/DragItem.json
+@objectstack/spec:build:   ✓ ui/DropEffect.json
+@objectstack/spec:build:   ✓ ui/DropZone.json
+@objectstack/spec:build:   ✓ ui/EmbedConfig.json
+@objectstack/spec:build:   ✓ ui/SharingConfig.json
+@objectstack/spec:build:   ✓ ui/PortalActionNavItem.json
+@objectstack/spec:build:   ✓ ui/PortalAnonymousEntry.json
+@objectstack/spec:build:   ✓ ui/PortalAnonymousRoute.json
+@objectstack/spec:build:   ✓ ui/PortalAuthMode.json
+@objectstack/spec:build:   ✓ ui/PortalDashboardNavItem.json
+@objectstack/spec:build:   ✓ ui/PortalLayout.json
+@objectstack/spec:build:   ✓ ui/PortalNavItem.json
+@objectstack/spec:build:   ✓ ui/PortalRateLimit.json
+@objectstack/spec:build:   ✓ ui/Portal.json
+@objectstack/spec:build:   ✓ ui/PortalSeo.json
+@objectstack/spec:build:   ✓ ui/PortalTheme.json
+@objectstack/spec:build:   ✓ ui/PortalUrlNavItem.json
+@objectstack/spec:build:   ✓ ui/PortalViewNavItem.json
+@objectstack/spec:build: 
+@objectstack/spec:build: ─── Summary ───
+@objectstack/spec:build:   Generated: 1690
+@objectstack/spec:build:   Skipped:   165 (unsupported types: function, transform, date)
+@objectstack/spec:build: 
+@objectstack/spec:build: ✅ Generated bundled schema: objectstack.json (1671 definitions)
+@objectstack/spec:build: 
+@objectstack/spec:build: ✅ Successfully generated 1690 schemas.
+@objectstack/spec:build: 
+@objectstack/spec:build: > @objectstack/spec@14.3.0 gen:openapi /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/packages/spec
+@objectstack/spec:build: > tsx scripts/build-openapi.ts
+@objectstack/spec:build: 
+@objectstack/spec:build: ✅ Generated OpenAPI spec: /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/packages/spec/json-schema/openapi.json
+@objectstack/spec:build:    Version: 14.3.0
+@objectstack/spec:build:    Paths: 7
+@objectstack/spec:build:    Components: 0
+@objectstack/spec:build: CLI Building entry: src/index.ts, src/ai/index.ts, src/automation/index.ts, src/api/index.ts, src/cloud/index.ts, src/contracts/index.ts, src/data/index.ts, src/identity/index.ts, src/integration/index.ts, src/qa/index.ts, src/kernel/index.ts, src/shared/index.ts, src/studio/index.ts, src/security/index.ts, src/ui/index.ts, src/system/index.ts
+@objectstack/spec:build: CLI Using tsconfig: tsconfig.json
+@objectstack/spec:build: CLI tsup v8.5.1
+@objectstack/spec:build: CLI Using tsup config: /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/packages/spec/tsup.config.ts
+@objectstack/spec:build: CLI Target: es2020
+@objectstack/spec:build: CLI Cleaning output folder
+@objectstack/spec:build: ESM Build start
+@objectstack/spec:build: CJS Build start
+@objectstack/spec:build: ESM dist/contracts/index.mjs       357.00 B
+@objectstack/spec:build: ESM dist/identity/index.mjs        119.28 KB
+@objectstack/spec:build: ESM dist/automation/index.mjs      187.10 KB
+@objectstack/spec:build: ESM dist/integration/index.mjs     83.74 KB
+@objectstack/spec:build: ESM dist/ai/index.mjs              151.55 KB
+@objectstack/spec:build: ESM dist/shared/index.mjs          60.18 KB
+@objectstack/spec:build: ESM dist/qa/index.mjs              4.72 KB
+@objectstack/spec:build: ESM dist/studio/index.mjs          35.66 KB
+@objectstack/spec:build: ESM dist/security/index.mjs        120.39 KB
+@objectstack/spec:build: ESM dist/index.mjs                 496.97 KB
+@objectstack/spec:build: ESM dist/data/index.mjs            329.09 KB
+@objectstack/spec:build: ESM dist/ui/index.mjs              291.23 KB
+@objectstack/spec:build: ESM dist/api/index.mjs             726.09 KB
+@objectstack/spec:build: ESM dist/cloud/index.mjs           540.19 KB
+@objectstack/spec:build: ESM dist/kernel/index.mjs          614.72 KB
+@objectstack/spec:build: ESM dist/system/index.mjs          969.97 KB
+@objectstack/spec:build: ESM dist/contracts/index.mjs.map   12.50 KB
+@objectstack/spec:build: ESM dist/identity/index.mjs.map    297.77 KB
+@objectstack/spec:build: ESM dist/shared/index.mjs.map      165.84 KB
+@objectstack/spec:build: ESM dist/automation/index.mjs.map  462.89 KB
+@objectstack/spec:build: ESM dist/qa/index.mjs.map          10.42 KB
+@objectstack/spec:build: ESM dist/integration/index.mjs.map 200.25 KB
+@objectstack/spec:build: ESM dist/ai/index.mjs.map          364.08 KB
+@objectstack/spec:build: ESM dist/security/index.mjs.map    295.30 KB
+@objectstack/spec:build: ESM dist/studio/index.mjs.map      81.14 KB
+@objectstack/spec:build: ESM dist/data/index.mjs.map        775.68 KB
+@objectstack/spec:build: ESM dist/ui/index.mjs.map          657.93 KB
+@objectstack/spec:build: ESM dist/index.mjs.map             1.14 MB
+@objectstack/spec:build: ESM dist/cloud/index.mjs.map       1.26 MB
+@objectstack/spec:build: ESM dist/kernel/index.mjs.map      1.37 MB
+@objectstack/spec:build: ESM dist/api/index.mjs.map         1.68 MB
+@objectstack/spec:build: ESM dist/system/index.mjs.map      2.20 MB
+@objectstack/spec:build: ESM ⚡️ Build success in 5661ms
+@objectstack/spec:build: CJS dist/contracts/index.js       443.00 B
+@objectstack/spec:build: CJS dist/automation/index.js      195.29 KB
+@objectstack/spec:build: CJS dist/identity/index.js        124.17 KB
+@objectstack/spec:build: CJS dist/qa/index.js              5.10 KB
+@objectstack/spec:build: CJS dist/ai/index.js              158.87 KB
+@objectstack/spec:build: CJS dist/integration/index.js     88.70 KB
+@objectstack/spec:build: CJS dist/shared/index.js          62.95 KB
+@objectstack/spec:build: CJS dist/studio/index.js          37.76 KB
+@objectstack/spec:build: CJS dist/security/index.js        124.47 KB
+@objectstack/spec:build: CJS dist/data/index.js            344.02 KB
+@objectstack/spec:build: CJS dist/ui/index.js              304.85 KB
+@objectstack/spec:build: CJS dist/index.js                 512.15 KB
+@objectstack/spec:build: CJS dist/cloud/index.js           559.24 KB
+@objectstack/spec:build: CJS dist/api/index.js             766.38 KB
+@objectstack/spec:build: CJS dist/system/index.js          1010.55 KB
+@objectstack/spec:build: CJS dist/kernel/index.js          640.61 KB
+@objectstack/spec:build: CJS dist/contracts/index.js.map   12.50 KB
+@objectstack/spec:build: CJS dist/automation/index.js.map  462.90 KB
+@objectstack/spec:build: CJS dist/qa/index.js.map          10.46 KB
+@objectstack/spec:build: CJS dist/identity/index.js.map    297.83 KB
+@objectstack/spec:build: CJS dist/studio/index.js.map      81.19 KB
+@objectstack/spec:build: CJS dist/ai/index.js.map          364.09 KB
+@objectstack/spec:build: CJS dist/integration/index.js.map 200.26 KB
+@objectstack/spec:build: CJS dist/shared/index.js.map      165.84 KB
+@objectstack/spec:build: CJS dist/security/index.js.map    295.30 KB
+@objectstack/spec:build: CJS dist/data/index.js.map        775.77 KB
+@objectstack/spec:build: CJS dist/ui/index.js.map          657.97 KB
+@objectstack/spec:build: CJS dist/index.js.map             1.14 MB
+@objectstack/spec:build: CJS dist/cloud/index.js.map       1.26 MB
+@objectstack/spec:build: CJS dist/kernel/index.js.map      1.37 MB
+@objectstack/spec:build: CJS dist/system/index.js.map      2.20 MB
+@objectstack/spec:build: CJS dist/api/index.js.map         1.68 MB
+@objectstack/spec:build: CJS ⚡️ Build success in 5662ms
+@objectstack/spec:build: CLI Building entry: src/index.ts, src/ai/index.ts, src/automation/index.ts, src/api/index.ts, src/cloud/index.ts, src/data/index.ts, src/identity/index.ts, src/integration/index.ts, src/contracts/index.ts, src/qa/index.ts, src/security/index.ts, src/kernel/index.ts, src/shared/index.ts, src/studio/index.ts, src/system/index.ts, src/ui/index.ts
+@objectstack/spec:build: CLI Using tsconfig: tsconfig.json
+@objectstack/spec:build: CLI tsup v8.5.1
+@objectstack/spec:build: CLI Using tsup config: /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/packages/spec/tsup.config.ts
+@objectstack/spec:build: DTS Build start
+@objectstack/spec:build: DTS ⚡️ Build success in 54639ms
+@objectstack/spec:build: DTS dist/ai/index.d.mts                        75.53 KB
+@objectstack/spec:build: DTS dist/api/index.d.mts                       1.74 MB
+@objectstack/spec:build: DTS dist/automation/index.d.mts                88.57 KB
+@objectstack/spec:build: DTS dist/cloud/index.d.mts                     773.33 KB
+@objectstack/spec:build: DTS dist/contracts/index.d.mts                 236.89 KB
+@objectstack/spec:build: DTS dist/data/index.d.mts                      92.26 KB
+@objectstack/spec:build: DTS dist/identity/index.d.mts                  35.81 KB
+@objectstack/spec:build: DTS dist/index.d.mts                           1.25 MB
+@objectstack/spec:build: DTS dist/integration/index.d.mts               166.01 KB
+@objectstack/spec:build: DTS dist/kernel/index.d.mts                    237.81 KB
+@objectstack/spec:build: DTS dist/qa/index.d.mts                        12.89 KB
+@objectstack/spec:build: DTS dist/security/index.d.mts                  22.48 KB
+@objectstack/spec:build: DTS dist/shared/index.d.mts                    17.14 KB
+@objectstack/spec:build: DTS dist/studio/index.d.mts                    38.31 KB
+@objectstack/spec:build: DTS dist/system/index.d.mts                    1.55 MB
+@objectstack/spec:build: DTS dist/ui/index.d.mts                        188.79 KB
+@objectstack/spec:build: DTS dist/knowledge-document.zod-C8B-jI53.d.mts 7.75 KB
+@objectstack/spec:build: DTS dist/export.zod-BSOHkLsj.d.mts             54.13 KB
+@objectstack/spec:build: DTS dist/node-executor.zod-CLfm7Iz1.d.mts      16.68 KB
+@objectstack/spec:build: DTS dist/subscription.zod-Bbukh9vc.d.mts       204.71 KB
+@objectstack/spec:build: DTS dist/field.zod-n0uCj60r.d.mts              294.98 KB
+@objectstack/spec:build: DTS dist/skill.zod-DdvIM8L3.d.mts              18.59 KB
+@objectstack/spec:build: DTS dist/webhook.zod-DBXVyHVq.d.mts            4.77 KB
+@objectstack/spec:build: DTS dist/state-machine.zod-BFg-VE0M.d.mts      3.84 KB
+@objectstack/spec:build: DTS dist/flow.zod-s_63UTAw.d.mts               21.08 KB
+@objectstack/spec:build: DTS dist/datasource.zod-9BV8xNFK.d.mts         11.27 KB
+@objectstack/spec:build: DTS dist/analytics.zod-DnRNNx7j.d.mts          6.68 KB
+@objectstack/spec:build: DTS dist/query.zod-BSTSsxHv.d.mts              21.10 KB
+@objectstack/spec:build: DTS dist/eval-user.zod-CfFMQqGW.d.mts          5.20 KB
+@objectstack/spec:build: DTS dist/connector.zod-DvohGaxD.d.mts          32.21 KB
+@objectstack/spec:build: DTS dist/manifest.zod-Di_HXUA6.d.mts           174.11 KB
+@objectstack/spec:build: DTS dist/package-registry.zod-CP6m8IUm.d.mts   180.69 KB
+@objectstack/spec:build: DTS dist/plugin.zod-BH3X7gl3.d.mts             5.60 KB
+@objectstack/spec:build: DTS dist/permission.zod-D_yUUBM_.d.mts         15.05 KB
+@objectstack/spec:build: DTS dist/external-errors-BkbYWLqU.d.mts        3.53 KB
+@objectstack/spec:build: DTS dist/suggestions.zod-DBfVfe94.d.mts        12.35 KB
+@objectstack/spec:build: DTS dist/expression.zod-CqxknFMd.d.mts         8.53 KB
+@objectstack/spec:build: DTS dist/app-install.zod-BJvantiC.d.mts        27.83 KB
+@objectstack/spec:build: DTS dist/email-template.zod-mExkYHMa.d.mts     21.98 KB
+@objectstack/spec:build: DTS dist/translation.zod-CYp49gMh.d.mts        27.35 KB
+@objectstack/spec:build: DTS dist/object.zod-ChKUJn9-.d.mts             229.36 KB
+@objectstack/spec:build: DTS dist/metadata-loader.zod-D-4QE4Bi.d.mts    10.38 KB
+@objectstack/spec:build: DTS dist/dataset.zod-BN3snzd8.d.mts            7.46 KB
+@objectstack/spec:build: DTS dist/page.zod-CoV-9Pu1.d.mts               179.42 KB
+@objectstack/spec:build: DTS dist/filter.zod-DtZp1Qzz.d.mts             10.64 KB
+@objectstack/spec:build: DTS dist/action.zod-DiZDtGv7.d.mts             24.66 KB
+@objectstack/spec:build: DTS dist/view.zod-BXRvXBOF.d.mts               160.67 KB
+@objectstack/spec:build: DTS dist/http.zod-BLsW0NuY.d.mts               3.53 KB
+@objectstack/spec:build: DTS dist/ai/index.d.ts                         75.53 KB
+@objectstack/spec:build: DTS dist/api/index.d.ts                        1.74 MB
+@objectstack/spec:build: DTS dist/automation/index.d.ts                 88.57 KB
+@objectstack/spec:build: DTS dist/cloud/index.d.ts                      773.32 KB
+@objectstack/spec:build: DTS dist/contracts/index.d.ts                  236.88 KB
+@objectstack/spec:build: DTS dist/data/index.d.ts                       92.25 KB
+@objectstack/spec:build: DTS dist/identity/index.d.ts                   35.81 KB
+@objectstack/spec:build: DTS dist/index.d.ts                            1.25 MB
+@objectstack/spec:build: DTS dist/integration/index.d.ts                166.01 KB
+@objectstack/spec:build: DTS dist/kernel/index.d.ts                     237.80 KB
+@objectstack/spec:build: DTS dist/qa/index.d.ts                         12.89 KB
+@objectstack/spec:build: DTS dist/security/index.d.ts                   22.48 KB
+@objectstack/spec:build: DTS dist/shared/index.d.ts                     17.14 KB
+@objectstack/spec:build: DTS dist/studio/index.d.ts                     38.31 KB
+@objectstack/spec:build: DTS dist/system/index.d.ts                     1.55 MB
+@objectstack/spec:build: DTS dist/ui/index.d.ts                         188.78 KB
+@objectstack/spec:build: DTS dist/knowledge-document.zod-C8B-jI53.d.ts  7.75 KB
+@objectstack/spec:build: DTS dist/export.zod-BSOHkLsj.d.ts              54.13 KB
+@objectstack/spec:build: DTS dist/node-executor.zod-CLfm7Iz1.d.ts       16.68 KB
+@objectstack/spec:build: DTS dist/subscription.zod-Big0z6z4.d.ts        204.71 KB
+@objectstack/spec:build: DTS dist/field.zod-n0uCj60r.d.ts               294.98 KB
+@objectstack/spec:build: DTS dist/skill.zod-CxUHXamk.d.ts               18.59 KB
+@objectstack/spec:build: DTS dist/webhook.zod-DBXVyHVq.d.ts             4.77 KB
+@objectstack/spec:build: DTS dist/state-machine.zod-BFg-VE0M.d.ts       3.84 KB
+@objectstack/spec:build: DTS dist/flow.zod-s_63UTAw.d.ts                21.08 KB
+@objectstack/spec:build: DTS dist/datasource.zod-CJy_CtFf.d.ts          11.27 KB
+@objectstack/spec:build: DTS dist/analytics.zod-CrWIoZXG.d.ts           6.68 KB
+@objectstack/spec:build: DTS dist/query.zod-BGJiqCIr.d.ts               21.10 KB
+@objectstack/spec:build: DTS dist/eval-user.zod-CfFMQqGW.d.ts           5.20 KB
+@objectstack/spec:build: DTS dist/connector.zod-DvohGaxD.d.ts           32.21 KB
+@objectstack/spec:build: DTS dist/manifest.zod-Di_HXUA6.d.ts            174.11 KB
+@objectstack/spec:build: DTS dist/package-registry.zod-CP6m8IUm.d.ts    180.69 KB
+@objectstack/spec:build: DTS dist/plugin.zod-BH3X7gl3.d.ts              5.60 KB
+@objectstack/spec:build: DTS dist/permission.zod-D_yUUBM_.d.ts          15.05 KB
+@objectstack/spec:build: DTS dist/external-errors-BkbYWLqU.d.ts         3.53 KB
+@objectstack/spec:build: DTS dist/suggestions.zod-DBfVfe94.d.ts         12.35 KB
+@objectstack/spec:build: DTS dist/expression.zod-CqxknFMd.d.ts          8.53 KB
+@objectstack/spec:build: DTS dist/app-install.zod-BJvantiC.d.ts         27.83 KB
+@objectstack/spec:build: DTS dist/email-template.zod-mExkYHMa.d.ts      21.98 KB
+@objectstack/spec:build: DTS dist/translation.zod-CYp49gMh.d.ts         27.35 KB
+@objectstack/spec:build: DTS dist/object.zod-ChKUJn9-.d.ts              229.36 KB
+@objectstack/spec:build: DTS dist/metadata-loader.zod-D-4QE4Bi.d.ts     10.38 KB
+@objectstack/spec:build: DTS dist/dataset.zod-4HLmwGcZ.d.ts             7.46 KB
+@objectstack/spec:build: DTS dist/page.zod-D_f90hiT.d.ts                179.42 KB
+@objectstack/spec:build: DTS dist/filter.zod-DtZp1Qzz.d.ts              10.64 KB
+@objectstack/spec:build: DTS dist/action.zod-DiZDtGv7.d.ts              24.66 KB
+@objectstack/spec:build: DTS dist/view.zod-CYNyDzuN.d.ts                160.67 KB
+@objectstack/spec:build: DTS dist/http.zod-BLsW0NuY.d.ts                3.53 KB
+@objectstack/formula:build: cache hit, replaying logs e3abc25c44fbc700
+@objectstack/formula:build: 
+@objectstack/formula:build: > @objectstack/formula@14.3.0 build /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/packages/formula
+@objectstack/formula:build: > tsup --config ../../tsup.config.ts
+@objectstack/formula:build: 
+@objectstack/formula:build: CLI Building entry: src/index.ts
+@objectstack/formula:build: CLI Using tsconfig: tsconfig.json
+@objectstack/formula:build: CLI tsup v8.5.1
+@objectstack/formula:build: CLI Using tsup config: /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/tsup.config.ts
+@objectstack/formula:build: CLI Target: es2020
+@objectstack/formula:build: CLI Cleaning output folder
+@objectstack/formula:build: ESM Build start
+@objectstack/formula:build: CJS Build start
+@objectstack/formula:build: CJS dist/index.js     48.03 KB
+@objectstack/formula:build: CJS dist/index.js.map 129.79 KB
+@objectstack/formula:build: CJS ⚡️ Build success in 75ms
+@objectstack/formula:build: ESM dist/index.mjs     46.03 KB
+@objectstack/formula:build: ESM dist/index.mjs.map 127.84 KB
+@objectstack/formula:build: ESM ⚡️ Build success in 80ms
+@objectstack/formula:build: DTS Build start
+@objectstack/formula:build: DTS ⚡️ Build success in 4453ms
+@objectstack/formula:build: DTS dist/index.d.mts 22.29 KB
+@objectstack/formula:build: DTS dist/index.d.ts  22.29 KB
+@objectstack/types:build: cache hit, replaying logs 43e77ea4f964a7fe
+@objectstack/types:build: 
+@objectstack/types:build: > @objectstack/types@14.3.0 build /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/packages/types
+@objectstack/types:build: > tsup --config ../../tsup.config.ts
+@objectstack/types:build: 
+@objectstack/types:build: CLI Building entry: src/index.ts
+@objectstack/types:build: CLI Using tsconfig: tsconfig.json
+@objectstack/types:build: CLI tsup v8.5.1
+@objectstack/types:build: CLI Using tsup config: /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/tsup.config.ts
+@objectstack/types:build: CLI Target: es2020
+@objectstack/types:build: CLI Cleaning output folder
+@objectstack/types:build: ESM Build start
+@objectstack/types:build: CJS Build start
+@objectstack/types:build: ESM dist/index.mjs     1.87 KB
+@objectstack/types:build: ESM dist/index.mjs.map 8.18 KB
+@objectstack/types:build: ESM ⚡️ Build success in 44ms
+@objectstack/types:build: CJS dist/index.js     3.10 KB
+@objectstack/types:build: CJS dist/index.js.map 9.08 KB
+@objectstack/types:build: CJS ⚡️ Build success in 44ms
+@objectstack/types:build: DTS Build start
+@objectstack/types:build: DTS ⚡️ Build success in 1161ms
+@objectstack/types:build: DTS dist/index.d.mts 4.85 KB
+@objectstack/types:build: DTS dist/index.d.ts  4.85 KB
+@objectstack/core:build: cache hit, replaying logs e37e217cf661313f
+@objectstack/core:build: 
+@objectstack/core:build: > @objectstack/core@14.3.0 build /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/packages/core
+@objectstack/core:build: > tsup
+@objectstack/core:build: 
+@objectstack/core:build: CLI Building entry: src/index.ts, src/logger.ts
+@objectstack/core:build: CLI Using tsconfig: tsconfig.json
+@objectstack/core:build: CLI tsup v8.5.1
+@objectstack/core:build: CLI Using tsup config: /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/packages/core/tsup.config.ts
+@objectstack/core:build: CLI Target: es2020
+@objectstack/core:build: CLI Cleaning output folder
+@objectstack/core:build: ESM Build start
+@objectstack/core:build: CJS Build start
+@objectstack/core:build: CJS dist/index.cjs      174.64 KB
+@objectstack/core:build: CJS dist/logger.cjs     5.49 KB
+@objectstack/core:build: CJS dist/index.cjs.map  382.72 KB
+@objectstack/core:build: CJS dist/logger.cjs.map 10.80 KB
+@objectstack/core:build: CJS ⚡️ Build success in 113ms
+@objectstack/core:build: ESM dist/logger.js     4.82 KB
+@objectstack/core:build: ESM dist/index.js      170.50 KB
+@objectstack/core:build: ESM dist/logger.js.map 10.75 KB
+@objectstack/core:build: ESM dist/index.js.map  380.82 KB
+@objectstack/core:build: ESM ⚡️ Build success in 114ms
+@objectstack/core:build: DTS Build start
+@objectstack/core:build: DTS ⚡️ Build success in 10491ms
+@objectstack/core:build: DTS dist/index.d.ts   79.82 KB
+@objectstack/core:build: DTS dist/logger.d.ts  1.14 KB
+@objectstack/core:build: DTS dist/index.d.cts  79.83 KB
+@objectstack/core:build: DTS dist/logger.d.cts 1.14 KB
+@objectstack/metadata-core:build: cache hit, replaying logs 7484dcfa1b480c9d
+@objectstack/metadata-core:build: 
+@objectstack/metadata-core:build: > @objectstack/metadata-core@14.3.0 build /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/packages/metadata-core
+@objectstack/metadata-core:build: > tsup
+@objectstack/metadata-core:build: 
+@objectstack/metadata-core:build: CLI Building entry: src/index.ts, src/testing.ts
+@objectstack/metadata-core:build: CLI Using tsconfig: tsconfig.json
+@objectstack/metadata-core:build: CLI tsup v8.5.1
+@objectstack/metadata-core:build: CLI Using tsup config: /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/packages/metadata-core/tsup.config.ts
+@objectstack/metadata-core:build: CLI Target: es2020
+@objectstack/metadata-core:build: CLI Cleaning output folder
+@objectstack/metadata-core:build: ESM Build start
+@objectstack/metadata-core:build: CJS Build start
+@objectstack/metadata-core:build: ESM dist/chunk-G3VZZW54.js     2.53 KB
+@objectstack/metadata-core:build: ESM dist/index.js              47.77 KB
+@objectstack/metadata-core:build: ESM dist/testing.js            11.99 KB
+@objectstack/metadata-core:build: ESM dist/chunk-G3VZZW54.js.map 6.57 KB
+@objectstack/metadata-core:build: ESM dist/index.js.map          111.13 KB
+@objectstack/metadata-core:build: ESM dist/testing.js.map        24.61 KB
+@objectstack/metadata-core:build: ESM ⚡️ Build success in 579ms
+@objectstack/metadata-core:build: CJS dist/chunk-F3VZBGKC.cjs     2.91 KB
+@objectstack/metadata-core:build: CJS dist/testing.cjs            14.61 KB
+@objectstack/metadata-core:build: CJS dist/chunk-F3VZBGKC.cjs.map 6.32 KB
+@objectstack/metadata-core:build: CJS dist/index.cjs              50.67 KB
+@objectstack/metadata-core:build: CJS dist/testing.cjs.map        18.94 KB
+@objectstack/metadata-core:build: CJS dist/index.cjs.map          96.30 KB
+@objectstack/metadata-core:build: CJS ⚡️ Build success in 624ms
+@objectstack/metadata-core:build: DTS Build start
+@objectstack/metadata-core:build: DTS ⚡️ Build success in 9133ms
+@objectstack/metadata-core:build: DTS dist/index.d.ts                842.96 KB
+@objectstack/metadata-core:build: DTS dist/testing.d.ts              459.00 B
+@objectstack/metadata-core:build: DTS dist/repository-C4MF1Ys3.d.ts  13.59 KB
+@objectstack/metadata-core:build: DTS dist/index.d.cts               842.96 KB
+@objectstack/metadata-core:build: DTS dist/testing.d.cts             460.00 B
+@objectstack/metadata-core:build: DTS dist/repository-C4MF1Ys3.d.cts 13.59 KB
+@objectstack/metadata-protocol:build: cache hit, replaying logs 736ec401ce902c14
+@objectstack/metadata-protocol:build: 
+@objectstack/metadata-protocol:build: > @objectstack/metadata-protocol@14.3.0 build /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/packages/metadata-protocol
+@objectstack/metadata-protocol:build: > tsup
+@objectstack/metadata-protocol:build: 
+@objectstack/metadata-protocol:build: CLI Building entry: src/index.ts
+@objectstack/metadata-protocol:build: CLI Using tsconfig: tsconfig.json
+@objectstack/metadata-protocol:build: CLI tsup v8.5.1
+@objectstack/metadata-protocol:build: CLI Using tsup config: /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/packages/metadata-protocol/tsup.config.ts
+@objectstack/metadata-protocol:build: CLI Target: es2020
+@objectstack/metadata-protocol:build: CLI Cleaning output folder
+@objectstack/metadata-protocol:build: ESM Build start
+@objectstack/metadata-protocol:build: CJS Build start
+@objectstack/metadata-protocol:build: ESM dist/chunk-PJRWA3RV.js            28.73 KB
+@objectstack/metadata-protocol:build: ESM dist/build-probes-TLWDII7Z.js     134.00 B
+@objectstack/metadata-protocol:build: ESM dist/chunk-KJGVCNUC.js            6.54 KB
+@objectstack/metadata-protocol:build: ESM dist/index.js                     196.90 KB
+@objectstack/metadata-protocol:build: ESM dist/seed-loader-UUVWUMXI.js      139.00 B
+@objectstack/metadata-protocol:build: ESM dist/chunk-KJGVCNUC.js.map        17.04 KB
+@objectstack/metadata-protocol:build: ESM dist/build-probes-TLWDII7Z.js.map 71.00 B
+@objectstack/metadata-protocol:build: ESM dist/seed-loader-UUVWUMXI.js.map  71.00 B
+@objectstack/metadata-protocol:build: ESM dist/index.js.map                 457.95 KB
+@objectstack/metadata-protocol:build: ESM dist/chunk-PJRWA3RV.js.map        58.97 KB
+@objectstack/metadata-protocol:build: ESM ⚡️ Build success in 199ms
+@objectstack/metadata-protocol:build: CJS dist/build-probes-I3227FYL.cjs     243.00 B
+@objectstack/metadata-protocol:build: CJS dist/seed-loader-3Y53WRR6.cjs      248.00 B
+@objectstack/metadata-protocol:build: CJS dist/chunk-7LOFAEHA.cjs            7.84 KB
+@objectstack/metadata-protocol:build: CJS dist/index.cjs                     213.32 KB
+@objectstack/metadata-protocol:build: CJS dist/chunk-3V4TXD5Z.cjs            30.63 KB
+@objectstack/metadata-protocol:build: CJS dist/build-probes-I3227FYL.cjs.map 338.00 B
+@objectstack/metadata-protocol:build: CJS dist/seed-loader-3Y53WRR6.cjs.map  336.00 B
+@objectstack/metadata-protocol:build: CJS dist/chunk-7LOFAEHA.cjs.map        15.56 KB
+@objectstack/metadata-protocol:build: CJS dist/index.cjs.map                 401.12 KB
+@objectstack/metadata-protocol:build: CJS dist/chunk-3V4TXD5Z.cjs.map        54.33 KB
+@objectstack/metadata-protocol:build: CJS ⚡️ Build success in 1851ms
+@objectstack/metadata-protocol:build: DTS Build start
+@objectstack/metadata-protocol:build: DTS ⚡️ Build success in 27207ms
+@objectstack/metadata-protocol:build: DTS dist/index.d.ts  87.00 KB
+@objectstack/metadata-protocol:build: DTS dist/index.d.cts 87.00 KB
+@objectstack/objectql:build: cache hit, replaying logs ce5328843a17edd4
+@objectstack/objectql:build: 
+@objectstack/objectql:build: > @objectstack/objectql@14.3.0 build /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/packages/objectql
+@objectstack/objectql:build: > tsup
+@objectstack/objectql:build: 
+@objectstack/objectql:build: CLI Building entry: src/core.ts, src/index.ts
+@objectstack/objectql:build: CLI Using tsconfig: tsconfig.json
+@objectstack/objectql:build: CLI tsup v8.5.1
+@objectstack/objectql:build: CLI Using tsup config: /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2/packages/objectql/tsup.config.ts
+@objectstack/objectql:build: CLI Target: es2020
+@objectstack/objectql:build: CLI Cleaning output folder
+@objectstack/objectql:build: ESM Build start
+@objectstack/objectql:build: CJS Build start
+@objectstack/objectql:build: ESM dist/core.mjs      179.08 KB
+@objectstack/objectql:build: ESM dist/index.mjs     220.78 KB
+@objectstack/objectql:build: ESM dist/index.mjs.map 484.59 KB
+@objectstack/objectql:build: ESM dist/core.mjs.map  397.97 KB
+@objectstack/objectql:build: ESM ⚡️ Build success in 257ms
+@objectstack/objectql:build: CJS dist/core.js      182.34 KB
+@objectstack/objectql:build: CJS dist/index.js     224.40 KB
+@objectstack/objectql:build: CJS dist/core.js.map  400.80 KB
+@objectstack/objectql:build: CJS dist/index.js.map 484.68 KB
+@objectstack/objectql:build: CJS ⚡️ Build success in 256ms
+@objectstack/objectql:build: DTS Build start
+@objectstack/objectql:build: DTS ⚡️ Build success in 52579ms
+@objectstack/objectql:build: DTS dist/index.d.mts 17.09 KB
+@objectstack/objectql:build: DTS dist/core.d.mts  75.42 KB
+@objectstack/objectql:build: DTS dist/index.d.ts  17.09 KB
+@objectstack/objectql:build: DTS dist/core.d.ts   75.42 KB
+
+ Tasks:    7 successful, 7 total
+Cached:    7 cached, 7 total
+  Time:    551ms >>> FULL TURBO
+

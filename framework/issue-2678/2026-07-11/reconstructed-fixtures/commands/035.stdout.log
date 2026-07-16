@@ -1,0 +1,203 @@
+                        succeeded++;
+                        break;
+                    }
+                    case 'delete': {
+                        if (!record.id) throw new Error('Record id is required for delete');
+                        await this.engine.delete(object, { where: { id: record.id } });
+                        results.push({ id: record.id, success: true });
+                        succeeded++;
+                        break;
+                    }
+                    default:
+                        results.push({ id: record.id, success: false, error: `Unknown operation: ${operation}` });
+                        failed++;
+                }
+            } catch (err: any) {
+                results.push({ id: record.id, success: false, error: err.message });
+                failed++;
+                if (options?.atomic) {
+                    // Abort remaining operations on first failure in atomic mode
+                    break;
+                }
+                if (!options?.continueOnError) {
+                    break;
+                }
+            }
+        }
+
+        return {
+            success: failed === 0,
+            operation,
+            total: records.length,
+            succeeded,
+            failed,
+            results: options?.returnRecords !== false ? results : results.map(r => ({ id: r.id, success: r.success, error: r.error })),
+        } as BatchUpdateResponse;
+    }
+    
+    async createManyData(request: { object: string, records: any[], context?: any }): Promise<any> {
+        const records = await this.engine.insert(
+            request.object,
+            request.records,
+            request.context !== undefined ? { context: request.context } as any : undefined,
+        );
+        return {
+            object: request.object,
+            records,
+            count: records.length
+        };
+    }
+    
+    async updateManyData(request: UpdateManyDataRequest): Promise<BatchUpdateResponse> {
+        const { object, records, options } = request;
+        const results: Array<{ id?: string; success: boolean; error?: string; record?: any }> = [];
+        let succeeded = 0;
+        let failed = 0;
+
+        for (const record of records) {
+            try {
+                const updated = await this.engine.update(object, record.data, { where: { id: record.id } });
+                results.push({ id: record.id, success: true, record: updated });
+                succeeded++;
+            } catch (err: any) {
+                results.push({ id: record.id, success: false, error: err.message });
+                failed++;
+                if (!options?.continueOnError) {
+                    break;
+                }
+            }
+        }
+
+        return {
+    }
+  }
+
+  async checkHealth(): Promise<boolean> {
+    try {
+      await this.knex.raw('SELECT 1');
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async disconnect(): Promise<void> {
+    await this.knex.destroy();
+  }
+
+  // ===================================
+  // CRUD — IDataDriver core
+  // ===================================
+
+  async find(object: string, query: QueryAST, options?: DriverOptions): Promise<any[]> {
+    // Build everything EXCEPT the SELECT list, so the unknown-column retry
+    // below can rebuild without re-deriving where/order/pagination.
+    const buildBase = () => {
+      const b = this.getBuilder(object, options);
+      this.applyTenantScope(b, object, options);
+
+      // WHERE
+      if (query.where) {
+        this.applyFilters(b, query.where);
+      }
+        if (type === 'time') timeCols.push(name);
+        if (type === 'auto_number' || type === 'autonumber') {
+          const rawFmt = (typeof field.autonumberFormat === 'string' && field.autonumberFormat)
+            ? field.autonumberFormat
+            : (typeof field.format === 'string' && field.format ? field.format : '');
+          const fmt = rawFmt || '{0000}';
+          autoNumberCols.push({ name, format: fmt, tokens: parseAutonumberFormat(fmt), tenantField });
+        }
+      }
+    }
+    this.jsonFields[key] = jsonCols;
+    this.booleanFields[key] = booleanCols;
+    this.numericFields[key] = numericCols;
+    this.autoNumberFields[key] = autoNumberCols;
+    this.tenantFieldByTable[key] = tenantField;
+    if (dateCols.length) this.dateFields[key] = new Set(dateCols);
+    if (datetimeCols.length) this.datetimeFields[key] = new Set(datetimeCols);
+    if (timeCols.length) this.timeFields[key] = new Set(timeCols);
+  }
+
+  async initObjects(objects: Array<{ name: string; fields?: Record<string, any> }>): Promise<void> {
+    // DDL gate (ADR-0015 §5.1): createTable/alterTable below mutate schema.
+    // Also covers `syncSchema`, which delegates here.
+    this.assertSchemaMutable('initObjects');
+    await this.ensureDatabaseExists();
+
+    for (const obj of objects) {
+      const tableName = StorageNameMapping.resolveTableName(obj);
+      // #2186: remember the authoritative metadata field set for this table so
+      // drift detection / `os migrate` can diff the physical schema against it.
+      this.managedObjectFields.set(tableName, obj.fields ?? {});
+      if (Array.isArray((obj as any).indexes)) {
+        this.managedObjectIndexes.set(tableName, (obj as any).indexes);
+      }
+
+      const jsonCols: string[] = [];
+      const booleanCols: string[] = [];
+      const numericCols: string[] = [];
+      const autoNumberCols: Array<{ name: string; format: string; tokens: AutonumberToken[]; tenantField: string | null }> = [];
+      // Tenant-isolation column: explicit tenancy opt-out → declared field →
+      // implicit `organization_id`. See {@link computeTenantField} (shared with
+      // registerExternalObject so the two paths can't drift).
+      const tenantField = this.computeTenantField(obj);
+      if (obj.fields) {
+        for (const [name, field] of Object.entries<any>(obj.fields)) {
+          const type = field.type || 'string';
+          if (this.isJsonField(type, field)) {
+            jsonCols.push(name);
+          }
+          // `toggle` shares boolean storage/affinity, so it needs the same
+          // read coercion (stored 1/0 → JS true/false) or it leaks back as a
+          // number/string instead of a boolean (#field-zoo).
+          if (type === 'boolean' || type === 'toggle') {
+            booleanCols.push(name);
+          }
+          // Numeric scalars are coerced back to JS numbers on read so legacy
+          // TEXT-affinity columns (created before they were mapped to a numeric
+          // column) still return numbers, not strings — see NUMERIC_SCALAR_TYPES.
+          if (NUMERIC_SCALAR_TYPES.has(type) && !field.multiple) {
+            numericCols.push(name);
+          }
+          if (type === 'date') {
+            (this.dateFields[tableName] ??= new Set()).add(name);
+          }
+          if (type === 'datetime') {
+            (this.datetimeFields[tableName] ??= new Set()).add(name);
+          }
+          if (type === 'time') {
+            (this.timeFields[tableName] ??= new Set()).add(name);
+          }
+          if (type === 'auto_number' || type === 'autonumber') {
+            // Honor either the spec-canonical `autonumberFormat` or the
+            // shorthand `format` (both appear in metadata) — see #1603.
+            const rawFmt = (typeof field.autonumberFormat === 'string' && field.autonumberFormat)
+              ? field.autonumberFormat
+              : (typeof field.format === 'string' && field.format ? field.format : '');
+            const fmt = rawFmt || '{0000}';
+            // Tokenize once: the renderer resolves date tokens (`{YYYYMMDD}`),
+            // field interpolation (`{island_zone}`) and the sequence slot at
+            // fill time. The counter scopes to whatever renders before the slot.
+            const tokens = parseAutonumberFormat(fmt);
+            autoNumberCols.push({ name, format: fmt, tokens, tenantField });
+          }
+        }
+      }
+      this.jsonFields[tableName] = jsonCols;
+      this.booleanFields[tableName] = booleanCols;
+      this.numericFields[tableName] = numericCols;
+      this.autoNumberFields[tableName] = autoNumberCols;
+      this.tenantFieldByTable[tableName] = tenantField;
+
+      let exists = await this.knex.schema.hasTable(tableName);
+
+      if (exists) {
+        const columnInfo = await this.knex(tableName).columnInfo();
+        const existingColumns = Object.keys(columnInfo);
+
+        if (existingColumns.includes('_id') && !existingColumns.includes('id')) {
+          await this.knex.schema.dropTable(tableName);
+          exists = false;
+        }

@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "archivedAt": "2026-07-17T00:23:15+08:00",
+  "provenance": "Data source reconstructed from the final report and revalidated; the original temporary fixture no longer exists.",
+  "scope": "Framework issue #2678 problem one only",
+  "frameworkSha": "98874656ffc50ce1531af52346228ffcdda73fba",
+  "comparison": {
+    "result": "exact-match",
+    "checks": 88,
+    "differences": 0,
+    "report": "results/comparison-report.md",
+    "raw": "results/raw-results.json"
+  },
+  "dataSource": {
+    "generator": "source/generate-fixtures.mjs",
+    "expected": "data/expected-results.json",
+    "workbook": "data/issue-2678-reconstructed-data-source.xlsx",
+    "csv": [
+      "data/qa_seed_item.csv",
+      "data/qa_import_item.csv",
+      "data/qa_summary_parents.csv",
+      "data/qa_summary_child_single_parent.csv",
+      "data/qa_summary_child_ten_parents.csv"
+    ]
+  },
+  "execution": {
+    "harness": "source/revalidate-problem-one.ts",
+    "objectDefinitions": "source/object-definitions.ts",
+    "comparator": "source/compare-results.mjs",
+    "database": "database/problem-one.sqlite",
+    "commandLedger": "command-ledger.md",
+    "commandStreamsDirectory": "commands",
+    "environment": "environment/runtime.json"
+  },
+  "spreadsheetVerification": {
+    "inspection": "data/workbook-inspection.json",
+    "fullInspectionStream": "data/issue-2678-reconstructed-data-source.xlsx.inspect.ndjson",
+    "formulaErrorScan": "data/workbook-formula-error-scan.ndjson",
+    "renderManifest": "data/workbook-render-manifest.json",
+    "renderDirectory": "rendered",
+    "worksheetsVisuallyVerified": 7,
+    "formulaErrors": 0
+  },
+  "integrity": {
+    "sha256Manifest": "SHA256SUMS",
+    "coverage": "Every file below this directory except SHA256SUMS itself"
+  },
+  "excluded": [
+    "node_modules",
+    "Framework build outputs",
+    "tool caches",
+    "credentials and tokens",
+    "unrelated task files"
+  ]
+}

@@ -1,0 +1,311 @@
+packages/dogfood/test/read-coercion-conformance.test.ts:24:      new SqlDriver({
+packages/triggers/trigger-record-change/src/record-change-integration.test.ts:124:    await kernel.use(new ObjectQLPlugin());
+packages/triggers/trigger-record-change/src/record-change-integration.test.ts:134:    objectql.registry.registerObject(objectDef('wid'), 'test', 'test');
+packages/triggers/trigger-record-change/src/record-change-integration.test.ts:167:        ql.registry.registerObject(objectDef('wid2'), 'test', 'test');
+packages/triggers/trigger-record-change/src/record-change-integration.test.ts:173:    await kernel.use(new ObjectQLPlugin());
+packages/triggers/trigger-record-change/src/multilookup-context.test.ts:60:    await kernel.use(new ObjectQLPlugin());
+packages/triggers/trigger-record-change/src/multilookup-context.test.ts:69:    objectql.registry.registerObject({
+packages/cli/src/adr-0048-app-split.test.ts:40:    engine = new ObjectQL();
+packages/rest/src/import-job-integration.test.ts:125:  const engine = new ObjectQL();
+packages/rest/src/import-job-integration.test.ts:128:  engine.registry.registerObject(TASK as any);
+packages/rest/src/import-job-integration.test.ts:129:  engine.registry.registerObject(SYS_IMPORT_JOB as any);
+packages/cli/src/utils/schema-migrate.integration.test.ts:46:    const seed = new SqlDriver({ client: 'better-sqlite3', connection: { filename: dbFile }, useNullAsDefault: true });
+packages/cli/src/utils/schema-migrate.integration.test.ts:48:    await k.schema.createTable('mig_biz_unit', (t: any) => {
+packages/rest/src/export-integration.test.ts:177:  const engine = new ObjectQL();
+packages/rest/src/export-integration.test.ts:180:  engine.registry.registerObject(USER as any);
+packages/rest/src/export-integration.test.ts:181:  engine.registry.registerObject(TASK as any);
+packages/plugins/driver-sql/src/sql-driver-external-columnmap.test.ts:43:  const fx = new SqlDriver({ client: 'better-sqlite3', connection: { filename: path }, useNullAsDefault: true }) as any;
+packages/plugins/driver-sql/src/sql-driver-external-columnmap.test.ts:54:  const d = new SqlDriver({ client: 'better-sqlite3', connection: { filename: path }, useNullAsDefault: true, schemaMode: 'external' } as any) as any;
+packages/plugins/driver-sql/src/sql-driver-external-columnmap.test.ts:116:    const d = new SqlDriver({ client: 'better-sqlite3', connection: { filename: ':memory:' }, useNullAsDefault: true }) as any;
+packages/plugins/driver-sql/src/sql-driver-timestamp-format.test.ts:31:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-timestamp-format.test.ts:144:    const dd = new SqlDriver({
+packages/rest/src/import-integration.test.ts:117:  const engine = new ObjectQL();
+packages/rest/src/import-integration.test.ts:120:  engine.registry.registerObject(USER as any);
+packages/rest/src/import-integration.test.ts:121:  engine.registry.registerObject(TASK as any);
+packages/plugins/driver-sql/src/sql-driver-external-remote-name.test.ts:44:  const fixture = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-external-remote-name.test.ts:65:  const ext = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-autonumber-persistence.test.ts:39:    return new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-multiwrite-tx.test.ts:32:    driver = new SqlDriver({ client: 'better-sqlite3', connection: { filename: file }, useNullAsDefault: true } as any);
+packages/plugins/driver-sql/src/sql-driver-multiwrite-tx.test.ts:34:    await k.schema.createTable('t', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-date-bucket.test.ts:63:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-date-bucket.test.ts:70:    await knex.schema.createTable('events', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-datetime-filter.test.ts:21:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-introspection.test.ts:11:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-introspection.test.ts:32:    await knexInstance.schema.createTable('users', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-introspection.test.ts:41:    await knexInstance.schema.createTable('posts', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-introspection.test.ts:56:    await knexInstance.schema.createTable('test_types', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-introspection.test.ts:81:    await knexInstance.schema.createTable('pk_test', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-introspection.test.ts:93:    await knexInstance.schema.createTable('categories', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-introspection.test.ts:98:    await knexInstance.schema.createTable('products', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-introspection.test.ts:118:    await knexInstance.schema.createTable('nullable_test', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-introspection.test.ts:135:    await knexInstance.schema.createTable('users', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-introspection.test.ts:140:    await knexInstance.schema.createTable('teams', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-introspection.test.ts:145:    await knexInstance.schema.createTable('memberships', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-time-of-day.test.ts:26:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-autonumber-tx.test.ts:43:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-autonumber.test.ts:20:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-like-escape.test.ts:16:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-like-escape.test.ts:22:    await knex.schema.createTable('docs', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:49:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:159:    const d2 = new SqlDriver({ client: 'better-sqlite3', connection: { filename: ':memory:' }, useNullAsDefault: true });
+packages/plugins/driver-sql/src/sql-driver.test.ts:10:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver.test.ts:18:    await k.schema.createTable('users', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-queryast.test.ts:13:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-queryast.test.ts:21:    await k.schema.createTable('products', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-queryast.test.ts:62:      const testDriver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-numeric-fidelity.test.ts:29:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-numeric-fidelity.test.ts:145:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-numeric-fidelity.test.ts:155:    await knex.schema.createTable('legacy', (t) => {
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver-introspection.test.ts:28:    await knexInstance.schema.createTable('users', (t: any) => {
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver-introspection.test.ts:37:    await knexInstance.schema.createTable('posts', (t: any) => {
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver-introspection.test.ts:52:    await knexInstance.schema.createTable('test_types', (t: any) => {
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver-introspection.test.ts:77:    await knexInstance.schema.createTable('pk_test', (t: any) => {
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver-introspection.test.ts:89:    await knexInstance.schema.createTable('categories', (t: any) => {
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver-introspection.test.ts:94:    await knexInstance.schema.createTable('products', (t: any) => {
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver-introspection.test.ts:114:    await knexInstance.schema.createTable('nullable_test', (t: any) => {
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver-introspection.test.ts:131:    await knexInstance.schema.createTable('users', (t: any) => {
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver-introspection.test.ts:136:    await knexInstance.schema.createTable('teams', (t: any) => {
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver-introspection.test.ts:141:    await knexInstance.schema.createTable('memberships', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-date-only.test.ts:23:    driver = new SqlDriver({
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver-date-bucket.test.ts:66:    await knex.schema.createTable('events', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-advanced.test.ts:11:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-advanced.test.ts:18:    await knexInstance.schema.createTable('orders', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-advanced.test.ts:279:      await knexInstance.schema.createTable('nullable_test', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-array-fields.test.ts:25:    driver = new SqlDriver({
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver-schema.test.ts:44:    await knexInstance.schema.createTable('test_obj', (t: any) => {
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver-schema.test.ts:73:    await knexInstance.schema.createTable('test_obj', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-autonumber-tokens.test.ts:31:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-autonumber-tokens.test.ts:194:    await k.schema.createTable('_objectstack_sequences', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-autonumber-tokens.test.ts:226:    await k.schema.createTable('_objectstack_sequences', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-sqlite-tx-guard.test.ts:40:    driver = new SqlDriver({
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver-queryast.test.ts:17:    await k.schema.createTable('products', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-analytics-datetime.test.ts:29:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:11:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:48:    await knexInstance.schema.createTable('test_obj', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:77:    await knexInstance.schema.createTable('test_obj', (t: any) => {
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver.test.ts:17:    await k.schema.createTable('users', (t: any) => {
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver.test.ts:109:    await k1.schema.createTable('items', (t: any) => {
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver.test.ts:126:    await k1.schema.createTable('items', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:32:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:205:      driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:225:      driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:271:      driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:307:      driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:328:      driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-retention-prune.test.ts:26:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-bulk-json.test.ts:32:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-ddl-gate.test.ts:17:  return new SqlDriver({
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver-advanced.test.ts:14:    await knexInstance.schema.createTable('orders', (t: any) => {
+packages/plugins/driver-sqlite-wasm/src/sqlite-wasm-driver-advanced.test.ts:275:      await knexInstance.schema.createTable('nullable_test', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-schema-drift.test.ts:18:    const d = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-schema-drift.test.ts:36:    await knexInstance.schema.createTable('biz_unit', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-schema-drift.test.ts:73:      await knexInstance.schema.createTable('biz_unit', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-schema-drift.test.ts:90:      await knexInstance.schema.createTable('biz_unit', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-schema-drift.test.ts:104:      await knexInstance.schema.createTable('biz_unit', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-schema-drift.test.ts:148:      await knexInstance.schema.createTable('biz_unit', (t: any) => {
+packages/plugins/driver-sql/src/sql-driver-schema-drift.test.ts:187:      const d = new SqlDriver({ client, connection: { host: 'x', database: 'y', user: 'u' } } as any);
+packages/plugins/driver-sql/src/sql-driver-schema-drift.test.ts:232:      await knexInstance.schema.createTable('biz_unit', (t: any) => {
+packages/objectql/src/secret-fields.test.ts:133:  const engine = new ObjectQL();
+packages/objectql/src/secret-fields.test.ts:137:  engine.registry.registerObject(sysSecretObject as any);
+packages/objectql/src/secret-fields.test.ts:138:  engine.registry.registerObject(dsObject as any);
+packages/objectql/src/secret-fields.test.ts:219:      const engine = new ObjectQL();
+packages/objectql/src/secret-fields.test.ts:223:      engine.registry.registerObject({
+packages/objectql/src/engine-aggregate-timezone.test.ts:62:  const engine = new ObjectQL();
+packages/objectql/src/engine-aggregate-timezone.test.ts:65:  engine.registry.registerObject({
+packages/objectql/src/external-write-gate.test.ts:59:  const engine = new ObjectQL();
+packages/objectql/src/external-write-gate.test.ts:84:    const engine = new ObjectQL();
+packages/objectql/src/external-write-gate.test.ts:145:    const engine = new ObjectQL();
+packages/objectql/src/external-write-gate.test.ts:155:    const engine = new ObjectQL();
+packages/objectql/src/external-write-gate.test.ts:161:    const engine = new ObjectQL();
+packages/objectql/src/hook-binder.test.ts:10:  return new ObjectQL();
+packages/objectql/src/protocol-destructive.test.ts:22:        registry.registerObject({
+packages/objectql/src/protocol-registry-shadow.test.ts:173:        engine = new ObjectQL();
+packages/objectql/src/protocol-registry-shadow.test.ts:177:        engine.registry.registerObject(sysMetadataObject as any);
+packages/objectql/src/protocol-registry-shadow.test.ts:178:        engine.registry.registerObject(sysMetadataHistoryObject as any);
+packages/objectql/src/registry-single-owner.test.ts:22:    registry.registerObject(
+packages/objectql/src/registry-single-owner.test.ts:28:    registry.registerObject(
+packages/objectql/src/registry-single-owner.test.ts:38:    registry.registerObject(
+packages/objectql/src/registry-single-owner.test.ts:44:    registry.registerObject(
+packages/objectql/src/registry-single-owner.test.ts:57:    registry.registerObject(
+packages/objectql/src/registry-single-owner.test.ts:69:    registry.registerObject(
+packages/objectql/src/registry-single-owner.test.ts:76:      registry.registerObject(
+packages/objectql/src/engine-autonumber-defer.test.ts:84:    engine = new ObjectQL();
+packages/objectql/src/engine-multivalue-normalize.test.ts:89:  const ql = new ObjectQL();
+packages/objectql/src/plugin.integration.test.ts:18:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:37:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:55:      objectql.registry.registerObject(testObject, 'test', 'test');
+packages/objectql/src/plugin.integration.test.ts:67:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:99:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:136:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:149:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:181:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:230:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:285:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:333:      await kernel.use(new ObjectQLPlugin());
+packages/objectql/src/plugin.integration.test.ts:413:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:475:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:540:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:574:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:642:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:722:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:798:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:860:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:923:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:996:      const plugin = new ObjectQLPlugin({ environmentId: 'env_1' });
+packages/objectql/src/plugin.integration.test.ts:1022:      const plugin = new ObjectQLPlugin({ environmentId: 'env_1', hydrateMetadataFromDb: true });
+packages/objectql/src/plugin.integration.test.ts:1063:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:1116:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:1170:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:1189:      objectql.registry.registerObject(lite, 'test', 'test');
+packages/objectql/src/plugin.integration.test.ts:1234:      const plugin = new ObjectQLPlugin();
+packages/objectql/src/plugin.integration.test.ts:1250:      objectql.registry.registerObject(audited, 'test', 'test');
+packages/objectql/src/datasource-mapping.test.ts:36:    engine = new ObjectQL();
+packages/objectql/src/datasource-mapping.test.ts:53:    engine.registry.registerObject(
+packages/objectql/src/datasource-mapping.test.ts:83:    engine.registry.registerObject(
+packages/objectql/src/datasource-mapping.test.ts:110:    engine.registry.registerObject(
+packages/objectql/src/datasource-mapping.test.ts:138:    engine.registry.registerObject(
+packages/objectql/src/datasource-mapping.test.ts:165:    engine.registry.registerObject(
+packages/objectql/src/seed-loader-org-fallback.test.ts:30:  const svc = new SeedLoaderService(engine as never, metadata as never, logger as never);
+packages/objectql/src/protocol-clone-real-engine.test.ts:116:        engine = new ObjectQL();
+packages/objectql/src/protocol-clone-real-engine.test.ts:120:        engine.registry.registerObject(accountObject as any);
+packages/objectql/src/protocol-clone-real-engine.test.ts:121:        engine.registry.registerObject(lockedObject as any);
+packages/objectql/src/engine.test.ts:106:        engine = new ObjectQL();
+packages/objectql/src/hook-metrics.test.ts:21:        const engine = new ObjectQL();
+packages/objectql/src/hook-metrics.test.ts:41:        const engine = new ObjectQL();
+packages/objectql/src/hook-metrics.test.ts:59:        const engine = new ObjectQL();
+packages/objectql/src/hook-metrics.test.ts:78:        const engine = new ObjectQL();
+packages/objectql/src/hook-metrics.test.ts:98:        const engine = new ObjectQL();
+packages/objectql/src/hook-metrics.test.ts:123:        const engine = new ObjectQL();
+packages/objectql/src/protocol-references.test.ts:22:        registry.registerObject({ name: 'account', label: 'Account', fields: {} } as any, 'pkg');
+packages/objectql/src/protocol-references.test.ts:24:        registry.registerObject({
+packages/objectql/src/protocol-references.test.ts:97:        registry.registerObject({ name: 'orphan', fields: {} } as any, 'pkg');
+packages/objectql/src/engine-cross-package-collision.test.ts:16:    const engine = new ObjectQL();
+packages/objectql/src/engine-cross-package-collision.test.ts:31:    const engine = new ObjectQL();
+packages/objectql/src/engine-cross-package-collision.test.ts:40:    const engine = new ObjectQL();
+packages/objectql/src/engine-cross-package-collision.test.ts:48:    const engine = new ObjectQL();
+packages/objectql/src/protocol-feed.test.ts:60:    engine = new ObjectQL();
+packages/objectql/src/engine-ambient-transaction.test.ts:74:    engine = new ObjectQL();
+packages/objectql/src/engine-ambient-transaction.test.ts:79:    engine.registry.registerObject({ name: 'thing', fields: { name: { type: 'text' } } } as any);
+packages/objectql/src/plugin-authored-hooks.test.ts:44:  return new ObjectQLPlugin({ ql: ql as unknown as ObjectQL });
+packages/objectql/src/plugin-authored-hooks.test.ts:188:    const plugin = new ObjectQLPlugin({ ql: ql as unknown as ObjectQL, environmentId: 'env_t' });
+packages/objectql/src/plugin-authored-actions.test.ts:51:  return new ObjectQLPlugin({ ql: ql as unknown as ObjectQL });
+packages/objectql/src/plugin-authored-actions.test.ts:278:    const plugin = new ObjectQLPlugin({ ql: ql as unknown as ObjectQL, environmentId: 'env_t' });
+packages/objectql/src/protocol-save-meta-repo-path-real-engine.test.ts:127:        engine = new ObjectQL();
+packages/objectql/src/protocol-save-meta-repo-path-real-engine.test.ts:131:        engine.registry.registerObject(sysMetadataObject as any);
+packages/objectql/src/protocol-save-meta-repo-path-real-engine.test.ts:227:        engine = new ObjectQL();
+packages/objectql/src/protocol-save-meta-repo-path-real-engine.test.ts:231:        engine.registry.registerObject(sysMetadataObject as any);
+packages/objectql/src/protocol-save-meta-repo-path-real-engine.test.ts:232:        engine.registry.registerObject(sysMetadataHistoryObject as any);
+packages/objectql/src/protocol-discovery.test.ts:12:    engine = new ObjectQL();
+packages/objectql/src/registry.test.ts:91:            const key = registry.registerObject(obj as any, 'com.example.crm', 'crm', 'own');
+packages/objectql/src/registry.test.ts:101:            const key = registry.registerObject(obj as any, 'com.example.app');
+packages/objectql/src/registry.test.ts:109:            registry.registerObject(obj as any, 'com.vendor.a', 'vendor_a', 'own');
+packages/objectql/src/registry.test.ts:113:                registry.registerObject(obj2 as any, 'com.vendor.b', undefined, 'own');
+packages/objectql/src/registry.test.ts:119:            registry.registerObject(obj as any, 'com.example.crm', 'crm', 'own');
+packages/objectql/src/registry.test.ts:123:                registry.registerObject(obj2 as any, 'com.example.crm', 'crm', 'own');
+packages/objectql/src/registry.test.ts:139:            registry.registerObject(obj as any, 'com.example.crm', undefined, 'own');
+packages/objectql/src/registry.test.ts:152:            registry.registerObject(named as any, 'com.crm', undefined, 'own');
+packages/objectql/src/registry.test.ts:156:            registry.registerObject(explicit as any, 'com.fin', undefined, 'own');
+packages/objectql/src/registry.test.ts:172:            registry.registerObject(obj as any, 'com.objectstack.system', undefined, 'own');
+packages/objectql/src/registry.test.ts:188:            registry.registerObject(obj as any, 'com.objectstack.system', undefined, 'own');
+packages/objectql/src/registry.test.ts:202:            registry.registerObject(owner as any, 'com.base', 'base', 'own');
+packages/objectql/src/registry.test.ts:205:            registry.registerObject(ext as any, 'com.crm', undefined, 'extend', 200);
+packages/objectql/src/registry.test.ts:214:            registry.registerObject(owner as any, 'com.base', 'base', 'own', 100);
+packages/objectql/src/registry.test.ts:217:            registry.registerObject(ext1 as any, 'com.ext1', undefined, 'extend', 150);
+packages/objectql/src/registry.test.ts:220:            registry.registerObject(ext2 as any, 'com.ext2', undefined, 'extend', 250);
+packages/objectql/src/registry.test.ts:228:            registry.registerObject(owner as any, 'com.base', 'base', 'own');
+packages/objectql/src/registry.test.ts:231:            registry.registerObject(ext as any, 'com.ext', undefined, 'extend');
+packages/objectql/src/registry.test.ts:239:            registry.registerObject(ext as any, 'com.ext', undefined, 'extend');
+packages/objectql/src/registry.test.ts:252:            registry.registerObject(obj as any, 'com.crm', 'crm', 'own');
+packages/objectql/src/registry.test.ts:259:            registry.registerObject(obj as any, 'com.objectstack.system', 'sys', 'own');
+packages/objectql/src/registry.test.ts:266:            registry.registerObject(obj as any, 'com.test', 'test', 'own');
+packages/objectql/src/registry.test.ts:275:            registry.registerObject(obj as any, 'com.test', 'test', 'own');
+packages/objectql/src/registry.test.ts:280:            registry.registerObject(obj2 as any, 'com.test', 'test', 'own');
+packages/objectql/src/registry.test.ts:293:            registry.registerObject({ name: 'a', fields: {} } as any, 'com.pkg1', 'pkg1', 'own');
+packages/objectql/src/registry.test.ts:294:            registry.registerObject({ name: 'b', fields: {} } as any, 'com.pkg2', 'pkg2', 'own');
+packages/objectql/src/registry.test.ts:302:            registry.registerObject({ name: 'a', fields: {} } as any, 'com.pkg1', 'pkg1', 'own');
+packages/objectql/src/registry.test.ts:303:            registry.registerObject({ name: 'b', fields: {} } as any, 'com.pkg2', 'pkg2', 'own');
+packages/objectql/src/registry.test.ts:311:            registry.registerObject({ name: 'base_obj', fields: {} } as any, 'com.owner', 'base', 'own');
+packages/objectql/src/registry.test.ts:312:            registry.registerObject({ name: 'base_obj', fields: { ext: { type: 'text' } } } as any, 'com.extender', undefined, 'extend');
+packages/objectql/src/registry.test.ts:324:            registry.registerObject({ name: 'removable', fields: {} } as any, 'com.pkg', 'pkg', 'own');
+packages/objectql/src/registry.test.ts:332:            registry.registerObject({ name: 'target', fields: { base: { type: 'text' } } } as any, 'com.owner', 'base', 'own');
+packages/objectql/src/registry.test.ts:333:            registry.registerObject({ name: 'target', fields: { ext: { type: 'text' } } } as any, 'com.ext', undefined, 'extend');
+packages/objectql/src/registry.test.ts:343:            registry.registerObject({ name: 'important', fields: {} } as any, 'com.owner', 'base', 'own');
+packages/objectql/src/registry.test.ts:344:            registry.registerObject({ name: 'important', fields: {} } as any, 'com.ext', undefined, 'extend');
+packages/objectql/src/registry.test.ts:352:            registry.registerObject({ name: 'forced', fields: {} } as any, 'com.owner', 'base', 'own');
+packages/objectql/src/registry.test.ts:353:            registry.registerObject({ name: 'forced', fields: {} } as any, 'com.ext', undefined, 'extend');
+packages/objectql/src/registry.test.ts:366:            registry.registerObject({ name: 'multi', fields: {} } as any, 'com.owner', 'pkg', 'own', 100);
+packages/objectql/src/registry.test.ts:367:            registry.registerObject({ name: 'multi', fields: {} } as any, 'com.ext1', undefined, 'extend', 200);
+packages/objectql/src/registry.test.ts:368:            registry.registerObject({ name: 'multi', fields: {} } as any, 'com.ext2', undefined, 'extend', 300);
+packages/objectql/src/registry.test.ts:378:            registry.registerObject({ name: 'owned', fields: {} } as any, 'com.owner', 'pkg', 'own');
+packages/objectql/src/registry.test.ts:465:            registry.registerObject({ name: 'obj', fields: {} } as any, 'com.pkg', 'pkg', 'own');
+packages/objectql/src/registry.test.ts:480:            registry.registerObject(
+packages/objectql/src/registry.test.ts:486:            registry.registerObject(
+packages/objectql/src/registry.test.ts:499:            registry.registerObject(
+packages/objectql/src/registry.test.ts:512:            registry.registerObject(
+packages/objectql/src/registry.test.ts:526:            registry.registerObject(
+packages/objectql/src/registry.test.ts:539:            registry.registerObject(
+packages/objectql/src/registry.test.ts:545:            registry.registerObject(
+packages/objectql/src/registry.test.ts:716:        reg.registerObject({ name: 'lead', fields: { first_name: { type: 'text' } } } as any, 'crm', 'crm', 'own');
+packages/objectql/src/summary-rollup.test.ts:63:    engine = new ObjectQL();
+packages/objectql/src/summary-rollup.test.ts:68:    engine.registry.registerObject({
+packages/objectql/src/summary-rollup.test.ts:76:    engine.registry.registerObject({
+packages/objectql/src/protocol-meta.test.ts:1422:            registry.registerObject(
+packages/objectql/src/registry-invalidate.test.ts:32:    registry.registerObject(makeObject('account'), 'com.example.crm');
+packages/objectql/src/registry-invalidate.test.ts:33:    registry.registerObject(makeObject('contact'), 'com.example.crm');
+packages/objectql/src/registry-invalidate.test.ts:51:    registry.registerObject(makeObject('task'), 'com.example.todo');
+packages/objectql/src/registry-invalidate.test.ts:58:    registry.registerObject(makeObject('a'), 'pkg.a');
+packages/objectql/src/registry-invalidate.test.ts:59:    registry.registerObject(makeObject('b'), 'pkg.b');
+packages/objectql/src/registry-invalidate.test.ts:69:    registry.registerObject(makeObject('lead', 'Lead v1'), 'com.example.crm');
+packages/objectql/src/registry-invalidate.test.ts:75:    registry.registerObject(makeObject('lead', 'Lead v2'), 'com.example.crm');
+packages/objectql/src/engine-count-read-filter.test.ts:97:  const ql = new ObjectQL();
+packages/objectql/src/engine-cascade-delete.test.ts:99:        engine = new ObjectQL();
+packages/objectql/src/engine-cascade-delete.test.ts:103:        for (const o of [acct, oppRequired, noteOptional, taskCascade]) engine.registry.registerObject(o as any);
+packages/client/src/client.hono.test.ts:15:        kernel.use(new ObjectQLPlugin());
+packages/client/src/client.hono.test.ts:96:        ql.registerObject({
+packages/client/src/client.environment-scoping.test.ts:30:        kernel.use(new ObjectQLPlugin());
+packages/client/src/client.environment-scoping.test.ts:62:        ql.registerObject({
+packages/services/service-analytics/src/__tests__/analytics-service.test.ts:283:  const strategy = new ObjectQLStrategy();
+packages/runtime/src/datasource-autoconnect.test.ts:75:  await kernel.use(new ObjectQLPlugin());
+packages/runtime/src/datasource-autoconnect.test.ts:169:    await kernel.use(new ObjectQLPlugin());
+packages/runtime/src/datasource-visibility.test.ts:63:    await kernel.use(new ObjectQLPlugin());
+packages/runtime/src/seed-loader.test.ts:108:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:129:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:152:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:172:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:198:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:226:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:248:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:264:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:284:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:313:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:333:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:371:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:408:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:437:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:479:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:514:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:547:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:591:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:623:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:649:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:676:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:703:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:738:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:767:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:797:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:830:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:873:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:909:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:947:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:980:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1001:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1023:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1054:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1094:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1125:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1158:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1189:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1217:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1239:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1269:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1299:      const loader = new SeedLoaderService(engine, metadata, logger);

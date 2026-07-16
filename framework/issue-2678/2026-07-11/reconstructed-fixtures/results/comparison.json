@@ -1,0 +1,619 @@
+{
+  "schemaVersion": 1,
+  "comparedAt": "2026-07-16T16:22:15.144Z",
+  "exactMatch": true,
+  "historicalConclusion": "Problem one remains consistent with the final QA report.",
+  "checks": [
+    {
+      "name": "Framework fixed SHA",
+      "expected": "98874656ffc50ce1531af52346228ffcdda73fba",
+      "actual": "98874656ffc50ce1531af52346228ffcdda73fba",
+      "passed": true
+    },
+    {
+      "name": "Harness provenance",
+      "expected": "Data source reconstructed from the final report and revalidated; the original temporary fixture no longer exists.",
+      "actual": "Data source reconstructed from the final report and revalidated; the original temporary fixture no longer exists.",
+      "passed": true
+    },
+    {
+      "name": "Batch size",
+      "expected": 200,
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "Seed batch write count",
+      "expected": 5,
+      "actual": 5,
+      "passed": true
+    },
+    {
+      "name": "Seed batch sizes",
+      "expected": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "actual": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "passed": true
+    },
+    {
+      "name": "Seed single write count",
+      "expected": 0,
+      "actual": 0,
+      "passed": true
+    },
+    {
+      "name": "Seed loader inserted",
+      "expected": 1000,
+      "actual": 1000,
+      "passed": true
+    },
+    {
+      "name": "Seed loader errors",
+      "expected": 0,
+      "actual": 0,
+      "passed": true
+    },
+    {
+      "name": "Seed database row count",
+      "expected": 1000,
+      "actual": 1000,
+      "passed": true
+    },
+    {
+      "name": "Seed unique external keys",
+      "expected": 1000,
+      "actual": 1000,
+      "passed": true
+    },
+    {
+      "name": "Seed amount minimum",
+      "expected": 1,
+      "actual": 1,
+      "passed": true
+    },
+    {
+      "name": "Seed amount maximum",
+      "expected": 1000,
+      "actual": 1000,
+      "passed": true
+    },
+    {
+      "name": "Seed amount resummed",
+      "expected": 500500,
+      "actual": 500500,
+      "passed": true
+    },
+    {
+      "name": "Seed active=true",
+      "expected": 500,
+      "actual": 500,
+      "passed": true
+    },
+    {
+      "name": "Import HTTP status",
+      "expected": 200,
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "Import total",
+      "expected": 1000,
+      "actual": 1000,
+      "passed": true
+    },
+    {
+      "name": "Import successful rows",
+      "expected": 1000,
+      "actual": 1000,
+      "passed": true
+    },
+    {
+      "name": "Import created rows",
+      "expected": 1000,
+      "actual": 1000,
+      "passed": true
+    },
+    {
+      "name": "Import error rows",
+      "expected": 0,
+      "actual": 0,
+      "passed": true
+    },
+    {
+      "name": "Import batch count",
+      "expected": 5,
+      "actual": 5,
+      "passed": true
+    },
+    {
+      "name": "Import batch sizes",
+      "expected": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "actual": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "passed": true
+    },
+    {
+      "name": "Import single-create count",
+      "expected": 0,
+      "actual": 0,
+      "passed": true
+    },
+    {
+      "name": "Import database row count",
+      "expected": 1000,
+      "actual": 1000,
+      "passed": true
+    },
+    {
+      "name": "Import unique external keys",
+      "expected": 1000,
+      "actual": 1000,
+      "passed": true
+    },
+    {
+      "name": "Import amount minimum",
+      "expected": 1,
+      "actual": 1,
+      "passed": true
+    },
+    {
+      "name": "Import amount maximum",
+      "expected": 1000,
+      "actual": 1000,
+      "passed": true
+    },
+    {
+      "name": "Import amount resummed",
+      "expected": 500500,
+      "actual": 500500,
+      "passed": true
+    },
+    {
+      "name": "Import active=true",
+      "expected": 500,
+      "actual": 500,
+      "passed": true
+    },
+    {
+      "name": "Single-parent loader inserted",
+      "expected": 1000,
+      "actual": 1000,
+      "passed": true
+    },
+    {
+      "name": "Single-parent loader errors",
+      "expected": 0,
+      "actual": 0,
+      "passed": true
+    },
+    {
+      "name": "Single-parent batch sizes",
+      "expected": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "actual": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "passed": true
+    },
+    {
+      "name": "Single-parent summary recomputes",
+      "expected": 5,
+      "actual": 5,
+      "passed": true
+    },
+    {
+      "name": "Single-parent summary parent updates",
+      "expected": 5,
+      "actual": 5,
+      "passed": true
+    },
+    {
+      "name": "Single-parent recompute target",
+      "expected": [
+        "parent_single",
+        "parent_single",
+        "parent_single",
+        "parent_single",
+        "parent_single"
+      ],
+      "actual": [
+        "parent_single",
+        "parent_single",
+        "parent_single",
+        "parent_single",
+        "parent_single"
+      ],
+      "passed": true
+    },
+    {
+      "name": "Ten-parent loader inserted",
+      "expected": 1000,
+      "actual": 1000,
+      "passed": true
+    },
+    {
+      "name": "Ten-parent loader errors",
+      "expected": 0,
+      "actual": 0,
+      "passed": true
+    },
+    {
+      "name": "Ten-parent batch sizes",
+      "expected": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "actual": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "passed": true
+    },
+    {
+      "name": "Ten-parent summary recomputes",
+      "expected": 50,
+      "actual": 50,
+      "passed": true
+    },
+    {
+      "name": "Ten-parent summary parent updates",
+      "expected": 50,
+      "actual": 50,
+      "passed": true
+    },
+    {
+      "name": "Ten-parent recomputes per parent",
+      "expected": {
+        "parent_01": 5,
+        "parent_02": 5,
+        "parent_03": 5,
+        "parent_04": 5,
+        "parent_05": 5,
+        "parent_06": 5,
+        "parent_07": 5,
+        "parent_08": 5,
+        "parent_09": 5,
+        "parent_10": 5
+      },
+      "actual": {
+        "parent_01": 5,
+        "parent_02": 5,
+        "parent_03": 5,
+        "parent_04": 5,
+        "parent_05": 5,
+        "parent_06": 5,
+        "parent_07": 5,
+        "parent_08": 5,
+        "parent_09": 5,
+        "parent_10": 5
+      },
+      "passed": true
+    },
+    {
+      "name": "parent_single child row count",
+      "expected": 1000,
+      "actual": 1000,
+      "passed": true
+    },
+    {
+      "name": "parent_single unique child keys",
+      "expected": 1000,
+      "actual": 1000,
+      "passed": true
+    },
+    {
+      "name": "parent_single child amount sum",
+      "expected": 500500,
+      "actual": 500500,
+      "passed": true
+    },
+    {
+      "name": "parent_single stored summary",
+      "expected": 500500,
+      "actual": 500500,
+      "passed": true
+    },
+    {
+      "name": "parent_01 child row count",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_01 unique child keys",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_01 child amount sum",
+      "expected": 49600,
+      "actual": 49600,
+      "passed": true
+    },
+    {
+      "name": "parent_01 stored summary",
+      "expected": 49600,
+      "actual": 49600,
+      "passed": true
+    },
+    {
+      "name": "parent_02 child row count",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_02 unique child keys",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_02 child amount sum",
+      "expected": 49700,
+      "actual": 49700,
+      "passed": true
+    },
+    {
+      "name": "parent_02 stored summary",
+      "expected": 49700,
+      "actual": 49700,
+      "passed": true
+    },
+    {
+      "name": "parent_03 child row count",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_03 unique child keys",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_03 child amount sum",
+      "expected": 49800,
+      "actual": 49800,
+      "passed": true
+    },
+    {
+      "name": "parent_03 stored summary",
+      "expected": 49800,
+      "actual": 49800,
+      "passed": true
+    },
+    {
+      "name": "parent_04 child row count",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_04 unique child keys",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_04 child amount sum",
+      "expected": 49900,
+      "actual": 49900,
+      "passed": true
+    },
+    {
+      "name": "parent_04 stored summary",
+      "expected": 49900,
+      "actual": 49900,
+      "passed": true
+    },
+    {
+      "name": "parent_05 child row count",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_05 unique child keys",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_05 child amount sum",
+      "expected": 50000,
+      "actual": 50000,
+      "passed": true
+    },
+    {
+      "name": "parent_05 stored summary",
+      "expected": 50000,
+      "actual": 50000,
+      "passed": true
+    },
+    {
+      "name": "parent_06 child row count",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_06 unique child keys",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_06 child amount sum",
+      "expected": 50100,
+      "actual": 50100,
+      "passed": true
+    },
+    {
+      "name": "parent_06 stored summary",
+      "expected": 50100,
+      "actual": 50100,
+      "passed": true
+    },
+    {
+      "name": "parent_07 child row count",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_07 unique child keys",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_07 child amount sum",
+      "expected": 50200,
+      "actual": 50200,
+      "passed": true
+    },
+    {
+      "name": "parent_07 stored summary",
+      "expected": 50200,
+      "actual": 50200,
+      "passed": true
+    },
+    {
+      "name": "parent_08 child row count",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_08 unique child keys",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_08 child amount sum",
+      "expected": 50300,
+      "actual": 50300,
+      "passed": true
+    },
+    {
+      "name": "parent_08 stored summary",
+      "expected": 50300,
+      "actual": 50300,
+      "passed": true
+    },
+    {
+      "name": "parent_09 child row count",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_09 unique child keys",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_09 child amount sum",
+      "expected": 50400,
+      "actual": 50400,
+      "passed": true
+    },
+    {
+      "name": "parent_09 stored summary",
+      "expected": 50400,
+      "actual": 50400,
+      "passed": true
+    },
+    {
+      "name": "parent_10 child row count",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_10 unique child keys",
+      "expected": 100,
+      "actual": 100,
+      "passed": true
+    },
+    {
+      "name": "parent_10 child amount sum",
+      "expected": 50500,
+      "actual": 50500,
+      "passed": true
+    },
+    {
+      "name": "parent_10 stored summary",
+      "expected": 50500,
+      "actual": 50500,
+      "passed": true
+    },
+    {
+      "name": "Summary child parent groups",
+      "expected": 11,
+      "actual": 11,
+      "passed": true
+    },
+    {
+      "name": "Summary parent records",
+      "expected": 11,
+      "actual": 11,
+      "passed": true
+    },
+    {
+      "name": "Orphan child records",
+      "expected": 0,
+      "actual": 0,
+      "passed": true
+    },
+    {
+      "name": "SQLite integrity_check",
+      "expected": "ok",
+      "actual": "ok",
+      "passed": true
+    }
+  ],
+  "failedChecks": []
+}

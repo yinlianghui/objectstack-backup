@@ -1,0 +1,497 @@
+packages/rest/src/import-runner.ts:11: * import-job worker feed rows through {@link runImport}. Extracting the loop
+packages/rest/src/import-runner.ts:16: * Rows resolved to a CREATE are batched through `p.createManyData` (the
+packages/rest/src/import-runner.ts:20: * doesn't implement `createManyData` falls back to the original per-row
+packages/rest/src/import-runner.ts:73:   * Optional bulk-create primitive. When present, `runImport` batches
+packages/rest/src/import-runner.ts:78:  createManyData?(args: { object: string; records: any[]; context?: any; environmentId?: string }): Promise<{ records: any[] }>;
+packages/rest/src/import-runner.ts:137:/** Upper bound on rows in one createManyData batch (framework#2678 suggests 100-500). */
+packages/rest/src/import-runner.ts:140:export function runImport(opts: RunImportOptions): Promise<ImportRunSummary> {
+packages/rest/src/import-runner.ts:238:  // CREATE rows are buffered here and flushed through `p.createManyData`
+packages/rest/src/import-runner.ts:240:  // without `createManyData` never buffers — `canBulkCreate` is false and
+packages/rest/src/import-runner.ts:242:  const canBulkCreate = typeof p.createManyData === 'function';
+packages/rest/src/import-runner.ts:255:        writeBatch: (chunk) => p.createManyData!({
+packages/runtime/src/seed-loader.test.ts:4:import { SeedLoaderService } from './seed-loader';
+packages/runtime/src/seed-loader.test.ts:6:import type { SeedLoaderRequest, SeedLoaderConfig } from '@objectstack/spec/data';
+packages/runtime/src/seed-loader.test.ts:90:describe('SeedLoaderService', () => {
+packages/runtime/src/seed-loader.test.ts:108:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:129:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:152:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:172:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:198:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:226:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:248:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:264:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:284:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:297:      expect(result.summary.totalInserted).toBe(2);
+packages/runtime/src/seed-loader.test.ts:298:      expect(result.summary.objectsProcessed).toBe(1);
+packages/runtime/src/seed-loader.test.ts:313:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:324:      expect(result.summary.totalRecords).toBe(0);
+packages/runtime/src/seed-loader.test.ts:333:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:349:      expect(result.summary.objectsProcessed).toBe(1);
+packages/runtime/src/seed-loader.test.ts:350:      expect(result.summary.totalInserted).toBe(1);
+packages/runtime/src/seed-loader.test.ts:371:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:385:      expect(result.summary.totalReferencesResolved).toBe(1);
+packages/runtime/src/seed-loader.test.ts:408:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:422:      expect(result.summary.totalReferencesResolved).toBe(0);
+packages/runtime/src/seed-loader.test.ts:437:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:479:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:514:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:527:      expect(result.summary.totalReferencesResolved).toBe(1);
+packages/runtime/src/seed-loader.test.ts:547:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:591:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:605:      expect(result.summary.totalInserted).toBe(2);
+packages/runtime/src/seed-loader.test.ts:607:      expect(result.summary.totalReferencesResolved).toBeGreaterThanOrEqual(1);
+packages/runtime/src/seed-loader.test.ts:623:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:639:      expect(result.summary.totalUpdated).toBe(1);
+packages/runtime/src/seed-loader.test.ts:640:      expect(result.summary.totalInserted).toBe(0);
+packages/runtime/src/seed-loader.test.ts:649:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:665:      expect(result.summary.totalInserted).toBe(1);
+packages/runtime/src/seed-loader.test.ts:666:      expect(result.summary.totalUpdated).toBe(0);
+packages/runtime/src/seed-loader.test.ts:676:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:692:      expect(result.summary.totalSkipped).toBe(1);
+packages/runtime/src/seed-loader.test.ts:693:      expect(result.summary.totalInserted).toBe(1);
+packages/runtime/src/seed-loader.test.ts:703:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:722:      expect(result.summary.totalUpdated).toBe(1);
+packages/runtime/src/seed-loader.test.ts:723:      expect(result.summary.totalSkipped).toBe(1);
+packages/runtime/src/seed-loader.test.ts:724:      expect(result.summary.totalInserted).toBe(0);
+packages/runtime/src/seed-loader.test.ts:738:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:767:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:797:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:830:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:844:      expect(result.summary.totalErrored).toBe(1);
+packages/runtime/src/seed-loader.test.ts:846:      expect(result.summary.objectsProcessed).toBe(1);
+packages/runtime/src/seed-loader.test.ts:873:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:909:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:947:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:980:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1001:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1018:    it('should include complete summary statistics', async () => {
+packages/runtime/src/seed-loader.test.ts:1023:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1035:      expect(result.summary).toMatchObject({
+packages/runtime/src/seed-loader.test.ts:1046:      expect(result.summary.durationMs).toBeGreaterThanOrEqual(0);
+packages/runtime/src/seed-loader.test.ts:1054:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1066:      expect(typeof result.summary.durationMs).toBe('number');
+packages/runtime/src/seed-loader.test.ts:1067:      expect(result.summary.durationMs).toBeGreaterThanOrEqual(0);
+packages/runtime/src/seed-loader.test.ts:1079:    const baseConfig = (extra: Record<string, any> = {}): SeedLoaderConfig => ({
+packages/runtime/src/seed-loader.test.ts:1087:    } as SeedLoaderConfig);
+packages/runtime/src/seed-loader.test.ts:1094:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1112:      expect(result.summary.totalErrored).toBe(0);
+packages/runtime/src/seed-loader.test.ts:1125:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1145:      expect(result.summary.totalErrored).toBe(0);
+packages/runtime/src/seed-loader.test.ts:1158:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1189:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1205:      expect(result.summary.totalErrored).toBe(1);
+packages/runtime/src/seed-loader.test.ts:1217:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1230:      expect(result.summary.totalInserted).toBe(1);
+packages/runtime/src/seed-loader.test.ts:1239:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1251:      expect(result.summary.totalErrored).toBe(1);
+packages/runtime/src/seed-loader.test.ts:1269:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1284:      expect(result.summary.totalReferencesResolved).toBe(2);
+packages/runtime/src/seed-loader.test.ts:1299:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/metadata-protocol/src/seed-loader.ts:3:import type { IDataEngine, IMetadataService, ISeedLoaderService } from '@objectstack/spec/contracts';
+packages/metadata-protocol/src/seed-loader.ts:5:  SeedLoaderRequest,
+packages/metadata-protocol/src/seed-loader.ts:6:  SeedLoaderResult,
+packages/metadata-protocol/src/seed-loader.ts:7:  SeedLoaderConfig,
+packages/metadata-protocol/src/seed-loader.ts:8:  SeedLoaderConfigInput,
+packages/metadata-protocol/src/seed-loader.ts:16:import { SeedLoaderConfigSchema } from '@objectstack/spec/data';
+packages/metadata-protocol/src/seed-loader.ts:31: * SeedLoaderService — Runtime implementation of ISeedLoaderService
+packages/metadata-protocol/src/seed-loader.ts:41:export class SeedLoaderService implements ISeedLoaderService {
+packages/metadata-protocol/src/seed-loader.ts:63:  async load(request: SeedLoaderRequest): Promise<SeedLoaderResult> {
+packages/metadata-protocol/src/seed-loader.ts:90:    this.logger.info('[SeedLoader] Dependency graph built', {
+packages/metadata-protocol/src/seed-loader.ts:113:        this.logger.warn('[SeedLoader] Halting on first error', { object: dataset.object });
+packages/metadata-protocol/src/seed-loader.ts:120:      this.logger.info('[SeedLoader] Pass 2: resolving deferred references', {
+packages/metadata-protocol/src/seed-loader.ts:174:  async validate(datasets: Seed[], config?: SeedLoaderConfigInput): Promise<SeedLoaderResult> {
+packages/metadata-protocol/src/seed-loader.ts:175:    const parsedConfig = SeedLoaderConfigSchema.parse({ ...config, dryRun: true });
+packages/metadata-protocol/src/seed-loader.ts:185:    config: SeedLoaderConfig,
+packages/metadata-protocol/src/seed-loader.ts:243:    const opts = SeedLoaderService.SEED_OPTIONS as any;
+packages/metadata-protocol/src/seed-loader.ts:250:          batchSize: SeedLoaderService.BULK_BATCH_SIZE,
+packages/metadata-protocol/src/seed-loader.ts:273:          this.logger.warn(`[SeedLoader] ${error.message}`, { recordIndex });
+packages/metadata-protocol/src/seed-loader.ts:335:        this.logger.warn(`[SeedLoader] ${error.message}`);
+packages/metadata-protocol/src/seed-loader.ts:361:        // the driver as a non-bindable value ("SQLite3 can only bind ..."). This
+packages/metadata-protocol/src/seed-loader.ts:383:          this.logger.warn(`[SeedLoader] ${error.message}`, { recordIndex: i });
+packages/metadata-protocol/src/seed-loader.ts:476:            this.logger.warn(`[SeedLoader] ${error.message}`, { recordIndex: i });
+packages/metadata-protocol/src/seed-loader.ts:499:              this.logger.warn(`[SeedLoader] ${error.message}`, { recordIndex: i });
+packages/metadata-protocol/src/seed-loader.ts:504:            if (pendingInserts.length >= SeedLoaderService.BULK_BATCH_SIZE) {
+packages/metadata-protocol/src/seed-loader.ts:652:            this.logger.warn('[SeedLoader] Failed to resolve deferred reference', {
+packages/metadata-protocol/src/seed-loader.ts:710:    const opts = SeedLoaderService.SEED_OPTIONS as any;
+packages/metadata-protocol/src/seed-loader.ts:998:  private buildEmptyResult(config: SeedLoaderConfig, durationMs: number): SeedLoaderResult {
+packages/metadata-protocol/src/seed-loader.ts:1005:      summary: {
+packages/metadata-protocol/src/seed-loader.ts:1021:    config: SeedLoaderConfig,
+packages/metadata-protocol/src/seed-loader.ts:1026:  ): SeedLoaderResult {
+packages/metadata-protocol/src/seed-loader.ts:1027:    const summary = {
+packages/metadata-protocol/src/seed-loader.ts:1040:    const hasErrors = errors.length > 0 || summary.totalErrored > 0;
+packages/metadata-protocol/src/seed-loader.ts:1048:      summary,
+packages/rest/src/import-integration.test.ts:68:    async bulkCreate(o: string, rows: Record<string, unknown>[]) { return Promise.all(rows.map((r) => this.create(o, r))); },
+packages/objectql/src/engine.ts:249:/** A roll-up `summary` field on a parent object that aggregates a child. */
+packages/objectql/src/engine.ts:252:  summaryField: string;
+packages/objectql/src/engine.ts:267:   * single-connection SQLite pool.
+packages/objectql/src/engine.ts:956:      this.invalidateSummaryIndex(); // new objects may add/change summary fields
+packages/objectql/src/engine.ts:1687:  /** Lazily-built index: child object name → roll-up summary descriptors on
+packages/objectql/src/engine.ts:1689:  private summaryIndex: Map<string, SummaryDescriptor[]> | null = null;
+packages/objectql/src/engine.ts:1691:  /** Invalidate the cached roll-up summary index (call when metadata changes). */
+packages/objectql/src/engine.ts:1693:    this.summaryIndex = null;
+packages/objectql/src/engine.ts:1696:  /** Scan all registered objects for `summary` fields and index them by the
+packages/objectql/src/engine.ts:1705:      for (const [summaryField, def] of Object.entries(fields)) {
+packages/objectql/src/engine.ts:1707:        if (d?.type !== 'summary' || !d.summaryOperations) continue;
+packages/objectql/src/engine.ts:1708:        const so = d.summaryOperations;
+packages/objectql/src/engine.ts:1727:        list.push({ parentObject: parent.name, summaryField, fkField, fn, sourceField: so.field });
+packages/objectql/src/engine.ts:1735:    if (!this.summaryIndex) this.summaryIndex = this.buildSummaryIndex();
+packages/objectql/src/engine.ts:1736:    return this.summaryIndex.get(childObject) ?? [];
+packages/objectql/src/engine.ts:1740:   * Recompute roll-up `summary` fields on parent records after a child write.
+packages/objectql/src/engine.ts:1743:   * summary field. Runs in the caller's execution context so it joins the same
+packages/objectql/src/engine.ts:1746:  private async recomputeSummaries(
+packages/objectql/src/engine.ts:1773:          await this.update(desc.parentObject, { id: parentId, [desc.summaryField]: value }, { context: execCtx } as any);
+packages/objectql/src/engine.ts:1775:          this.logger.warn('Roll-up summary recompute failed', {
+packages/objectql/src/engine.ts:1776:            childObject, parentObject: desc.parentObject, parentId, field: desc.summaryField,
+packages/objectql/src/engine.ts:1985:    // this, drivers (notably SqlDriver) emit `SELECT unknown_col FROM ...`
+packages/objectql/src/engine.ts:1986:    // which the DB rejects ("no such column") — and SqlDriver swallows
+packages/objectql/src/engine.ts:2160:      // on SQLite's single-connection pool. Also propagates tenantId so
+packages/objectql/src/engine.ts:2185:          if (driver.bulkCreate) {
+packages/objectql/src/engine.ts:2186:               result = await driver.bulkCreate(object, rows, hookContext.input.options as any);
+packages/objectql/src/engine.ts:2203:        // Coerce `boolean` fields (SQLite/libsql return 0/1) to real booleans on
+packages/objectql/src/engine.ts:2212:        // Roll-up: recompute parent summary fields that aggregate this object.
+packages/objectql/src/engine.ts:2213:        await this.recomputeSummaries(object, result, null, opCtx.context);
+packages/objectql/src/engine.ts:2271:     //    (e.g. `WHERE id = {"$in":[...]}`, which SQLite rejects). Leave `id`
+packages/objectql/src/engine.ts:2348:           // Coerce boolean fields (SQLite 0/1 → JS bool) on the after-hook view
+packages/objectql/src/engine.ts:2360:           await this.recomputeSummaries(object, result, priorRecord, opCtx.context);
+packages/objectql/src/engine.ts:2531:          // recompute the (now-orphaned) parent. Only when a summary aggregates
+packages/objectql/src/engine.ts:2533:          let summaryPrev: any = null;
+packages/objectql/src/engine.ts:2536:              summaryPrev = await this.findOne(object, { where: { id: hookContext.input.id }, context: opCtx.context } as any);
+packages/objectql/src/engine.ts:2555:          // Roll-up: recompute the parent summary now that the child is gone.
+packages/objectql/src/engine.ts:2556:          if (summaryPrev) await this.recomputeSummaries(object, null, summaryPrev, opCtx.context);
+packages/objectql/src/engine.ts:2654:        // remains correct on partial-support dialects (e.g. SQLite + week).
+packages/objectql/src/engine.ts:2664:        // UTC-only — SQLite has no tz database and MySQL needs tz tables loaded,
+packages/objectql/src/engine.ts:2690:   * Run raw driver-specific commands (SQL for SqlDriver, REST for RestDriver, …).
+packages/objectql/src/engine.ts:2949:    // physical-table mapping exist for queries. See SqlDriver.registerExternalObject.
+packages/plugins/driver-sql/src/sql-driver-external-columnmap.test.ts:16:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-external-columnmap.test.ts:43:  const fx = new SqlDriver({ client: 'better-sqlite3', connection: { filename: path }, useNullAsDefault: true }) as any;
+packages/plugins/driver-sql/src/sql-driver-external-columnmap.test.ts:54:  const d = new SqlDriver({ client: 'better-sqlite3', connection: { filename: path }, useNullAsDefault: true, schemaMode: 'external' } as any) as any;
+packages/plugins/driver-sql/src/sql-driver-external-columnmap.test.ts:59:describe('SqlDriver external columnMap (ADR-0015 §18)', () => {
+packages/plugins/driver-sql/src/sql-driver-external-columnmap.test.ts:116:    const d = new SqlDriver({ client: 'better-sqlite3', connection: { filename: ':memory:' }, useNullAsDefault: true }) as any;
+packages/plugins/driver-sql/src/sql-driver-autonumber.test.ts:4:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-autonumber.test.ts:16:describe('SqlDriver auto_number sequence', () => {
+packages/plugins/driver-sql/src/sql-driver-autonumber.test.ts:17:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-autonumber.test.ts:20:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-autonumber.test.ts:21:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-autonumber.test.ts:173:  it('fills autonumber fields on bulkCreate (engine defers to the driver — #1603)', async () => {
+packages/plugins/driver-sql/src/sql-driver-autonumber.test.ts:185:    const rows = await driver.bulkCreate('contract', [
+packages/plugins/driver-sql/src/sql-driver-autonumber-tx.test.ts:5:// Reported: on SQLite (better-sqlite3, pool max=1), the first autonumber write
+packages/plugins/driver-sql/src/sql-driver-autonumber-tx.test.ts:19://      own transaction on SQLite instead of grabbing a second connection, so
+packages/plugins/driver-sql/src/sql-driver-autonumber-tx.test.ts:23:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-autonumber-tx.test.ts:34:describe('SqlDriver auto_number in-transaction (deadlock regression)', () => {
+packages/plugins/driver-sql/src/sql-driver-autonumber-tx.test.ts:35:  let driver: SqlDriver | undefined;
+packages/plugins/driver-sql/src/sql-driver-autonumber-tx.test.ts:43:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-autonumber-tx.test.ts:44:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver.ts:7: * Supports PostgreSQL, MySQL, SQLite, and other SQL databases.
+packages/plugins/driver-sql/src/sql-driver.ts:52: * checkboxes/tags/repeater/vector) reach the SQLite binder un-serialized and
+packages/plugins/driver-sql/src/sql-driver.ts:53: * crash with "SQLite3 can only bind numbers, strings, bigints, buffers, and
+packages/plugins/driver-sql/src/sql-driver.ts:70: * The read coercion exists so the fix is robust on SQLite even when the column
+packages/plugins/driver-sql/src/sql-driver.ts:72: * TEXT affinity and returns '4' not 4, and SQLite never alters a column's type
+packages/plugins/driver-sql/src/sql-driver.ts:82:  'float', 'number', 'currency', 'percent', 'summary',
+packages/plugins/driver-sql/src/sql-driver.ts:88: * stamped to a single canonical instant format on SQLite (see
+packages/plugins/driver-sql/src/sql-driver.ts:95: * Read-side repair for the builtin audit timestamps on SQLite.
+packages/plugins/driver-sql/src/sql-driver.ts:97: * SQLite has no native timestamp type. Rows written before the canonical-format
+packages/plugins/driver-sql/src/sql-driver.ts:137: * Read-side normalization for user-declared `Field.datetime` columns on SQLite.
+packages/plugins/driver-sql/src/sql-driver.ts:139: * SQLite has no native timestamp type, so one `datetime` column can hold MIXED
+packages/plugins/driver-sql/src/sql-driver.ts:141: *   - an explicitly-written value bound through better-sqlite3 as a JS `Date`
+packages/plugins/driver-sql/src/sql-driver.ts:145: *     (`SqlDriver.nowColumnDefault`), or a legacy timezone-NAIVE
+packages/plugins/driver-sql/src/sql-driver.ts:162: * SQLite-only: Postgres/MySQL store a real zone-aware TIMESTAMP and never carry
+packages/plugins/driver-sql/src/sql-driver.ts:167:  // INTEGER/REAL epoch milliseconds — what better-sqlite3 binds a JS `Date` to.
+packages/plugins/driver-sql/src/sql-driver.ts:173:  // A JS `Date` is never returned by better-sqlite3 here, but normalize one
+packages/plugins/driver-sql/src/sql-driver.ts:225: * SqlDriver configuration — passed directly to Knex.
+packages/plugins/driver-sql/src/sql-driver.ts:233:export type SqlDriverConfig = Knex.Config & {
+packages/plugins/driver-sql/src/sql-driver.ts:251: * generation against PostgreSQL, MySQL, SQLite and other SQL databases.
+packages/plugins/driver-sql/src/sql-driver.ts:253:export class SqlDriver implements IDataDriver {
+packages/plugins/driver-sql/src/sql-driver.ts:266:      bulkCreate: true,
+packages/plugins/driver-sql/src/sql-driver.ts:374:   * Count of transactions currently open through `beginTransaction`. On SQLite
+packages/plugins/driver-sql/src/sql-driver.ts:416:  /** Whether the underlying database is a SQLite variant (sqlite3 or better-sqlite3). */
+packages/plugins/driver-sql/src/sql-driver.ts:419:    return c === 'sqlite3' || c === 'better-sqlite3';
+packages/plugins/driver-sql/src/sql-driver.ts:455:      // SQLite's strftime gained ISO week (%V) in 3.46 (2024-05-23); play it safe
+packages/plugins/driver-sql/src/sql-driver.ts:519:   * Dev-only auto-reconcile policy (issue #2186). See {@link SqlDriverConfig.autoMigrate}.
+packages/plugins/driver-sql/src/sql-driver.ts:530:  /** Declared indexes per managed table (tableName → indexes[]), captured in `initObjects`. Used to recreate indexes after a SQLite table rebuild. */
+packages/plugins/driver-sql/src/sql-driver.ts:536:  constructor(config: SqlDriverConfig) {
+packages/plugins/driver-sql/src/sql-driver.ts:567:    // better-sqlite3 to open the file (e.g. loadMetaFromDb on startup).
+packages/plugins/driver-sql/src/sql-driver.ts:570:    // SQLite space hygiene (ADR-0057). With the default `auto_vacuum=NONE`,
+packages/plugins/driver-sql/src/sql-driver.ts:682:    // its json/boolean deserialisation stays SQLite-gated internally. Run it
+packages/plugins/driver-sql/src/sql-driver.ts:766:    // (SQLite, pool max=1), that connection is busy with the open transaction —
+packages/plugins/driver-sql/src/sql-driver.ts:769:    // Run the DDL on the caller's own transaction instead; SQLite permits DDL
+packages/plugins/driver-sql/src/sql-driver.ts:774:    // If we are about to run DDL on a fresh pooled connection while a SQLite
+packages/plugins/driver-sql/src/sql-driver.ts:798:      // the caller's transaction (the SQLite in-tx fallback above), the table is
+packages/plugins/driver-sql/src/sql-driver.ts:822:   * caller's transaction on SQLite — see {@link ensureSequencesTable}).
+packages/plugins/driver-sql/src/sql-driver.ts:932:   *   - SQLite: a write transaction (`BEGIN IMMEDIATE` via knex) serializes
+packages/plugins/driver-sql/src/sql-driver.ts:933:   *     all writers; safe in-process. Cross-process SQLite is out of scope.
+packages/plugins/driver-sql/src/sql-driver.ts:953:    // locking on a second one (SQLite pool max=1). `initObjects` normally warms
+packages/plugins/driver-sql/src/sql-driver.ts:983:      // Lock the row (no-op on SQLite, real lock on Postgres/MySQL).
+packages/plugins/driver-sql/src/sql-driver.ts:1085:   * instant on the SQLite write paths (`create`/`bulkCreate`/`upsert`), so
+packages/plugins/driver-sql/src/sql-driver.ts:1089:   * the column's `CURRENT_TIMESTAMP` default, which on SQLite renders a
+packages/plugins/driver-sql/src/sql-driver.ts:1117:      // Canonical instant format. On SQLite (no native timestamp type) stamp
+packages/plugins/driver-sql/src/sql-driver.ts:1181:  async bulkCreate(object: string, data: any[], options?: DriverOptions): Promise<any> {
+packages/plugins/driver-sql/src/sql-driver.ts:1182:    this.auditMissingTenant(object, 'bulkCreate', options);
+packages/plugins/driver-sql/src/sql-driver.ts:1210:    // to SQLite ("Wrong API use: tried to bind a value of an unknown type"),
+packages/plugins/driver-sql/src/sql-driver.ts:1338:   * Dev/test guard against the SQLite single-connection dead-lock. SQLite's pool
+packages/plugins/driver-sql/src/sql-driver.ts:1344:   * No-op in production (zero overhead on the hot path) and on every non-SQLite
+packages/plugins/driver-sql/src/sql-driver.ts:1356:        `transaction is open: SQLite's pool has a single connection, so acquiring a ` +
+packages/plugins/driver-sql/src/sql-driver.ts:1417:                `SqlDriver: dateGranularity '${g.dateGranularity}' not supported on dialect ` +
+packages/plugins/driver-sql/src/sql-driver.ts:1649:          `[sql-driver] external object "${key}" declares remoteSchema="${remoteSchema}" but SQLite has no schema namespace; ignoring (treating "${remoteName}" as a bare table).`,
+packages/plugins/driver-sql/src/sql-driver.ts:1794:      // iterating obj.fields to avoid duplicate-column errors (e.g. SQLite
+packages/plugins/driver-sql/src/sql-driver.ts:1853:    // the first autonumber INSERT dead-locks a `/api/v1/batch` write on SQLite
+packages/plugins/driver-sql/src/sql-driver.ts:1871:    if (this.isSqlite) return 'sqlite';
+packages/plugins/driver-sql/src/sql-driver.ts:1975:   * in place; SQLite (which cannot alter constraints in place) rebuilds each
+packages/plugins/driver-sql/src/sql-driver.ts:2000:    // Group by table — SQLite reconciles a whole table in one rebuild.
+packages/plugins/driver-sql/src/sql-driver.ts:2077:   * Rebuild a SQLite table applying a set of column edits (relax/tighten NOT
+packages/plugins/driver-sql/src/sql-driver.ts:2079:   * the official SQLite procedure: create patched table → copy → drop → rename.
+packages/plugins/driver-sql/src/sql-driver.ts:2080:   * varchar widen/narrow are no-ops on SQLite (dynamic typing) and ignored.
+packages/plugins/driver-sql/src/sql-driver.ts:2085:   * the application layer, not via SQLite FK constraints).
+packages/plugins/driver-sql/src/sql-driver.ts:2095:      // widen/narrow varchar: SQLite ignores declared length — nothing to do.
+packages/plugins/driver-sql/src/sql-driver.ts:2104:    // FK enforcement must be toggled OUTSIDE the transaction (SQLite ignores
+packages/plugins/driver-sql/src/sql-driver.ts:2147:  /** Map an introspected SQLite column to a knex builder for the rebuilt table. */
+packages/plugins/driver-sql/src/sql-driver.ts:2215:   *   default across SQLite/Postgres/MySQL, so multiple NULL rows remain
+packages/plugins/driver-sql/src/sql-driver.ts:2300:        FROM sqlite_master
+packages/plugins/driver-sql/src/sql-driver.ts:2302:        AND name NOT LIKE 'sqlite_%'
+packages/plugins/driver-sql/src/sql-driver.ts:2452:    op: 'create' | 'update' | 'delete' | 'bulkCreate' | 'bulkDelete' | 'updateMany' | 'deleteMany' | 'upsert',
+packages/plugins/driver-sql/src/sql-driver.ts:2495:   * entry). Note datetime coercion is a SQLite-only concern (see
+packages/plugins/driver-sql/src/sql-driver.ts:2496:   * coerceFilterValue), and SQLite external tables are bare-named, so this is
+packages/plugins/driver-sql/src/sql-driver.ts:2561:   * driver sends to SQLite matches the on-disk representation.
+packages/plugins/driver-sql/src/sql-driver.ts:2564:   * (the result of passing a JS `Date` through better-sqlite3) but date
+packages/plugins/driver-sql/src/sql-driver.ts:2602:      // Only SQLite stores `Field.datetime` as an INTEGER epoch (better-sqlite3
+packages/plugins/driver-sql/src/sql-driver.ts:2628:   *   - SQLite `Field.datetime` → epoch milliseconds (INTEGER), so the
+packages/plugins/driver-sql/src/sql-driver.ts:2731:   * because SQLite does not honour a default escape character (MySQL/Postgres do,
+packages/plugins/driver-sql/src/sql-driver.ts:2896:   * had the ambiguity below. SQLite has no timestamp type and `knex.fn.now()`
+packages/plugins/driver-sql/src/sql-driver.ts:2958:      // affinity so SQLite coerced the written number to a string ('4' not 4) —
+packages/plugins/driver-sql/src/sql-driver.ts:2994:      case 'summary':
+packages/plugins/driver-sql/src/sql-driver.ts:3019:      // for whatever upstream code happens to write — and, on SQLite, instead
+packages/plugins/driver-sql/src/sql-driver.ts:3040:    // SQLite auto-creates database files but NOT parent directories.
+packages/plugins/driver-sql/src/sql-driver.ts:3041:    // Ensure the directory exists so better-sqlite3 can create the file.
+packages/plugins/driver-sql/src/sql-driver.ts:3125:  // ── SQLite serialisation ────────────────────────────────────────────────────
+packages/plugins/driver-sql/src/sql-driver.ts:3134:    // wire. Applies to every driver, not just SQLite.
+packages/plugins/driver-sql/src/sql-driver.ts:3177:    // Safety net: better-sqlite3 can only bind numbers/strings/bigints/buffers/
+packages/plugins/driver-sql/src/sql-driver.ts:3262:      // A SQLite `datetime` column mixes forms: an explicit value bound as a JS
+packages/plugins/driver-sql/src/sql-driver.ts:3296:    // column took when the SQLite default was still the full `CURRENT_TIMESTAMP`
+packages/plugins/driver-sql/src/sql-driver.ts:3407:          "SELECT name FROM sqlite_master WHERE type = 'table' AND name = ?",
+packages/plugins/driver-sql/src/sql-driver.ts:3472:        const tablesResult = await this.knex.raw("SELECT name FROM sqlite_master WHERE type = 'table'");
+packages/plugins/driver-sql/src/sql-driver.ts:3535:        const tablesResult = await this.knex.raw("SELECT name FROM sqlite_master WHERE type = 'table'");
+packages/plugins/driver-sql/src/sql-driver-time-of-day.test.ts:4: * Read-side time-of-day normalization for `Field.time` on SQLite.
+packages/plugins/driver-sql/src/sql-driver-time-of-day.test.ts:17:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-time-of-day.test.ts:21:describe('Field.time read normalization (time-of-day, SQLite)', () => {
+packages/plugins/driver-sql/src/sql-driver-time-of-day.test.ts:22:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-time-of-day.test.ts:26:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-time-of-day.test.ts:27:      client: 'better-sqlite3', connection: { filename: ':memory:' }, useNullAsDefault: true,
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:4:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:6:describe('SqlDriver Schema Sync (SQLite)', () => {
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:7:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:11:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:12:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:191:  it('should handle special fields (formula, summary, auto_number)', async () => {
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:197:          child_count: { type: 'summary', summary_object: 'child_obj', summary_type: 'count' } as any,
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:277:  it('should skip ensureDatabaseExists for SQLite (no-op)', async () => {
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:278:    // SQLite auto-creates database files, so ensureDatabaseExists should be a no-op
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:279:    // This test verifies that initObjects works normally for SQLite without errors
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:289:    // Should not throw — SQLite skips ensureDatabaseExists
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:339:    const declared = list.filter((i: any) => !String(i.name).startsWith('sqlite_autoindex'));
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:365:    const declared = list.filter((i: any) => !String(i.name).startsWith('sqlite_autoindex'));
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:415:    const declared = list.filter((i: any) => !String(i.name).startsWith('sqlite_autoindex'));
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:434:    const declared = list.filter((i: any) => !String(i.name).startsWith('sqlite_autoindex'));
+packages/plugins/driver-sql/src/sql-driver-schema.test.ts:457:    const declared = list.filter((i: any) => !String(i.name).startsWith('sqlite_autoindex'));
+packages/plugins/driver-sql/src/sql-driver-bulk-json.test.ts:4:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-bulk-json.test.ts:7: * bulkCreate write-side marshaling (#2735).
+packages/plugins/driver-sql/src/sql-driver-bulk-json.test.ts:12: * straight to the SQLite binder — "Wrong API use: tried to bind a value of an
+packages/plugins/driver-sql/src/sql-driver-bulk-json.test.ts:16:describe('SqlDriver bulkCreate JSON marshaling (#2735)', () => {
+packages/plugins/driver-sql/src/sql-driver-bulk-json.test.ts:17:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-bulk-json.test.ts:32:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-bulk-json.test.ts:33:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-bulk-json.test.ts:49:    const result = await driver.bulkCreate!('venue', rows);
+packages/plugins/driver-sql/src/sql-driver-bulk-json.test.ts:63:    const [batch] = await driver.bulkCreate!('venue', [
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:5: * temporal fields on SQLite — the ADR-0053/ADR-0074 follow-up.
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:8: * `knex.fn.now()` → `CURRENT_TIMESTAMP` column default on SQLite, storing a
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:14: * better-sqlite3 as INTEGER epoch ms, while an omitted value takes the naive
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:28:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:35:class ProbeDriver extends SqlDriver {
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:44:describe('User NOW()-default temporal fields — canonical format (SQLite)', () => {
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:45:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:49:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:50:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:97:    // Raw on disk is the INTEGER epoch (better-sqlite3 binds a Date as getTime()).
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:159:    const d2 = new SqlDriver({ client: 'better-sqlite3', connection: { filename: ':memory:' }, useNullAsDefault: true });
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:172:  it('nowColumnDefault: SQLite emits canonical strftime; Postgres/MySQL keep native now()', () => {
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:173:    const sqlite = makeProbe('better-sqlite3');
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:174:    expect(sqlite.nowDefaultSql('datetime')).toContain('strftime');
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:175:    expect(sqlite.nowDefaultSql('datetime')).toContain('%Y-%m-%dT%H:%M:%fZ');
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:176:    expect(sqlite.nowDefaultSql('date')).toContain('%Y-%m-%d');
+packages/plugins/driver-sql/src/sql-driver-user-datetime-default-format.test.ts:177:    expect(sqlite.nowDefaultSql('time')).toContain('%H:%M:%f');
+packages/plugins/driver-sql/src/sql-driver-datetime-filter.test.ts:6: * values as INTEGER milliseconds (via better-sqlite3's Date binding),
+packages/plugins/driver-sql/src/sql-driver-datetime-filter.test.ts:15:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-datetime-filter.test.ts:17:describe('SqlDriver datetime filter coercion', () => {
+packages/plugins/driver-sql/src/sql-driver-datetime-filter.test.ts:18:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-datetime-filter.test.ts:21:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-datetime-filter.test.ts:22:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-datetime-filter.test.ts:39:    // Insert with real Date objects so better-sqlite3 stores them as
+packages/plugins/driver-sql/src/sql-driver-queryast.test.ts:4:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-queryast.test.ts:9:describe('SqlDriver (QueryAST Format)', () => {
+packages/plugins/driver-sql/src/sql-driver-queryast.test.ts:10:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-queryast.test.ts:13:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-queryast.test.ts:14:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-queryast.test.ts:62:      const testDriver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-queryast.test.ts:63:        client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-like-escape.test.ts:4:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-like-escape.test.ts:11:describe('SqlDriver — contains escapes LIKE metacharacters (P0-3)', () => {
+packages/plugins/driver-sql/src/sql-driver-like-escape.test.ts:12:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-like-escape.test.ts:16:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-like-escape.test.ts:17:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-multiwrite-tx.test.ts:10:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-multiwrite-tx.test.ts:19:describe('SqlDriver multi-write transaction (deadlock regression)', () => {
+packages/plugins/driver-sql/src/sql-driver-multiwrite-tx.test.ts:20:  let driver: SqlDriver | undefined;
+packages/plugins/driver-sql/src/sql-driver-multiwrite-tx.test.ts:32:    driver = new SqlDriver({ client: 'better-sqlite3', connection: { filename: file }, useNullAsDefault: true } as any);
+packages/plugins/driver-sql/src/sql-driver-timestamp-format.test.ts:4: * Canonical audit-timestamp format on SQLite.
+packages/plugins/driver-sql/src/sql-driver-timestamp-format.test.ts:6: * SQLite has no native timestamp type. The two write paths used to disagree:
+packages/plugins/driver-sql/src/sql-driver-timestamp-format.test.ts:22:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-timestamp-format.test.ts:26:describe('SqlDriver canonical audit-timestamp format (SQLite)', () => {
+packages/plugins/driver-sql/src/sql-driver-timestamp-format.test.ts:27:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-timestamp-format.test.ts:31:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-timestamp-format.test.ts:32:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-timestamp-format.test.ts:85:  it('bulkCreate stamps canonical timestamps', async () => {
+packages/plugins/driver-sql/src/sql-driver-timestamp-format.test.ts:86:    await driver.bulkCreate('thing', [
+packages/plugins/driver-sql/src/sql-driver-timestamp-format.test.ts:139:    // When created_at is declared `datetime`, better-sqlite3 stores a JS Date as
+packages/plugins/driver-sql/src/sql-driver-timestamp-format.test.ts:144:    const dd = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-timestamp-format.test.ts:145:      client: 'better-sqlite3', connection: { filename: ':memory:' }, useNullAsDefault: true,
+packages/plugins/driver-sql/src/sql-driver-numeric-fidelity.test.ts:7: * `default → table.string` and got TEXT affinity — SQLite then coerced the
+packages/plugins/driver-sql/src/sql-driver-numeric-fidelity.test.ts:23:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-numeric-fidelity.test.ts:25:describe('SqlDriver scalar type fidelity (rating/slider/toggle/progress)', () => {
+packages/plugins/driver-sql/src/sql-driver-numeric-fidelity.test.ts:26:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-numeric-fidelity.test.ts:29:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-numeric-fidelity.test.ts:30:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-numeric-fidelity.test.ts:133: * The column-affinity fix only governs NEWLY created columns; SQLite never
+packages/plugins/driver-sql/src/sql-driver-numeric-fidelity.test.ts:141:describe('SqlDriver numeric read coercion repairs legacy TEXT columns', () => {
+packages/plugins/driver-sql/src/sql-driver-numeric-fidelity.test.ts:142:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-numeric-fidelity.test.ts:145:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-numeric-fidelity.test.ts:146:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-numeric-fidelity.test.ts:183:    // Write through the driver — on a TEXT column SQLite stores the number as
+packages/plugins/driver-sql/src/sql-driver-retention-prune.test.ts:11: * out of range"). SQLite's lenient column affinity hid the bug.
+packages/plugins/driver-sql/src/sql-driver-retention-prune.test.ts:20:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-retention-prune.test.ts:22:describe('SqlDriver retention prune on a builtin created_at timestamp column', () => {
+packages/plugins/driver-sql/src/sql-driver-retention-prune.test.ts:23:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-retention-prune.test.ts:26:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-retention-prune.test.ts:27:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-retention-prune.test.ts:43:    // SQLite better-sqlite3 stores these as INTEGER milliseconds.
+packages/plugins/driver-sql/src/sql-driver-date-only.test.ts:17:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-date-only.test.ts:19:describe('SqlDriver Field.date is a tz-naive calendar day (ADR-0053 Phase 1)', () => {
+packages/plugins/driver-sql/src/sql-driver-date-only.test.ts:20:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-date-only.test.ts:23:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-date-only.test.ts:24:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-schema-drift.test.ts:4:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-schema-drift.test.ts:14:describe('SqlDriver managed-schema drift (#2186)', () => {
+packages/plugins/driver-sql/src/sql-driver-schema-drift.test.ts:18:    const d = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-schema-drift.test.ts:19:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-schema-drift.test.ts:35:  const seedLegacyTable = async (driver: SqlDriver) => {
+packages/plugins/driver-sql/src/sql-driver-schema-drift.test.ts:102:    it('does not flag varchar length on SQLite (no length enforcement)', async () => {
+packages/plugins/driver-sql/src/sql-driver-schema-drift.test.ts:187:      const d = new SqlDriver({ client, connection: { host: 'x', database: 'y', user: 'u' } } as any);
+packages/plugins/driver-sql/src/sql-driver-temporal-dialect.test.ts:5: * uses). The datetime → epoch-ms coercion is SQLite-ONLY: SQLite stores
+packages/plugins/driver-sql/src/sql-driver-temporal-dialect.test.ts:16:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-temporal-dialect.test.ts:19:class ProbeDriver extends SqlDriver {
+packages/plugins/driver-sql/src/sql-driver-temporal-dialect.test.ts:37:  it('SQLite: datetime ISO comparand → epoch ms', () => {
+packages/plugins/driver-sql/src/sql-driver-temporal-dialect.test.ts:38:    const d = makeDriver('better-sqlite3');
+packages/plugins/driver-sql/src/sql-driver-temporal-dialect.test.ts:56:    for (const client of ['better-sqlite3', 'pg', 'mysql2']) {
+packages/plugins/driver-sql/src/sql-driver-temporal-dialect.test.ts:64:    for (const client of ['better-sqlite3', 'pg', 'mysql2']) {
+packages/plugins/driver-sql/src/sql-driver-advanced.test.ts:4:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-advanced.test.ts:6:describe('SqlDriver Advanced Operations (SQLite)', () => {
+packages/plugins/driver-sql/src/sql-driver-advanced.test.ts:7:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-advanced.test.ts:11:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-advanced.test.ts:12:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-advanced.test.ts:137:      const result = await driver.bulkCreate('orders', newOrders);
+packages/plugins/driver-sql/src/sql-driver-advanced.test.ts:482:      expect(analysis.client).toBe('better-sqlite3');
+packages/plugins/driver-sql/src/sql-driver-autonumber-persistence.test.ts:7:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-autonumber-persistence.test.ts:15: * that was already issued. We prove that here with a FILE-backed sqlite DB and
+packages/plugins/driver-sql/src/sql-driver-autonumber-persistence.test.ts:19:describe('SqlDriver auto_number — persistence across driver restart', () => {
+packages/plugins/driver-sql/src/sql-driver-autonumber-persistence.test.ts:38:  function newDriver(filename: string): SqlDriver {
+packages/plugins/driver-sql/src/sql-driver-autonumber-persistence.test.ts:39:    return new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-autonumber-persistence.test.ts:40:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-autonumber-persistence.test.ts:48:    const file = join(dir, 'data.sqlite');
+packages/plugins/driver-sql/src/sql-driver-autonumber-persistence.test.ts:74:    const file = join(dir, 'data.sqlite');
+packages/plugins/driver-sql/src/sql-driver.test.ts:4:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver.test.ts:6:describe('SqlDriver (SQLite Integration)', () => {
+packages/plugins/driver-sql/src/sql-driver.test.ts:7:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver.test.ts:10:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver.test.ts:11:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver.test.ts:38:    expect(driver).toBeInstanceOf(SqlDriver);
+packages/plugins/driver-sql/src/sql-driver-date-bucket.test.ts:4: * SqlDriver date bucket (dateGranularity) parity tests.
+packages/plugins/driver-sql/src/sql-driver-date-bucket.test.ts:16:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-date-bucket.test.ts:58:describe('SqlDriver date bucket (dateGranularity)', () => {
+packages/plugins/driver-sql/src/sql-driver-date-bucket.test.ts:59:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-date-bucket.test.ts:63:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-date-bucket.test.ts:64:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-date-bucket.test.ts:89:      // SQLite-specific: ISO week (%V) is not assumed.
+packages/plugins/driver-sql/src/sql-driver-date-bucket.test.ts:122:    it('throws a loud error for week on SQLite (so engine routes to in-memory)', async () => {
+packages/plugins/driver-sql/src/sql-driver-ddl-gate.test.ts:6: * A SqlDriver constructed with `schemaMode !== 'managed'` must reject every
+packages/plugins/driver-sql/src/sql-driver-ddl-gate.test.ts:13:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-ddl-gate.test.ts:17:  return new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-ddl-gate.test.ts:18:    client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-ddl-gate.test.ts:25:describe('SqlDriver DDL gate (ADR-0015)', () => {
+packages/plugins/driver-sql/src/sql-driver-ddl-gate.test.ts:26:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-ddl-gate.test.ts:45:    expect((driver as any).config.client).toBe('better-sqlite3');
+packages/plugins/driver-sql/src/sql-driver-introspection.test.ts:4:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-introspection.test.ts:6:describe('SqlDriver Schema Introspection (SQLite)', () => {
+packages/plugins/driver-sql/src/sql-driver-introspection.test.ts:7:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-introspection.test.ts:11:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-introspection.test.ts:12:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-external-remote-name.test.ts:12: * These tests stand up one sqlite file as the "remote" database (populated with
+packages/plugins/driver-sql/src/sql-driver-external-remote-name.test.ts:23:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-external-remote-name.test.ts:44:  const fixture = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-external-remote-name.test.ts:45:    client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-external-remote-name.test.ts:64:function externalDriver(path: string): SqlDriver {
+packages/plugins/driver-sql/src/sql-driver-external-remote-name.test.ts:65:  const ext = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-external-remote-name.test.ts:66:    client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-external-remote-name.test.ts:75:describe('SqlDriver external read path — remoteName resolution (ADR-0015)', () => {
+packages/plugins/driver-sql/src/sql-driver-external-remote-name.test.ts:116:      // Datetime filter — the SQLite epoch-affinity case the §3 trap would break
+packages/plugins/driver-sql/src/sql-driver-external-remote-name.test.ts:154:  it('treats remoteSchema as a no-op on sqlite (bare table)', async () => {
+packages/plugins/driver-sql/src/index.ts:3:import { SqlDriver } from './sql-driver.js';
+packages/plugins/driver-sql/src/index.ts:5:export { SqlDriver };
+packages/plugins/driver-sql/src/index.ts:7:  SqlDriverConfig,
+packages/plugins/driver-sql/src/index.ts:39:      const driver = new SqlDriver(config);
+packages/plugins/driver-sql/src/sql-driver-array-fields.test.ts:7: * classification, so their array values reached the better-sqlite3 binder
+packages/plugins/driver-sql/src/sql-driver-array-fields.test.ts:8: * un-serialized and crashed with "SQLite3 can only bind numbers, strings,
+packages/plugins/driver-sql/src/sql-driver-array-fields.test.ts:19:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-array-fields.test.ts:21:describe('SqlDriver array/object field persistence', () => {
+packages/plugins/driver-sql/src/sql-driver-array-fields.test.ts:22:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-array-fields.test.ts:25:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-array-fields.test.ts:26:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-analytics-datetime.test.ts:10: * bypassing the normal `find()` filter coercion. Under better-sqlite3 a
+packages/plugins/driver-sql/src/sql-driver-analytics-datetime.test.ts:17: * SQLite database, mirroring exactly what the analytics strategy now does.
+packages/plugins/driver-sql/src/sql-driver-analytics-datetime.test.ts:21:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-analytics-datetime.test.ts:23:describe('Analytics datetime filter — SQLite epoch storage (E2E repro)', () => {
+packages/plugins/driver-sql/src/sql-driver-analytics-datetime.test.ts:24:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-analytics-datetime.test.ts:29:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-analytics-datetime.test.ts:30:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-analytics-datetime.test.ts:47:    // Date objects so better-sqlite3 stores `assessed_at` as INTEGER epoch ms,
+packages/plugins/driver-sql/src/sql-driver-sqlite-tx-guard.test.ts:3:// Dev/test guard against the SQLite single-connection dead-lock.
+packages/plugins/driver-sql/src/sql-driver-sqlite-tx-guard.test.ts:5:// SQLite's connection pool hands out exactly one connection. Issuing a bare
+packages/plugins/driver-sql/src/sql-driver-sqlite-tx-guard.test.ts:14:// dead-lock. The guard is a no-op in production and on non-SQLite dialects.
+packages/plugins/driver-sql/src/sql-driver-sqlite-tx-guard.test.ts:17:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-sqlite-tx-guard.test.ts:28:describe('SqlDriver SQLite single-connection tx guard', () => {
+packages/plugins/driver-sql/src/sql-driver-sqlite-tx-guard.test.ts:29:  let driver: SqlDriver | undefined;
+packages/plugins/driver-sql/src/sql-driver-sqlite-tx-guard.test.ts:40:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-sqlite-tx-guard.test.ts:41:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-sqlite-tx-guard.test.ts:178:    it('throws only in the danger combination: non-prod + sqlite + open tx', () => {
+packages/plugins/driver-sql/src/schema-drift.ts:33:export type SqlDialectName = 'sqlite' | 'postgres' | 'mysql' | 'unknown';
+packages/plugins/driver-sql/src/schema-drift.ts:60:/** Minimal shape of an introspected physical column (see SqlDriver.introspectColumns). */
+packages/plugins/driver-sql/src/schema-drift.ts:78: * `SqlDriver.createColumn` exactly: `formula` is virtual (computed, no column);
+packages/plugins/driver-sql/src/schema-drift.ts:86:/** Whether the dialect physically enforces varchar length (SQLite does not). */
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:4:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:17:describe('SqlDriver tenant scope (organization_id)', () => {
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:18:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:32:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:33:      client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:186:  describe('bulkCreate', () => {
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:188:      await driver.bulkCreate!(
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:205:      driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:206:        client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:225:      driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:226:        client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:271:      driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:272:        client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:307:      driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:308:        client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:328:      driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-tenant-scope.test.ts:329:        client: 'better-sqlite3',
+packages/plugins/driver-sql/src/sql-driver-autonumber-tokens.test.ts:4:import { SqlDriver } from '../src/index.js';
+packages/plugins/driver-sql/src/sql-driver-autonumber-tokens.test.ts:27:describe('SqlDriver auto_number format tokens', () => {
+packages/plugins/driver-sql/src/sql-driver-autonumber-tokens.test.ts:28:  let driver: SqlDriver;
+packages/plugins/driver-sql/src/sql-driver-autonumber-tokens.test.ts:31:    driver = new SqlDriver({
+packages/plugins/driver-sql/src/sql-driver-autonumber-tokens.test.ts:32:      client: 'better-sqlite3',

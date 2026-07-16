@@ -1,0 +1,486 @@
+  // Realtime service for event publishing
+  private realtimeService?: IRealtimeService;
+
+  // Crypto provider backing `secret`-typed fields. Optional: when absent,
+  // writing an object that declares a secret field fails closed (never
+  // persists cleartext). Injected by the host via setCryptoProvider().
+  private cryptoProvider?: ICryptoProvider;
+
+  // Per-engine SchemaRegistry instance.
+  //
+  // Historically SchemaRegistry was a process-wide singleton of static state,
+  // which broke multi-environment servers: a project kernel would inherit every
+  // object registered by the control plane (e.g. sys_metadata), and
+  // getDriver()'s owner lookup would route CRUD to the wrong database. Each
+  // engine now owns its registry so kernels are fully isolated.
+  private _registry: SchemaRegistry = new SchemaRegistry();
+
+  constructor(hostContext: Record<string, any> = {}) {
+    this.hostContext = hostContext;
+    // Use provided logger or create a new one
+    this.logger = hostContext.logger || createLogger({ level: 'info', format: 'pretty' });
+    // Pick up production hardening switches from env so deployers can
+    // enforce strict-body without code changes:
+    //   OBJECTQL_STRICT_HOOKS=1 → unresolved hooks throw at bind time
+    //   OBJECTQL_WARN_LEGACY_HANDLER=1 → log a deprecation per legacy bind
+    if (process?.env?.OBJECTQL_STRICT_HOOKS === '1') {
+      (this as any)._strictHookBinding = true;
+    }
+    if (process?.env?.OBJECTQL_WARN_LEGACY_HANDLER === '1') {
+      (this as any)._warnLegacyHandler = true;
+    }
+    this.logger.info('ObjectQL Engine Instance Created');
+  }
+
+  /**
+   * Service Status Report
+   * Used by Kernel to verify health and capabilities.
+   */
+  getStatus() {
+      return {
+          name: CoreServiceName.enum.data,
+          status: 'running',
+          version: '0.9.0',
+          features: ['crud', 'query', 'aggregate', 'transactions', 'metadata']
+      };
+  }
+
+  /**
+   * Expose the SchemaRegistry for plugins to register metadata.
+   *
+   * Returns the per-engine instance, NOT the class. Each ObjectQL engine
+   * owns its registry so multi-environment kernels remain isolated.
+   */
+  get registry(): SchemaRegistry {
+    return this._registry;
+  }
+
+  /**
+   * Load and Register a Plugin
+   */
+  async use(manifestPart: any, runtimePart?: any) {
+    this.logger.debug('Loading plugin', { 
+      hasManifest: !!manifestPart, 
+      hasRuntime: !!runtimePart 
+    });
+
+    // 1. Validate / Register Manifest
+    if (manifestPart) {
+      this.registerApp(manifestPart);
+    }
+
+    // 2. Execute Runtime
+    if (runtimePart) {
+       const pluginDef = (runtimePart as any).default || runtimePart;
+       if (pluginDef.onEnable) {
+          this.logger.debug('Executing plugin runtime onEnable');
+          
+          const context: ObjectQLHostContext = {
+            ql: this,
+            logger: this.logger,
+            // Expose the driver registry helper explicitly if needed
+            drivers: {
+                register: (driver: IDataDriver) => this.registerDriver(driver)
+            },
+            ...this.hostContext
+          };
+          
+          await pluginDef.onEnable(context);
+          this.logger.debug('Plugin runtime onEnable completed');
+       }
+    }
+  }
+
+  /**
+   * Register a hook
+   * @param event The event name (e.g. 'beforeFind', 'afterInsert')
+   * @param handler The handler function
+   * @param options Optional: target object(s) and priority
+   */
+  registerHook(event: string, handler: HookHandler, options?: {
+    object?: string | string[];
+    priority?: number;
+    packageId?: string;
+    /** Original metadata Hook definition (set by `bindHooksToEngine`). */
+    meta?: any;
+    /** Stable name from metadata (set by `bindHooksToEngine`). */
+    hookName?: string;
+  }) {
+    if (!this.hooks.has(event)) {
+        this.hooks.set(event, []);
+    }
+      for (const key of metadataArrayKeys) {
+          const items = (plugin as any)[key];
+          if (Array.isArray(items) && items.length > 0) {
+              for (const item of items) {
+                  const itemName = resolveMetadataItemName(key, item);
+                  if (itemName) {
+                      const toRegister = item.name === itemName ? item : { ...item, name: itemName };
+                      this._registry.registerItem(pluralToSingular(key), toRegister, 'name' as any, ownerId);
+                  }
+              }
+          }
+      }
+  }
+
+  /**
+   * Register a new storage driver
+   */
+  registerDriver(driver: IDataDriver, isDefault: boolean = false) {
+    if (this.drivers.has(driver.name)) {
+      this.logger.warn('Driver already registered, skipping', { driverName: driver.name });
+      return;
+    }
+
+    this.drivers.set(driver.name, driver);
+    this.logger.info('Registered driver', {
+      driverName: driver.name,
+      version: driver.version
+    });
+
+    if (isDefault || this.drivers.size === 1) {
+      this.defaultDriver = driver.name;
+      this.logger.info('Set default driver', { driverName: driver.name });
+    }
+  }
+
+  /**
+   * Register a Datasource *definition* (ADR-0015).
+   *
+   * Distinct from {@link registerDriver}, which registers a live connection.
+   * This captures the declarative `schemaMode` + `external.allowWrites` so the
+   * write gate ({@link assertWriteAllowed}) can enforce external-datasource
+   * ownership. Safe to call repeatedly; last write wins.
+   */
+  registerDatasourceDef(def: { name: string; schemaMode?: string; external?: { allowWrites?: boolean } }): void {
+    if (!def?.name) return;
+    this.datasourceDefs.set(def.name, { schemaMode: def.schemaMode, external: def.external });
+    objectPattern?: string;
+    default?: boolean;
+    datasource: string;
+    priority?: number;
+  }>) {
+    this.datasourceMapping = rules;
+    this.logger.info('Datasource mapping rules configured', {
+      ruleCount: rules.length
+    });
+  }
+
+  /**
+   * Initialize the engine and all registered drivers
+   */
+  async init() {
+    this.logger.info('Initializing ObjectQL engine', { 
+      driverCount: this.drivers.size,
+      drivers: Array.from(this.drivers.keys())
+    });
+    
+    const failedDrivers: string[] = [];
+    for (const [name, driver] of this.drivers) {
+      try {
+        await driver.connect();
+        this.logger.info('Driver connected successfully', { driverName: name });
+      } catch (e) {
+        failedDrivers.push(name);
+        this.logger.error('Failed to connect driver', e as Error, { driverName: name });
+      }
+    }
+
+    if (failedDrivers.length > 0) {
+      this.logger.warn(
+        `${failedDrivers.length} of ${this.drivers.size} driver(s) failed initial connect. ` +
+        `Operations may recover via lazy reconnection or fail at query time.`,
+        { failedDrivers }
+      );
+    }
+    
+    this.logger.info('ObjectQL engine initialization complete');
+  }
+
+  async destroy() {
+    this.logger.info('Destroying ObjectQL engine', { driverCount: this.drivers.size });
+    
+    for (const [name, driver] of this.drivers.entries()) {
+      try {
+        await driver.disconnect();
+      } catch (e) {
+        this.logger.error('Error disconnecting driver', e as Error, { driverName: name });
+      }
+    }
+    
+    this.logger.info('ObjectQL engine destroyed');
+  }
+
+  // ============================================
+  // Helper: Expand Related Records
+  // ============================================
+
+  /** Maximum depth for recursive expand to prevent infinite loops */
+{
+  "name": "@objectstack/objectql",
+  "version": "14.3.0",
+  "license": "Apache-2.0",
+  "description": "Isomorphic ObjectQL Engine for ObjectStack",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./core": {
+      "types": "./dist/core.d.ts",
+      "import": "./dist/core.mjs",
+      "require": "./dist/core.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@objectstack/core": "workspace:*",
+    "@objectstack/formula": "workspace:*",
+    "@objectstack/metadata-core": "workspace:*",
+    "@objectstack/metadata-protocol": "workspace:*",
+    "@objectstack/spec": "workspace:*",
+    "@objectstack/types": "workspace:*",
+    "ajv": "^8.20.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10"
+  },
+  "keywords": [
+    "objectstack",
+    "objectql",
+    "query-engine",
+    "orm",
+    "data-access"
+  ],
+  "author": "ObjectStack",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/objectstack-ai/framework.git",
+    "directory": "packages/objectql"
+  },
+  "homepage": "https://objectstack.ai/docs",
+  "bugs": "https://github.com/objectstack-ai/framework/issues",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+{
+  "name": "@objectstack/driver-sql",
+  "version": "14.3.0",
+  "license": "Apache-2.0",
+  "description": "SQL Driver for ObjectStack - Supports PostgreSQL, MySQL, SQLite via Knex",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup --config ../../../tsup.config.ts",
+    "dev": "tsc -w",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@objectstack/core": "workspace:*",
+    "@objectstack/spec": "workspace:*",
+    "@objectstack/types": "workspace:*",
+    "knex": "^3.3.0",
+    "nanoid": "^5.1.16"
+  },
+  "optionalDependencies": {
+    "better-sqlite3": "^12.11.1"
+  },
+  "peerDependencies": {
+    "mysql2": "^3.0.0",
+    "pg": "^8.0.0",
+    "sqlite3": "^5.0.0",
+    "tedious": "^18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "mysql2": {
+      "optional": true
+    },
+    "pg": {
+      "optional": true
+    },
+    "sqlite3": {
+      "optional": true
+    },
+    "tedious": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "better-sqlite3": "^12.11.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10"
+  },
+  "keywords": [
+    "objectstack",
+    "driver",
+    "sql",
+    "postgres",
+    "mysql",
+    "sqlite"
+  ],
+  "author": "ObjectStack",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/objectstack-ai/framework.git",
+    "directory": "packages/plugins/driver-sql"
+  },
+  "homepage": "https://objectstack.ai/docs",
+  "bugs": "https://github.com/objectstack-ai/framework/issues",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+{
+  "name": "@objectstack/metadata-protocol",
+  "version": "14.3.0",
+  "license": "Apache-2.0",
+  "description": "ObjectStack metadata management protocol: sys_metadata CRUD, draft/publish, locks, package ownership, diagnostics (ADR-0076).",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "objectstack",
+    "metadata",
+    "protocol",
+    "sys-metadata"
+  ],
+  "dependencies": {
+    "@objectstack/core": "workspace:*",
+    "@objectstack/formula": "workspace:*",
+    "@objectstack/metadata-core": "workspace:*",
+    "@objectstack/spec": "workspace:*",
+    "@objectstack/types": "workspace:*",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10"
+  },
+  "author": "ObjectStack",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/objectstack-ai/framework.git",
+    "directory": "packages/metadata-protocol"
+  },
+  "homepage": "https://objectstack.ai/docs",
+  "bugs": "https://github.com/objectstack-ai/framework/issues",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+{
+  "name": "@objectstack/rest",
+  "version": "14.3.0",
+  "license": "Apache-2.0",
+  "description": "ObjectStack REST API Server - automatic REST endpoint generation from protocol",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup --config ../../tsup.config.ts",
+    "dev": "tsc -w",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@objectstack/core": "workspace:*",
+    "@objectstack/platform-objects": "workspace:*",
+    "@objectstack/service-package": "workspace:*",
+    "@objectstack/spec": "workspace:*",
+    "@objectstack/types": "workspace:*",
+    "exceljs": "^4.4.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@objectstack/metadata-protocol": "workspace:*",
+    "@objectstack/objectql": "workspace:*",
+    "@types/node": "^26.1.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10"
+  },
+  "keywords": [
+    "objectstack",
+    "rest",
+    "api",
+    "crud",
+    "openapi"
+  ],
+  "author": "ObjectStack",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/objectstack-ai/framework.git",
+    "directory": "packages/rest"
+  },
+  "homepage": "https://objectstack.ai/docs",
+  "bugs": "https://github.com/objectstack-ai/framework/issues",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

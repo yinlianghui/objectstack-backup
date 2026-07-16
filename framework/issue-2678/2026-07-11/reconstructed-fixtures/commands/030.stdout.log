@@ -1,0 +1,89 @@
+packages/plugins/driver-sql/src/sql-driver-date-bucket.test.ts:98:        const rows = await driver.aggregate('events', {
+packages/plugins/driver-sql/src/sql-driver-date-bucket.test.ts:124:        driver.aggregate('events', {
+packages/plugins/driver-sql/src/sql-driver-date-bucket.test.ts:141:      const rows = await driver.aggregate('events', {
+packages/rest/src/import-runner.ts:16: * Rows resolved to a CREATE are batched through `p.createManyData` (the
+packages/rest/src/import-runner.ts:20: * doesn't implement `createManyData` falls back to the original per-row
+packages/rest/src/import-runner.ts:78:  createManyData?(args: { object: string; records: any[]; context?: any; environmentId?: string }): Promise<{ records: any[] }>;
+packages/rest/src/import-runner.ts:137:/** Upper bound on rows in one createManyData batch (framework#2678 suggests 100-500). */
+packages/rest/src/import-runner.ts:238:  // CREATE rows are buffered here and flushed through `p.createManyData`
+packages/rest/src/import-runner.ts:240:  // without `createManyData` never buffers — `canBulkCreate` is false and
+packages/rest/src/import-runner.ts:242:  const canBulkCreate = typeof p.createManyData === 'function';
+packages/rest/src/import-runner.ts:255:        writeBatch: (chunk) => p.createManyData!({
+packages/metadata-protocol/src/seed-loader.ts:41:export class SeedLoaderService implements ISeedLoaderService {
+packages/objectql/src/engine-aggregate-timezone.test.ts:3:// ADR-0053 Phase 2 (D2): `engine.aggregate({ timezone })` routing.
+packages/objectql/src/engine-aggregate-timezone.test.ts:9:// native `aggregate()` was taken.
+packages/objectql/src/engine-aggregate-timezone.test.ts:15: * A driver advertising native `day` granularity. Its native `aggregate()`
+packages/objectql/src/engine-aggregate-timezone.test.ts:37:    async aggregate(_object: string, ast: any) {
+packages/objectql/src/engine-aggregate-timezone.test.ts:80:    const utc = await engine.aggregate('deal', { ...dayBucket, timezone: 'UTC' } as any);
+packages/objectql/src/engine-aggregate-timezone.test.ts:84:    const unset = await engine.aggregate('deal', { ...dayBucket } as any);
+packages/objectql/src/engine-aggregate-timezone.test.ts:91:    const ny = (await engine.aggregate('deal', {
+packages/plugins/driver-sql/src/sql-driver-advanced.test.ts:43:      const result = await driver.aggregate('orders', {
+packages/plugins/driver-sql/src/sql-driver-advanced.test.ts:53:      const result = await driver.aggregate('orders', {
+packages/plugins/driver-sql/src/sql-driver-advanced.test.ts:62:      const result = await driver.aggregate('orders', {
+packages/plugins/driver-sql/src/sql-driver-advanced.test.ts:72:      const result = await driver.aggregate('orders', {
+packages/plugins/driver-sql/src/sql-driver-advanced.test.ts:85:      const result = await driver.aggregate('orders', {
+packages/plugins/driver-sql/src/sql-driver-advanced.test.ts:105:      const result = await driver.aggregate('orders', {
+packages/plugins/driver-sql/src/sql-driver-advanced.test.ts:118:      const result = await driver.aggregate('orders', {
+packages/metadata-protocol/src/protocol.ts:2357:        // Route to engine.aggregate() when the query has GROUP BY / aggregations.
+packages/metadata-protocol/src/protocol.ts:2365:            const records = await this.engine.aggregate(request.object, {
+packages/metadata-protocol/src/protocol.ts:2492:     * columns, regenerates `autonumber` fields, and recomputes derived
+packages/metadata-protocol/src/protocol.ts: WARNING: stopped searching binary file after match (found "\0" byte around offset 136253)
+packages/plugins/driver-sql/src/sql-driver.ts:253:export class SqlDriver implements IDataDriver {
+packages/plugins/driver-sql/src/sql-driver.ts:1395:  async aggregate(object: string, query: any, options?: DriverOptions): Promise<any> {
+packages/rest/src/rest-server.ts:5889:        if (operations.createMany && this.protocol.createManyData) {
+packages/rest/src/rest-server.ts:5900:                        const result = await p.createManyData!({
+packages/rest/src/import-runner-bulk.test.ts:4: * runImport() batches CREATE-resolved rows through `p.createManyData` instead
+packages/rest/src/import-runner-bulk.test.ts:35:  it('routes N insert-mode rows through ceil(N/batch) createManyData calls, not N createData calls', async () => {
+packages/rest/src/import-runner-bulk.test.ts:36:    const createManyData = vi.fn(async (args: { records: any[] }) => ({
+packages/rest/src/import-runner-bulk.test.ts:44:      createManyData,
+packages/rest/src/import-runner-bulk.test.ts:52:    expect(createManyData).toHaveBeenCalledTimes(3); // ceil(250/100)
+packages/rest/src/import-runner-bulk.test.ts:60:  it('retries a transient createManyData failure instead of dropping the batch', async () => {
+packages/rest/src/import-runner-bulk.test.ts:62:    const createManyData = vi.fn(async (args: { records: any[] }) => {
+packages/rest/src/import-runner-bulk.test.ts:71:      createManyData,
+packages/rest/src/import-runner-bulk.test.ts:76:    expect(createManyData).toHaveBeenCalledTimes(2);
+packages/rest/src/import-runner-bulk.test.ts:82:    const createManyData = vi.fn(async () => {
+packages/rest/src/import-runner-bulk.test.ts:93:      createManyData,
+packages/rest/src/import-runner-bulk.test.ts:106:  it('falls back to one createData call per row when the protocol has no createManyData', async () => {
+packages/rest/src/import-runner-bulk.test.ts:112:      // no createManyData
+packages/rest/src/import-runner-bulk.test.ts:122:    const createManyData = vi.fn(async (args: { records: any[] }) => ({
+packages/rest/src/import-runner-bulk.test.ts:129:    const p: ImportProtocolLike = { findData, createData: vi.fn(), updateData, createManyData };
+packages/plugins/driver-sql/src/sql-driver-queryast.test.ts:114:      const results = await driver.aggregate('products', {
+packages/plugins/driver-sql/src/sql-driver-queryast.test.ts:155:      const results = await driver.aggregate('products', {
+packages/rest/src/rest.test.ts:48:    createManyData: undefined as any,
+packages/rest/src/rest.test.ts:388:      protocol.createManyData = vi.fn().mockResolvedValue([]);
+packages/rest/src/rest.test.ts:2506:    protocol.createManyData = vi.fn().mockResolvedValue([]);
+packages/rest/src/rest.test.ts:2583:    expect(protocol.createManyData).not.toHaveBeenCalled();
+packages/objectql/src/engine.ts:260:export class ObjectQL implements IDataEngine {
+packages/objectql/src/engine.ts:1707:        if (d?.type !== 'summary' || !d.summaryOperations) continue;
+packages/objectql/src/engine.ts:1708:        const so = d.summaryOperations;
+packages/objectql/src/engine.ts:1746:  private async recomputeSummaries(
+packages/objectql/src/engine.ts:1762:          const rows = await this.aggregate(childObject, {
+packages/objectql/src/engine.ts:1775:          this.logger.warn('Roll-up summary recompute failed', {
+packages/objectql/src/engine.ts:2212:        // Roll-up: recompute parent summary fields that aggregate this object.
+packages/objectql/src/engine.ts:2213:        await this.recomputeSummaries(object, result, null, opCtx.context);
+packages/objectql/src/engine.ts:2358:           // Roll-up: recompute parent summaries; pass priorRecord too so a child
+packages/objectql/src/engine.ts:2360:           await this.recomputeSummaries(object, result, priorRecord, opCtx.context);
+packages/objectql/src/engine.ts:2531:          // recompute the (now-orphaned) parent. Only when a summary aggregates
+packages/objectql/src/engine.ts:2555:          // Roll-up: recompute the parent summary now that the child is gone.
+packages/objectql/src/engine.ts:2556:          if (summaryPrev) await this.recomputeSummaries(object, null, summaryPrev, opCtx.context);
+packages/objectql/src/engine.ts:2620:  async aggregate(object: string, query: EngineAggregateOptions, options?: EngineReadOptions): Promise<any[]> {
+packages/objectql/src/engine.ts:2644:        // Prefer driver.aggregate() when available — driver.find() in many
+packages/objectql/src/engine.ts:2674:            return drv.aggregate(object, ast, this.buildDriverOptions(opCtx.context));
+packages/objectql/src/engine.ts:3176:  async aggregate(query: any = {}): Promise<any[]> {
+packages/objectql/src/engine.ts:3177:    return this.engine.aggregate(this.objectName, {
+packages/objectql/src/plugin.ts:103:export class ObjectQLPlugin implements Plugin {
+packages/objectql/src/plugin.ts:489:        // resolveObject() races recompute against the new state.
+packages/objectql/src/engine-count-read-filter.test.ts:8: * #2737 — count() and aggregate() must honor middleware-injected read filters.
+packages/objectql/src/engine-count-read-filter.test.ts:12: * scoped — but count() and aggregate() built a LOCAL ast inside the executor
+packages/objectql/src/engine-count-read-filter.test.ts:128:  it('aggregate(): the middleware filter reaches driver.aggregate', async () => {
+packages/objectql/src/engine-count-read-filter.test.ts:133:    await ql.aggregate('note', {
+packages/objectql/src/summary-rollup.test.ts:4:// child collection (SUM/COUNT/...). The engine must recompute it whenever a
+packages/objectql/src/summary-rollup.test.ts:72:        line_total: { type: 'summary', summaryOperations: { object: 'inv_line', field: 'amount', function: 'sum' } },
+packages/objectql/src/summary-rollup.test.ts:73:        line_count: { type: 'summary', summaryOperations: { object: 'inv_line', field: 'amount', function: 'count' } },
+packages/objectql/src/summary-rollup.test.ts:96:  it('recomputes when a child amount is updated', async () => {
+packages/objectql/src/summary-rollup.test.ts:106:  it('recomputes when a child is deleted (down to 0 with no children)', async () => {
+packages/objectql/src/summary-rollup.test.ts:116:  it('only recomputes the affected parent', async () => {
+packages/objectql/src/registry-invalidate.test.ts:41:    // contact still cached; account recomputes next call — both should
+packages/objectql/src/dry-run-hash-compat.test.ts:213:    it('accepts row whose stored checksum matches recomputed hashSpec(body)', () => {
+packages/objectql/src/dry-run-hash-compat.test.ts:232:    it('flags drift when stored checksum disagrees with recomputed hash', () => {
+packages/objectql/src/registry.ts:1435:   * dropped, so the next `resolveObject(fqn)` recomputes from scratch.

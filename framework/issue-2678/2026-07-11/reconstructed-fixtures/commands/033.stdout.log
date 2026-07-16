@@ -1,0 +1,225 @@
+packages/metadata-protocol/src/protocol.ts: binary file matches (found "\0" byte around offset 136253)
+packages/objectql/src/engine.ts:337:  constructor(hostContext: Record<string, any> = {}) {
+packages/objectql/src/engine.ts:402:                register: (driver: IDataDriver) => this.registerDriver(driver)
+packages/objectql/src/engine.ts:986:                const fqn = this._registry.registerObject(objDef, id, namespace, 'own');
+packages/objectql/src/engine.ts:994:                const fqn = this._registry.registerObject(objDef as any, id, namespace, 'own');
+packages/objectql/src/engine.ts:1017:              this._registry.registerObject(extDef as any, id, undefined, 'extend', priority);
+packages/objectql/src/engine.ts:1193:                      const fqn = this._registry.registerObject(objDef, ownerId, pluginNamespace, 'own');
+packages/objectql/src/engine.ts:1201:                      const fqn = this._registry.registerObject(objDef as any, ownerId, pluginNamespace, 'own');
+packages/objectql/src/engine.ts:1247:  registerDriver(driver: IDataDriver, isDefault: boolean = false) {
+packages/objectql/src/engine.ts:1268:   * Distinct from {@link registerDriver}, which registers a live connection.
+packages/objectql/src/engine.ts:2804:   * Proxies to SchemaRegistry.registerObject() with sensible defaults.
+packages/objectql/src/engine.ts:2807:  registerObject(
+packages/objectql/src/engine.ts:2820:    return this._registry.registerObject(schema, packageId, namespace);
+packages/objectql/src/engine.ts:2826:  unregisterObject(name: string, packageId?: string): void {
+packages/objectql/src/engine.ts:2828:      this._registry.unregisterObjectsByPackage(packageId);
+packages/objectql/src/engine.ts:3022:    this._registry.unregisterObjectsByPackage(packageId, true);
+packages/objectql/src/engine.ts:3074:        ql.registerDriver(driver, name === 'default');
+packages/objectql/src/engine.ts:3081:        ql.registerObject(schema);
+packages/objectql/src/engine.ts:3107:  constructor(
+packages/objectql/src/engine.ts:3205:  constructor(
+packages/plugins/driver-sql/src/sql-driver.ts:536:  constructor(config: SqlDriverConfig) {
+            id: result.id,
+            record: result
+        };
+    }
+
+    /**
+     * Clone a record — read the source, drop engine-owned columns, and
+     * insert a fresh copy. Gated by the object's `enable.clone` capability
+     * (default `true`; only an explicit `enable.clone === false` disables it).
+     *
+     * Shallow by design: it duplicates the record's own scalar/business field
+     * values, not its related child records. The insert path re-stamps audit
+     * columns, regenerates `autonumber` fields, and recomputes derived
+     * (`formula`/`summary`) fields, so the copy is a valid new row rather than
+     * a byte-identical twin. Caller-supplied `overrides` are applied last and
+     * win over the copied values — the natural place to set a new `name`,
+     * clear a unique field, or reset status before insert.
+     */
+    async cloneData(request: { object: string, id: string, overrides?: Record<string, any>, context?: any }) {
+        const schema: any = this.engine.registry.getObject(request.object);
+        if (!schema) {
+            const err: any = new Error(`Object '${request.object}' not found`);
+            err.code = 'OBJECT_NOT_FOUND';
+            err.status = 404;
+            err.object = request.object;
+            throw err;
+        }
+        // `enable.clone` defaults to true in the spec; treat an absent block /
+        // absent flag as enabled and only block on an explicit `false`.
+        if (schema.enable?.clone === false) {
+            const err: any = new Error(`Cloning is disabled for object '${request.object}'`);
+            err.code = 'CLONE_DISABLED';
+            err.status = 403;
+            err.object = request.object;
+            throw err;
+        }
+
+        const ctx = request.context;
+        const ctxOpt = ctx !== undefined ? { context: ctx } : undefined;
+
+        const source = await this.engine.findOne(
+            request.object,
+            { where: { id: request.id }, ...(ctxOpt as any) } as any,
+        );
+        if (!source) {
+            const err: any = new Error(`Record ${request.id} not found in ${request.object}`);
+            err.code = 'RECORD_NOT_FOUND';
+            err.status = 404;
+            err.object = request.object;
+            throw err;
+        }
+
+        // Copy the source, then strip the columns the engine owns so the insert
+        // path re-derives them rather than carrying the source's values over.
+        const data: Record<string, any> = { ...source };
+        for (const f of CLONE_STRIP_FIELDS) delete data[f];
+        const fields: Record<string, any> = schema.fields || {};
+        for (const [name, def] of Object.entries(fields)) {
+            if (!def) continue;
+            // Engine-/automation-owned values: injected system/audit columns,
+            // engine-generated autonumbers, and computed formula/summary fields.
+            if ((def as any).system === true
+                || (def as any).type === 'autonumber'
+                || (def as any).type === 'formula'
+                || (def as any).type === 'summary') {
+                delete data[name];
+            }
+        }
+        // Caller overrides win (new name, cleared unique field, reset status…).
+        if (request.overrides && typeof request.overrides === 'object') {
+            Object.assign(data, request.overrides);
+        }
+
+        const result = await this.engine.insert(request.object, data, ctxOpt as any);
+        return {
+            object: request.object,
+            id: result.id,
+            sourceId: request.id,
+            record: result,
+        };
+    }
+
+    async updateData(request: { object: string, id: string, data: any, expectedVersion?: string, context?: any }) {
+        await this.assertVersionMatch(request.object, request.id, request.expectedVersion, request.context);
+        const opts: any = { where: { id: request.id } };
+        if (request.context !== undefined) opts.context = request.context;
+        const result = await this.engine.update(request.object, request.data, opts);
+        return {
+            object: request.object,
+            id: request.id,
+            record: result
+        };
+    }
+
+    async deleteData(request: { object: string, id: string, expectedVersion?: string, context?: any }) {
+        await this.assertVersionMatch(request.object, request.id, request.expectedVersion, request.context);
+export class SqlDriver implements IDataDriver {
+  // IDataDriver metadata
+  public readonly name: string = 'com.objectstack.driver.sql';
+  public readonly version: string = '1.0.0';
+  public get supports() {
+    return {
+      // Basic CRUD Operations
+      create: true,
+      read: true,
+      update: true,
+      delete: true,
+
+      // Bulk Operations
+      bulkCreate: true,
+      bulkUpdate: true,
+      bulkDelete: true,
+
+      // Transaction & Connection Management
+      transactions: true,
+      savepoints: false,
+
+      // Query Operations
+      queryFilters: true,
+      queryAggregations: true,
+      /**
+       * Per-granularity native date bucket support. Granularities marked
+       * `false` (or absent) fall back to in-memory `bucketDateValue()` via
+       * `engine.findData` — see `buildDateBucketExpr()` for the SQL emitted.
+       */
+      queryDateGranularity: this.dateGranularityCapabilities,
+      querySorting: true,
+      queryPagination: true,
+      queryWindowFunctions: true,
+      querySubqueries: true,
+      queryCTE: false,
+      joins: true,
+
+      // Advanced Features
+      fullTextSearch: false,
+      jsonQuery: false,
+      geospatialQuery: false,
+      streaming: false,
+      jsonFields: true,
+      arrayFields: true,
+      vectorSearch: false,
+      // Persistent, atomic autonumber sequences via `_objectstack_sequences`
+      // (see fillAutoNumberFields / getNextSequenceValue). The engine defers
+      // autonumber generation to this driver — it is the single source of truth.
+      autonumber: true,
+
+      // Schema Management
+      schemaSync: true,
+      batchSchemaSync: false,
+      migrations: false,
+      // Object-level declared `indexes` (incl. multi-column UNIQUE) are
+      // materialized during `initObjects` — see `syncDeclaredIndexes`.
+      indexes: true,
+
+      // Performance & Optimization
+      connectionPooling: true,
+      preparedStatements: true,
+      queryCache: false,
+    };
+  }
+
+  protected knex: Knex;
+  protected config: Knex.Config;
+  protected jsonFields: Record<string, string[]> = {};
+  protected booleanFields: Record<string, string[]> = {};
+  protected numericFields: Record<string, string[]> = {};
+  protected dateFields: Record<string, Set<string>> = {};
+  protected datetimeFields: Record<string, Set<string>> = {};
+  protected timeFields: Record<string, Set<string>> = {};
+  /**
+   * Federation read path (ADR-0015). For external objects whose physical
+   * remote table differs from the object name, these map between the two so
+   * {@link getBuilder} targets the remote table while the coercion maps above
+   * stay keyed by OBJECT name (matching formatInput/formatOutput). Empty for
+   * managed objects, so the managed query path is unchanged.
+   */
+  protected physicalTableByObject: Record<string, string> = {};
+  protected physicalSchemaByObject: Record<string, string> = {};
+  protected objectByPhysicalTable: Record<string, string> = {};
+  /** External columnMap (ADR-0015): logical field -> physical remote column (for WHERE/ORDER BY/writes). */
+  protected fieldColumnByObject: Record<string, Record<string, string>> = {};
+  /** External columnMap inverse: physical remote column -> logical field (for read output remap). */
+  protected columnFieldByObject: Record<string, Record<string, string>> = {};
+  protected tablesWithTimestamps: Set<string> = new Set();
+  /**
+   * Autonumber field configs per table, captured during initObjects.
+   *
+   * Each entry records:
+   *   - `prefix` + `padWidth`: how to render the next value (`CTR-0007`)
+   *   - `tenantField`: the column to scope the sequence by (defaults to
+   *     `organization_id` if the object has that field, otherwise null →
+   *     sequence is shared globally for that field)
+   *
+   * Numbering is backed by the `_objectstack_sequences` row keyed by
+   * `(object, tenant_id, field)`, not by scanning the data table on each
+   * insert. The sequence row is bootstrapped from the existing MAX on
+   * first use so legacy data is respected.
+   */
+  protected autoNumberFields: Record<
+    string,
+    Array<{ name: string; format: string; tokens: AutonumberToken[]; tenantField: string | null }>
+  > = {};
+
+  /** Whether the sequences table has been ensured this process. */

@@ -1,0 +1,351 @@
+      total: dataset.records.length,
+      referencesResolved,
+      referencesDeferred,
+      errors,
+    };
+  }
+
+  // ==========================================================================
+  // Internal: Reference Resolution
+  // ==========================================================================
+
+  /**
+   * Best-effort resolve the tenant's SOLE organization id — used to stamp
+   * business seed rows when the caller pinned no `config.organizationId` (an
+   * in-process publish has no active user session). A fresh env has exactly one
+   * org, so its seeds should carry it like a normal write instead of landing
+   * org-less (→ invisible under strict org-scoping). Returns undefined when
+   * there are zero or several orgs (genuinely ambiguous — keep the historical
+   * global/cross-tenant NULL) or when `sys_organization` is absent.
+   */
+  private async resolveSoleOrganizationId(): Promise<string | undefined> {
+    try {
+      const rows = await this.engine.find('sys_organization', {
+        fields: ['id'],
+        limit: 2,
+        context: { isSystem: true },
+      } as any);
+      if (Array.isArray(rows) && rows.length === 1) {
+        const id = (rows[0] as { id?: unknown; _id?: unknown })?.id ?? (rows[0] as { _id?: unknown })?._id;
+        return id ? String(id) : undefined;
+      }
+    } catch {
+      // sys_organization may not exist (single-tenant runtime) — ignore.
+    }
+    return undefined;
+  }
+
+  private async resolveFromDatabase(
+    targetObject: string,
+    targetField: string,
+    value: unknown,
+    organizationId?: string,
+  ): Promise<string | null> {
+    try {
+      const where: Record<string, unknown> = { [targetField]: value };
+      // Per-tenant replay: when scoping is requested, only consider
+      // rows that belong to the target tenant so cross-tenant rows
+      // never get borrowed as a "resolved" reference (would silently
+      // create a cross-org FK).
+      if (organizationId) where.organization_id = organizationId;
+      const records = await this.engine.find(targetObject, {
+        where,
+        fields: ['id'],
+        limit: 1,
+        context: { isSystem: true },
+      } as any);
+      if (records && records.length > 0) {
+        return String(records[0].id || records[0]._id);
+      }
+      // Fallback: the value may already be the target's internal id rather than
+      // its natural key — a seed that wires a lookup to a real existing record
+      // (e.g. a people field → the current user, whose id is not a UUID/ObjectId
+      // so `looksLikeInternalId` did not short-circuit). Resolving by id lets a
+      // valid id resolve instead of dangling null, with no risk of a false
+      // natural-key match (an id either exists or it does not).
+      if (targetField !== 'id') {
+        const byId: Record<string, unknown> = { id: value };
+        if (organizationId) byId.organization_id = organizationId;
+        const idMatch = await this.engine.find(targetObject, {
+          where: byId,
+          fields: ['id'],
+          limit: 1,
+          context: { isSystem: true },
+        } as any);
+        if (idMatch && idMatch.length > 0) {
+          return String(idMatch[0].id || idMatch[0]._id);
+        }
+      }
+    } catch {
+      // Target object may not exist yet
+    }
+    return null;
+  }
+
+  private async resolveDeferredUpdates(
+    deferredUpdates: DeferredUpdate[],
+    insertedRecords: Map<string, Map<string, string>>,
+    allResults: SeedLoadResult[],
+    allErrors: ReferenceResolutionError[],
+    organizationId?: string,
+  ): Promise<void> {
+  // ==========================================================================
+  // Internal: Write Operations
+  // ==========================================================================
+
+  /**
+   * Seed writes always run as a privileged system context. This bypasses
+   * RBAC checks (so seeds can target system tables like `sys_*`) and
+   * disables the SecurityPlugin's auto-injection of `organization_id` /
+   * `owner_id` — seeds either declare those fields explicitly per
+   * record, or are intentionally cross-tenant / global.
+   *
+   * `skipTriggers` suppresses record-change AUTOMATION (autolaunched flow
+   * triggers) for seed writes: a package's seed is pre-existing END-STATE
+   * reference/sample data, not a stream of user events, so firing
+   * on-create/on-update flows (notifications, escalations, assignments,
+   * approvals) for it is semantically wrong and dangerous — a self-triggering
+   * flow can loop and wedge the whole first-boot (2026-07-06 incident).
+   * Lifecycle HOOKS (derived/default fields, validation) still run.
+   */
+  private static readonly SEED_OPTIONS = { context: { isSystem: true, skipTriggers: true } } as const;
+
+  private async writeRecord(
+    objectName: string,
+    record: Record<string, unknown>,
+    mode: string,
+    externalId: string,
+    existingRecords?: Map<string, any>,
+  ): Promise<{ action: 'inserted' | 'updated' | 'skipped'; id?: string }> {
+    const externalIdValue = record[externalId];
+    const existing = existingRecords?.get(String(externalIdValue ?? ''));
+    const opts = SeedLoaderService.SEED_OPTIONS as any;
+
+    switch (mode) {
+      case 'insert': {
+        const result = await this.engine.insert(objectName, record, opts);
+        return { action: 'inserted', id: this.extractId(result) };
+      }
+
+      case 'update': {
+        if (!existing) {
+          return { action: 'skipped' };
+        }
+        const id = this.extractId(existing);
+        await this.engine.update(objectName, { ...record, id }, opts);
+        return { action: 'updated', id };
+      }
+
+      case 'upsert': {
+        if (existing) {
+          const id = this.extractId(existing);
+          await this.engine.update(objectName, { ...record, id }, opts);
+          return { action: 'updated', id };
+        } else {
+          const result = await this.engine.insert(objectName, record, opts);
+          return { action: 'inserted', id: this.extractId(result) };
+        }
+      }
+
+      case 'ignore': {
+        if (existing) {
+          return { action: 'skipped', id: this.extractId(existing) };
+        }
+        const result = await this.engine.insert(objectName, record, opts);
+        return { action: 'inserted', id: this.extractId(result) };
+      }
+
+      case 'replace': {
+        // Replace mode: just insert (caller should have cleared the table)
+        const result = await this.engine.insert(objectName, record, opts);
+        return { action: 'inserted', id: this.extractId(result) };
+      }
+
+      default: {
+        const result = await this.engine.insert(objectName, record, opts);
+        return { action: 'inserted', id: this.extractId(result) };
+      }
+    }
+  }
+
+  /** Rows per batch for the buffered-insert flush. See framework#2678. */
+  private static readonly BULK_BATCH_SIZE = 200;
+
+  /**
+   * Decide what {@link loadDataset}'s non-self-referencing (batched) path
+   * should do with a record — mirrors {@link writeRecord}'s mode/existing
+   * logic exactly, but WITHOUT performing the write, so insert decisions can
+   * be buffered and flushed as a batch instead of one call per record.
+   */
+  private decideWriteAction(
+    record: Record<string, unknown>,
+    mode: string,
+337:  constructor(hostContext: Record<string, any> = {}) {
+402:                register: (driver: IDataDriver) => this.registerDriver(driver)
+1247:  registerDriver(driver: IDataDriver, isDefault: boolean = false) {
+1634:  async init() {
+1667:        await driver.disconnect();
+3074:        ql.registerDriver(driver, name === 'default');
+3107:  constructor(
+3205:  constructor(
+  /**
+   * Build the acting-user object (ADR-0068 EvalUser shape) surfaced to
+   * validation-time predicates as `current_user` — notably per-option
+   * `visibleWhen` authorization gating (objectui#2284). Returns undefined for
+   * system / unauthenticated writes, where membership predicates then fail-open.
+   */
+  private buildEvalUser(
+    execCtx?: ExecutionContext,
+  ): { id: string; positions: string[]; organizationId: string | null } | undefined {
+    if (!execCtx || execCtx.userId == null) return undefined;
+    return {
+      id: String(execCtx.userId),
+      positions: execCtx.positions ?? [],
+      organizationId: execCtx.tenantId != null ? String(execCtx.tenantId) : null,
+    };
+  }
+
+  /**
+   * Build the DriverOptions blob passed to every IDataDriver call.
+   *
+   * Always carries `tenantId` from the active ExecutionContext so the
+   * driver can enforce per-tenant isolation (SQL driver auto-scopes reads
+   * and auto-injects the tenant column on writes). Existing user-supplied
+   * shapes (transactions, AST extras) are preserved by spreading them
+   * first.
+   *
+   * System / isSystem callers may still cross tenants by clearing
+   * `tenantId` themselves on the resulting object; this helper does not
+   * mask the system path.
+   */
+  private buildDriverOptions(execCtx?: ExecutionContext, base?: any): any {
+    // The open transaction may arrive explicitly via the context, or ambiently
+    // via txStore when an internal query runs during a transactional write
+    // (ADR-0034). Explicit wins; ambient is the safety net.
+    const tx = execCtx?.transaction !== undefined
+      ? execCtx.transaction
+      : this.txStore.getStore()?.transaction;
+    const hasTx = tx !== undefined;
+    const hasTenant = execCtx?.tenantId !== undefined;
+    const hasTz = execCtx?.timezone !== undefined;
+    const isSystem = execCtx?.isSystem === true;
+    if (!hasTx && !hasTenant && !isSystem && !hasTz) return base;
+    const opts: any = base && typeof base === 'object' ? { ...base } : {};
+    if (hasTx && opts.transaction === undefined) {
+      opts.transaction = tx;
+    }
+    if (hasTenant && opts.tenantId === undefined) {
+      opts.tenantId = execCtx!.tenantId;
+    }
+    if (hasTz && opts.timezone === undefined) {
+      // Thread the business timezone so date-dependent driver generation
+      // (autonumber `{YYYYMMDD}` tokens) resolves the calendar day correctly.
+      opts.timezone = execCtx!.timezone;
+    }
+    if (isSystem && opts.bypassTenantAudit === undefined) {
+      // System-elevated writes (boot-time seeds, internal mirrors, scheduled
+      // hooks) are unscoped by design — silence the audit warn for them but
+      // still flag genuine user-path bugs.
+      opts.bypassTenantAudit = true;
+    }
+    return opts;
+  }
+
+  /**
+   * Build a HookContext.api: a ScopedContext that hooks can use to
+   * read/write other objects within the same execution context.
+   * Falls back to a system-elevated empty context when no execCtx
+   * is supplied (e.g. system-triggered hooks).
+   */
+  private buildHookApi(execCtx?: ExecutionContext): ScopedContext {
+    const safeCtx: ExecutionContext = execCtx ?? ({ isSystem: true } as any);
+    return new ScopedContext(safeCtx, this as unknown as IDataEngine);
+  }
+
+  /**
+   * Apply field defaults to an incoming insert payload. Defaults that are
+   * Expression envelopes (e.g. `{ dialect: 'cel', source: 'today()' }`,
+   * `{ dialect: 'cel', source: 'os.user.id' }`) are evaluated via
+   * `ExpressionEngine` against the calling user/org/now snapshot. Static
+   * defaults are applied verbatim. Records that already supplied a value for a
+   * field are left untouched.
+   *
+   * Implements ROADMAP §M9.9b — `defaultValue` accepts Expression so authors
+   * can replace "write a hook to default to today/current-user" with a
+   * declarative `defaultValue: cel\`today()\``.
+   */
+  private applyFieldDefaults(
+    object: string,
+    record: Record<string, unknown>,
+    execCtx?: ExecutionContext,
+    nowSnapshot?: Date,
+  ): Record<string, unknown> {
+    const schema = this.getSchema(object);
+    const fieldsRaw = (schema as any)?.fields;
+    if (!fieldsRaw || typeof fieldsRaw !== 'object') return record;
+    // `fields` may be a Record<string, Field> (canonical) or an array (legacy).
+    const fieldEntries: Array<{ name: string; defaultValue?: unknown }> = Array.isArray(fieldsRaw)
+      ? fieldsRaw
+      : Object.entries(fieldsRaw).map(([name, def]) => ({ name, ...(def as object) }));
+    const out = { ...record };
+    const now = nowSnapshot ?? new Date();
+    for (const f of fieldEntries) {
+      if (out[f.name] !== undefined) continue;
+      if (f.defaultValue == null) continue;
+      const dv = f.defaultValue;
+      if (typeof dv === 'object' && dv !== null && (dv as any).dialect && typeof (dv as any).source === 'string') {
+        const result = ExpressionEngine.evaluate(dv as any, {
+          now,
+          timezone: execCtx?.timezone,
+          user: execCtx?.userId ? { id: String(execCtx.userId), positions: execCtx?.positions ?? [] } : undefined,
+          org: execCtx?.tenantId ? { id: String(execCtx.tenantId) } : undefined,
+          record: out,
+          extra: { object },
+        });
+        if (result.ok) {
+          out[f.name] = result.value as unknown;
+        } else {
+          this.logger.warn('Failed to evaluate default expression', {
+            object, field: f.name, error: result.error,
+          });
+        }
+      } else if (dv === 'current_user') {
+        // `current_user` token → the acting user's id at insert time. Declarative
+        // counterpart to writing a beforeInsert hook; mirrors the 'NOW()' string
+        // convention and is resolved app-side per request (driver-agnostic), so
+        // `Field.user({ defaultValue: 'current_user' })` auto-fills the actor.
+        // When there is no authenticated user (system/anonymous), leave it unset
+        // and let required-validation decide — never stamp a bogus owner.
+        if (execCtx?.userId != null) out[f.name] = String(execCtx.userId);
+      } else {
+        out[f.name] = dv;
+      }
+    }
+    return out;
+  }
+
+  /**
+   * Generate values for empty `autonumber` fields on insert — ONLY for drivers
+   * that do not generate them natively (memory, mongodb). For SQL-backed objects
+   * the driver owns a persistent, atomic `_objectstack_sequences` table and
+   * advertises `supports.autonumber === true`; the engine then defers entirely
+   * and never pre-fills (so the persistent sequence is the single source of
+   * truth — see #1603). Required-validation exempts `autonumber` either way, so
+   * a `required` record number is never rejected for "missing" — the runtime
+   * owns the value, not the client.
+   *
+   * In the fallback path the next value is `max(existing) + 1`, seeded once per
+   * `object.field.<scope>` from the store then incremented in memory (monotonic
+   * within the process, resilient to deletions). The shared `autonumberFormat`
+   * renderer is honored end-to-end, so date tokens (`AD{YYYYMMDD}{0000}`), field
+   * interpolation (`{island_zone}{000}`) and per-scope reset behave identically
+   * to the SQL driver's persistent sequence (#1603). NOTE: this in-memory seeding
+   * is single-instance.
+   */
+  private async applyAutonumbers(
+    object: string,
+    record: Record<string, unknown>,
+    execCtx?: ExecutionContext,
+    driverOwnsAutonumber?: boolean,
+  ): Promise<void> {
+    if (driverOwnsAutonumber) return; // driver generates persistently in create()

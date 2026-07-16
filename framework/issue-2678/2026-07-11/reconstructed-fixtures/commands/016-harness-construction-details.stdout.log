@@ -1,0 +1,573 @@
+47:   * explicit `config.organizationId` (resolved per {@link resolveSoleOrganizationId}).
+71:    // would land `organization_id = NULL` and then vanish under strict
+77:      config.organizationId == null ? await this.resolveSoleOrganizationId() : undefined;
+243:    const opts = SeedLoaderService.SEED_OPTIONS as any;
+250:          batchSize: SeedLoaderService.BULK_BATCH_SIZE,
+344:      // A record that supplies its own `organization_id` always wins; objects
+349:      if (tenantOrg && record['organization_id'] == null) {
+350:        record['organization_id'] = tenantOrg;
+504:            if (pendingInserts.length >= SeedLoaderService.BULK_BATCH_SIZE) {
+550:  private async resolveSoleOrganizationId(): Promise<string | undefined> {
+579:      if (organizationId) where.organization_id = organizationId;
+597:        if (organizationId) byId.organization_id = organizationId;
+687:   * disables the SecurityPlugin's auto-injection of `organization_id` /
+699:  private static readonly SEED_OPTIONS = { context: { isSystem: true, skipTriggers: true } } as const;
+710:    const opts = SeedLoaderService.SEED_OPTIONS as any;
+760:  private static readonly BULK_BATCH_SIZE = 200;
+967:      if (organizationId) findArgs.where = { organization_id: organizationId };
+
+  // ========================================================================
+  // load — edge cases
+  // ========================================================================
+
+  describe('load — seed identity (os.user / os.org)', () => {
+    // CEL Expression envelope helper — same shape the spec persists.
+    const cel = (source: string) => ({ dialect: 'cel', source });
+
+    const baseConfig = (extra: Record<string, any> = {}): SeedLoaderConfig => ({
+      dryRun: false,
+      haltOnError: false,
+      multiPass: false,
+      defaultMode: 'upsert',
+      batchSize: 1000,
+      transaction: false,
+      ...extra,
+    } as SeedLoaderConfig);
+
+    it('resolves cel`os.user.id` from config.identity', async () => {
+      const metadata = createMockMetadata({
+        note: { name: 'note', fields: { name: { type: 'text' }, author: { type: 'text' } } },
+      });
+      const engine = createMockEngine();
+      const loader = new SeedLoaderService(engine, metadata, logger);
+
+      const result = await loader.load({
+        seeds: [
+          {
+            object: 'note',
+            externalId: 'name',
+            mode: 'insert',
+            env: ['prod', 'dev', 'test'],
+            records: [{ name: 'N1', author: cel('os.user.id') }],
+          },
+        ],
+        config: baseConfig({
+          identity: { user: { id: 'usr_system', role: 'system', email: 'system@objectstack.local' } },
+        }),
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.summary.totalErrored).toBe(0);
+      expect(engine.insert).toHaveBeenCalledWith(
+        'note',
+        expect.objectContaining({ name: 'N1', author: 'usr_system' }),
+        expect.anything(),
+      );
+    });
+
+    it('resolves os.user.id to NULL (not a drop) when no identity is supplied', async () => {
+      const metadata = createMockMetadata({
+        note: { name: 'note', fields: { name: { type: 'text' }, author: { type: 'text' } } },
+      });
+      const engine = createMockEngine();
+      const loader = new SeedLoaderService(engine, metadata, logger);
+
+      const result = await loader.load({
+        seeds: [
+          {
+            object: 'note',
+            externalId: 'name',
+            mode: 'insert',
+            env: ['prod', 'dev', 'test'],
+            records: [{ name: 'N1', author: cel('os.user.id') }],
+          },
+        ],
+        // No identity → the loader binds os.user to a NULL identity, so
+        // `os.user.id` resolves to null and the record seeds with author=null.
+        // The platform never mints a `usr_system` placeholder; owner-style
+        // fields are filled later by the first-admin handoff.
+        config: baseConfig(),
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.summary.totalErrored).toBe(0);
+      expect(engine.insert).toHaveBeenCalledWith(
+        'note',
+        expect.objectContaining({ name: 'N1', author: null }),
+        expect.anything(),
+      );
+    });
+
+    it('falls back os.org.id to organizationId during per-tenant replay', async () => {
+      const metadata = createMockMetadata({
+        note: { name: 'note', fields: { name: { type: 'text' }, org_label: { type: 'text' } } },
+      });
+      const engine = createMockEngine();
+      const loader = new SeedLoaderService(engine, metadata, logger);
+
+      const result = await loader.load({
+        seeds: [
+          {
+            object: 'note',
+            externalId: 'name',
+            mode: 'insert',
+            env: ['prod', 'dev', 'test'],
+            records: [{ name: 'N1', org_label: cel('os.org.id') }],
+          },
+        ],
+        config: baseConfig({ organizationId: 'org_123' }),
+      });
+
+      expect(result.success).toBe(true);
+      expect(engine.insert).toHaveBeenCalledWith(
+        'note',
+        expect.objectContaining({ org_label: 'org_123' }),
+        expect.anything(),
+      );
+    });
+
+    it('surfaces write failures in result.errors (loud, not just counted)', async () => {
+      const metadata = createMockMetadata({
+        account: { name: 'account', fields: { name: { type: 'text' } } },
+      });
+      const engine = createMockEngine();
+      engine.insert = vi.fn(async () => {
+        throw new Error('boom');
+      });
+      const loader = new SeedLoaderService(engine, metadata, logger);
+
+      const result = await loader.load({
+        seeds: [
+          {
+            object: 'account',
+            externalId: 'name',
+            mode: 'insert',
+            env: ['prod', 'dev', 'test'],
+            records: [{ name: 'Acme' }],
+          },
+        ],
+        config: baseConfig({ defaultMode: 'insert' }),
+      });
+
+      expect(result.success).toBe(false);
+      expect(result.summary.totalErrored).toBe(1);
+      expect(result.errors.length).toBeGreaterThan(0);
+      expect(result.errors[0].message).toContain('Failed to write');
+    });
+  });
+
+  describe('load — edge cases', () => {
+    it('should handle records with no matching externalId field', async () => {
+      const metadata = createMockMetadata({
+        account: { name: 'account', fields: { name: { type: 'text' } } },
+      });
+      const engine = createMockEngine();
+      const loader = new SeedLoaderService(engine, metadata, logger);
+
+      const result = await loader.load({
+        seeds: [
+          { object: 'account', externalId: 'code', mode: 'upsert', env: ['prod', 'dev', 'test'], records: [{ name: 'Acme' }] },
+        ],
+        config: {
+          dryRun: false, haltOnError: false, multiPass: true,
+          defaultMode: 'upsert', batchSize: 1000, transaction: false,
+        },
+      });
+
+      // Should still insert (externalId 'code' not present in record, insert path)
+      expect(result.summary.totalInserted).toBe(1);
+    });
+
+    it('should handle insert errors gracefully', async () => {
+      const metadata = createMockMetadata({
+        account: { name: 'account', fields: { name: { type: 'text' } } },
+      });
+      const engine = createMockEngine();
+      (engine.insert as any).mockRejectedValue(new Error('Duplicate key'));
+      const loader = new SeedLoaderService(engine, metadata, logger);
+
+      const result = await loader.load({
+        seeds: [
+          { object: 'account', externalId: 'name', mode: 'upsert', env: ['prod', 'dev', 'test'], records: [{ name: 'Acme' }] },
+        ],
+        config: {
+          dryRun: false, haltOnError: false, multiPass: true,
+          defaultMode: 'upsert', batchSize: 1000, transaction: false,
+        },
+      });
+
+      expect(result.summary.totalErrored).toBe(1);
+      expect(logger.warn).toHaveBeenCalled();
+    });
+
+    it('should handle multiple references on same object', async () => {
+      const metadata = createMockMetadata({
+        account: { name: 'account', fields: { name: { type: 'text' } } },
+        user: { name: 'user', fields: { name: { type: 'text' } } },
+        opportunity: {
+          name: 'opportunity',
+          fields: {
+            name: { type: 'text' },
+            account_id: { type: 'lookup', reference: 'account' },
+            owner_id: { type: 'lookup', reference: 'user' },
+          },
+        },
+      });
+      const engine = createMockEngine();
+      const loader = new SeedLoaderService(engine, metadata, logger);
+
+      const result = await loader.load({
+        seeds: [
+          { object: 'account', externalId: 'name', mode: 'upsert', env: ['prod', 'dev', 'test'], records: [{ name: 'Acme' }] },
+          { object: 'user', externalId: 'name', mode: 'upsert', env: ['prod', 'dev', 'test'], records: [{ name: 'Admin' }] },
+          { object: 'opportunity', externalId: 'name', mode: 'upsert', env: ['prod', 'dev', 'test'], records: [{ name: 'Deal', account_id: 'Acme', owner_id: 'Admin' }] },
+        ],
+        config: {
+          dryRun: false, haltOnError: false, multiPass: true,
+          defaultMode: 'upsert', batchSize: 1000, transaction: false,
+        },
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.summary.totalReferencesResolved).toBe(2);
+    });
+
+    it('should skip reference resolution for MongoDB ObjectId-like values', async () => {
+      const metadata = createMockMetadata({
+        account: { name: 'account', fields: { name: { type: 'text' } } },
+        contact: {
+          name: 'contact',
+          fields: {
+            name: { type: 'text' },
+            account_id: { type: 'lookup', reference: 'account' },
+          },
+        },
+      });
+      const engine = createMockEngine();
+      const loader = new SeedLoaderService(engine, metadata, logger);
+
+      const objectId = '507f1f77bcf86cd799439011';
+      const result = await loader.load({
+        seeds: [
+          { object: 'contact', externalId: 'name', mode: 'upsert', env: ['prod', 'dev', 'test'], records: [{ name: 'John', account_id: objectId }] },
+        ],
+        config: {
+          dryRun: false, haltOnError: false, multiPass: true,
+          defaultMode: 'upsert', batchSize: 1000, transaction: false,
+        },
+      });
+
+      const insertCall = (engine.insert as any).mock.calls[0];
+      expect(insertCall[1].account_id).toBe(objectId);
+    });
+  });
+// Copyright (c) 2025 ObjectStack. Licensed under the Apache-2.0 license.
+
+/**
+ * End-to-end async import-job integration: the REAL create / progress / results
+ * / list / cancel routes driven by a REAL {@link ObjectQL} engine +
+ * {@link ObjectStackProtocolImplementation}, an in-memory driver, and real
+ * registered objects (including a `sys_import_job` mirror) — no protocol mocks.
+ *
+ * Proves the P1 async pipeline: a create request persists a job row and returns
+ * immediately; the background worker streams the batch through the SAME shared
+ * runner the sync route uses, updating progress on the row; and readers can poll
+ * progress, fetch a capped results report, and list history.
+ */
+
+import { describe, it, expect, beforeEach } from 'vitest';
+import { ObjectQL, ObjectStackProtocolImplementation } from '@objectstack/objectql';
+import { RestServer } from './rest-server';
+
+// In-memory driver — equality + `$in`, with skip/limit (mirrors import-integration).
+function makeMemoryDriver() {
+  const stores = new Map<string, Map<string, Record<string, unknown>>>();
+  const storeFor = (o: string) => {
+    let s = stores.get(o);
+    if (!s) { s = new Map(); stores.set(o, s); }
+    return s;
+  };
+  let nextId = 0;
+  const matchOne = (cell: unknown, cond: unknown): boolean => {
+    if (cond && typeof cond === 'object' && !Array.isArray(cond)) {
+      const c = cond as Record<string, unknown>;
+      if ('$in' in c) return Array.isArray(c.$in) && c.$in.some((x) => (cell ?? null) === (x ?? null));
+      if ('$eq' in c) return (cell ?? null) === ((c.$eq as unknown) ?? null);
+      if ('$ne' in c) return (cell ?? null) !== ((c.$ne as unknown) ?? null);
+    }
+    return (cell ?? null) === ((cond as unknown) ?? null);
+  };
+  const matches = (row: Record<string, unknown>, where: any): boolean => {
+    if (!where || typeof where !== 'object') return true;
+    for (const [k, v] of Object.entries(where)) {
+      if (k.startsWith('$')) continue;
+      if (!matchOne(row[k], v)) return false;
+    }
+    return true;
+  };
+  const driver: any = {
+    name: 'memory', version: '0.0.0', supports: {},
+    async connect() {}, async disconnect() {}, async checkHealth() { return true; }, async execute() { return null; },
+    async find(o: string, ast: any) {
+      const rows = Array.from(storeFor(o).values()).filter((r) => matches(r, ast?.where));
+      const skip = Number(ast?.skip ?? ast?.offset ?? 0) || 0;
+      const limit = ast?.limit ?? ast?.top;
+      return limit != null ? rows.slice(skip, skip + Number(limit)) : rows.slice(skip);
+    },
+    findStream() { throw new Error('ns'); },
+    async findOne(o: string, ast: any) { for (const r of storeFor(o).values()) if (matches(r, ast?.where)) return r; return null; },
+    async create(o: string, data: Record<string, unknown>) {
+      nextId += 1; const id = (data.id as string) ?? `r_${nextId}`; const row = { ...data, id }; storeFor(o).set(id, row); return row;
+    },
+    async update(o: string, id: string, data: Record<string, unknown>) {
+      const s = storeFor(o); const cur = s.get(id); if (!cur) throw new Error(`nf ${o}/${id}`);
+      const up = { ...cur, ...data, id }; s.set(id, up); return up;
+    },
+    async upsert(o: string, data: Record<string, unknown>) { const id = data.id as string | undefined; return id && storeFor(o).has(id) ? this.update(o, id, data) : this.create(o, data); },
+    async delete(o: string, id: string) { return storeFor(o).delete(id); },
+    async count(o: string, ast: any) { return (await this.find(o, ast)).length; },
+    async bulkCreate(o: string, rows: Record<string, unknown>[]) { return Promise.all(rows.map((r) => this.create(o, r))); },
+    async bulkUpdate() { return []; }, async bulkDelete() {},
+    async beginTransaction() { return { commit: async () => {}, rollback: async () => {} }; }, async commit() {}, async rollback() {},
+  };
+  return { driver, stores };
+}
+
+const TASK = {
+  name: 'task', label: 'Task', systemFields: false,
+  fields: {
+    id: { name: 'id', type: 'text' as const, primaryKey: true, label: 'ID' },
+    title: { name: 'title', type: 'text' as const, label: '标题' },
+    done: { name: 'done', type: 'boolean' as const, label: '完成' },
+    score: { name: 'score', type: 'number' as const, label: '分数' },
+  },
+};
+
+// Minimal sys_import_job mirror the routes read/write through the protocol.
+const SYS_IMPORT_JOB = {
+  name: 'sys_import_job', label: 'Import Job', systemFields: false,
+  fields: {
+    id: { name: 'id', type: 'text' as const, primaryKey: true },
+    object_name: { name: 'object_name', type: 'text' as const },
+    status: { name: 'status', type: 'text' as const },
+    total_rows: { name: 'total_rows', type: 'number' as const },
+    processed_rows: { name: 'processed_rows', type: 'number' as const },
+    created_count: { name: 'created_count', type: 'number' as const },
+    updated_count: { name: 'updated_count', type: 'number' as const },
+    skipped_count: { name: 'skipped_count', type: 'number' as const },
+    error_count: { name: 'error_count', type: 'number' as const },
+    write_mode: { name: 'write_mode', type: 'text' as const },
+    dry_run: { name: 'dry_run', type: 'boolean' as const },
+    run_automations: { name: 'run_automations', type: 'boolean' as const },
+    error: { name: 'error', type: 'textarea' as const },
+    results: { name: 'results', type: 'json' as const },
+    started_at: { name: 'started_at', type: 'text' as const },
+    completed_at: { name: 'completed_at', type: 'text' as const },
+    created_by: { name: 'created_by', type: 'text' as const },
+    created_at: { name: 'created_at', type: 'text' as const },
+  },
+};
+
+function createMockServer() {
+  const noop = () => {};
+  return { get: noop, post: noop, put: noop, delete: noop, patch: noop, use: noop, listen: async () => {}, close: async () => {} };
+}
+
+function makeRes() {
+  const res: any = {
+    write: () => true, end: () => {},
+    header: () => res,
+    status: (code: number) => { res._status = code; return res; },
+    json: (body: any) => { res._json = body; return res; },
+  };
+  return res;
+}
+
+async function boot() {
+  const { driver } = makeMemoryDriver();
+  const engine = new ObjectQL();
+  engine.registerDriver(driver, true);
+  await engine.init();
+  engine.registry.registerObject(TASK as any);
+  engine.registry.registerObject(SYS_IMPORT_JOB as any);
+
+  const protocol = new ObjectStackProtocolImplementation(engine as any);
+  const rest = new RestServer(createMockServer() as any, protocol as any, { api: { requireAuth: false } } as any);
+  rest.registerRoutes();
+  const routes = rest.getRoutes();
+  const find = (method: string, path: string) => routes.find((r: any) => r.method === method && r.path === path);
+  return {
+    engine, protocol,
+    create: find('POST', '/api/v1/data/:object/import/jobs'),
+    progress: find('GET', '/api/v1/data/import/jobs/:jobId'),
+    results: find('GET', '/api/v1/data/import/jobs/:jobId/results'),
+    list: find('GET', '/api/v1/data/import/jobs'),
+    cancel: find('POST', '/api/v1/data/import/jobs/:jobId/cancel'),
+    undo: find('POST', '/api/v1/data/import/jobs/:jobId/undo'),
+  };
+}
+
+const callCreate = (route: any, body: any) => {
+  const res = makeRes();
+  return route.handler({ params: { object: 'task' }, body } as any, res).then(() => res);
+};
+const callJob = (route: any, jobId: string, query: any = {}) => {
+  const res = makeRes();
+  return route.handler({ params: { jobId }, query } as any, res).then(() => res);
+};
+
+/** Poll the progress route until the job reaches a terminal state. */
+async function waitForTerminal(progress: any, jobId: string, tries = 100): Promise<any> {
+  for (let i = 0; i < tries; i++) {
+    const res = await callJob(progress, jobId);
+    const status = res._json?.status;
+    if (status === 'succeeded' || status === 'failed' || status === 'cancelled') return res._json;
+    await new Promise((r) => setTimeout(r, 5));
+  }
+  throw new Error(`import job ${jobId} did not finish`);
+}
+
+describe('async import job — real engine + protocol integration', () => {
+  let ctx: Awaited<ReturnType<typeof boot>>;
+  beforeEach(async () => {
+    ctx = await boot();
+// Copyright (c) 2025 ObjectStack. Licensed under the Apache-2.0 license.
+
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { QueryAST, HookContext, ServiceObject } from '@objectstack/spec/data';
+import {
+  EngineQueryOptions,
+  DataEngineInsertOptions,
+  EngineUpdateOptions,
+  EngineDeleteOptions,
+  EngineAggregateOptions,
+  EngineCountOptions
+} from '@objectstack/spec/data';
+import { parseAutonumberFormat, renderAutonumber, missingFieldValues } from '@objectstack/spec/data';
+import { ExecutionContext, ExecutionContextSchema } from '@objectstack/spec/kernel';
+import { IDataDriver, IDataEngine, Logger, createLogger } from '@objectstack/core';
+import { CoreServiceName, StorageNameMapping } from '@objectstack/spec/system';
+import { IRealtimeService, RealtimeEventPayload } from '@objectstack/spec/contracts';
+import type { ICryptoProvider, CryptoHandle } from '@objectstack/spec/contracts';
+import {
+  collectSecretFields,
+  makeSecretRef,
+  parseSecretRef,
+  isSecretRef,
+  SECRET_MASK,
+} from './secret-fields.js';
+import { pluralToSingular, ExternalWriteForbiddenError } from '@objectstack/spec/shared';
+import { SchemaRegistry, computeFQN } from './registry.js';
+import { expandSearchToFilter } from './search-filter.js';
+import { ExpressionEngine } from '@objectstack/formula';
+import type { Expression } from '@objectstack/spec';
+import { isAggregatedViewContainer, expandViewContainer } from '@objectstack/spec';
+import { bindHooksToEngine } from './hook-binder.js';
+import { validateRecord, normalizeMultiValueFields, coerceBooleanFields } from './validation/record-validator.js';
+import { evaluateValidationRules, needsPriorRecord, stripReadonlyWhenFields } from './validation/rule-validator.js';
+import { applyInMemoryAggregation } from './in-memory-aggregation.js';
+
+interface FormulaPlanEntry { name: string; expression: Expression; }
+
+function planFormulaProjection(
+  schema: any,
+  requestedFields: string[] | undefined
+): { plan: FormulaPlanEntry[]; projected?: string[] } {
+  if (!schema?.fields) return { plan: [] };
+  const allFieldNames = Object.keys(schema.fields);
+  // When no explicit projection, evaluate every formula field on the schema —
+  // matches REST default of "return everything". Explicit projection still
+  // honours the caller's selection.
+  const targets = (Array.isArray(requestedFields) && requestedFields.length > 0)
+    ? requestedFields
+    : allFieldNames;
+  const plan: FormulaPlanEntry[] = [];
+  const projected = new Set<string>();
+  for (const f of targets) {
+    const def = (schema.fields as any)[f];
+    if (def?.type === 'formula' && def.expression) {
+      // Normalize string-shorthand → Expression envelope (M9 transition).
+      const expr: Expression = typeof def.expression === 'string'
+        ? { dialect: 'cel', source: def.expression }
+        : def.expression;
+      plan.push({ name: f, expression: expr });
+      // Pre-compile to surface syntax errors at planning stage rather than
+      // per-row eval. Dependency discovery (which fields the formula reads)
+      // is no longer used — CEL uses dynamic projection via `record.<field>`.
+      ExpressionEngine.compile(expr);
+    } else if (Array.isArray(requestedFields) && requestedFields.length > 0) {
+      projected.add(f);
+    }
+  }
+  if (plan.length === 0) return { plan: [] };
+  // For formulas: project all schema fields so CEL `record.<field>` lookups
+  // see complete data. Static dependency analysis on AST is M9.7 work.
+  if (Array.isArray(requestedFields) && requestedFields.length > 0) {
+    if (!projected.has('id')) projected.add('id');
+    for (const fname of allFieldNames) {
+      // Skip formula fields themselves — they are virtual and not
+      // projectable by the underlying driver. Without this guard the
+      // SQL driver emits `SELECT response_rate ...` which fails as
+      // "no such column" and the driver returns [] (silently).
+      const fdef = (schema.fields as any)[fname];
+      if (fdef?.type === 'formula') continue;
+      projected.add(fname);
+    }
+    return { plan, projected: Array.from(projected) };
+  }
+  // Implicit/full projection — leave projected undefined so the driver
+  // returns its default columns (typically *).
+  return { plan };
+}
+
+/**
+ * Evaluate read-time formula virtual fields against the raw rows.
+ *
+ * The eval context mirrors `applyFieldDefaults` so formula and default
+ * expressions see the same shape: a `now` pinned ONCE per operation (every row
+ * and every formula field in one `find()` observes the same instant —
+ * determinism, and no per-eval `new Date()` drift), plus `os.user` / `os.org`
+ * resolved from the execution context (so a computed field can reference the
+ * caller, e.g. `os.user.id`). Previously this passed only `{ record }`, so
+ * `now()`/`today()` ran against live wall-clock and user/org were unreachable.
+ *
+ * (ADR-0053 Phase 2 will additionally thread `timezone` here once
+ * `ExecutionContext.timezone` exists — see #1980; this change is independent
+ * of timezone.)
+ */
+function applyFormulaPlan(
+  plan: FormulaPlanEntry[],
+  records: any[],
+  execCtx?: ExecutionContext,
+  nowSnapshot?: Date,
+): void {
+  if (!plan.length) return;
+  const now = nowSnapshot ?? new Date();
+  const timezone = execCtx?.timezone;
+  const user = execCtx?.userId ? { id: String(execCtx.userId), positions: execCtx?.positions ?? [] } : undefined;
+  const org = execCtx?.tenantId ? { id: String(execCtx.tenantId) } : undefined;
+  for (const rec of records) {
+    if (rec == null) continue;
+    for (const fp of plan) {
+      const r = ExpressionEngine.evaluate(fp.expression, { now, timezone, user, org, record: rec });
+      rec[fp.name] = r.ok ? r.value : null;
+    }
+  }
+}
+
+export type HookHandler = (context: HookContext) => Promise<void> | void;
+
+/**
+ * Per-object hook entry with priority support
+ */
+export interface HookEntry {
+  handler: HookHandler;
+  object?: string | string[];  // undefined = global hook
+  priority: number;
+  packageId?: string;
+  /**
+   * Original metadata-form `Hook` definition this entry was bound from
+   * (when registered via `bindHooksToEngine`). Pure code-paths that call
+   * `engine.registerHook` directly leave this undefined.
+   */
+  meta?: any;

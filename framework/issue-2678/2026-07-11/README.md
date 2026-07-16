@@ -16,6 +16,16 @@ of this QA run.
 
 - [Final QA report (Chinese)](final-qa-report.md)
 
+## 2026-07-17 reconstructed data revalidation
+
+The original temporary fixture was deleted. A deterministic data source was reconstructed from the final report and revalidated for Problem One only at the same fixed Framework commit. The 88-check comparison found zero differences.
+
+- [Reconstructed fixtures and complete rerun evidence](reconstructed-fixtures/README.md)
+- [Excel workbook](reconstructed-fixtures/data/issue-2678-reconstructed-data-source.xlsx)
+- [Problem One comparison report](reconstructed-fixtures/results/comparison-report.md)
+- [Post-test SQLite database](reconstructed-fixtures/database/problem-one.sqlite)
+- [Reconstructed archive SHA-256 manifest](reconstructed-fixtures/SHA256SUMS)
+
 ## Archived working evidence
 
 The files below preserve execution and audit detail. They are not separate

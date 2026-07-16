@@ -1,0 +1,843 @@
+    let referencesDeferred = 0;
+    const errors: ReferenceResolutionError[] = [];
+
+    // Ensure the object's record map exists
+    if (!insertedRecords.has(objectName)) {
+      insertedRecords.set(objectName, new Map());
+    }
+
+    // Pre-load existing records for upsert matching. When a target
+    // organization is set, scope the lookup so each tenant gets its
+    // own copy (otherwise upsert would clobber other tenants' rows
+    // that share the same natural key — e.g. `name: 'Acme Corp'`).
+    let existingRecords: Map<string, any> | undefined;
+    if ((mode === 'upsert' || mode === 'update' || mode === 'ignore') && !config.dryRun) {
+      existingRecords = await this.loadExistingRecords(
+        objectName,
+        externalId,
+        config.organizationId,
+      );
+    }
+
+    // Get reference resolutions for this object
+    const objectRefs = refMap.get(objectName) || [];
+
+    // Self-referencing objects (e.g. `employee.manager_id -> employee`) can
+    // have record i reference record j<i from the SAME dataset by natural
+    // key; that only resolves via `insertedRecords` once record j has
+    // actually been written (see the reference-resolution loop below). Batch
+    // writes defer the write past the point the record was resolved, which
+    // would break that same-batch ordering — so self-referencing datasets
+    // keep the historical strictly-sequential per-record write path
+    // (`writeRecord`, unchanged) and opt out of batching entirely. Every
+    // other dataset (the overwhelming majority — contact/lead/opportunity/…
+    // reference OTHER objects, already fully loaded via topological order)
+    // gets the batched path below. See framework#2678.
+    const hasSelfRef = objectRefs.some(ref => ref.targetObject === objectName);
+
+    // Records resolved as inserts (mode 'insert'/'replace', or an unmatched
+    // upsert/ignore) are buffered here and flushed in batches through the
+    // engine's array-form insert() — one round-trip per batch instead of one
+    // per record, with transient-error retry and per-row degradation on a
+    // logical/validation failure. See framework#2678.
+    const pendingInserts: Array<{ recordIndex: number; externalIdValue: string; record: Record<string, unknown> }> = [];
+    const opts = SeedLoaderService.SEED_OPTIONS as any;
+    const flushPendingInserts = async (): Promise<void> => {
+      if (pendingInserts.length === 0) return;
+      const batch = pendingInserts.splice(0, pendingInserts.length);
+      const writeResults: BulkWriteRowResult[] = await bulkWrite(
+        batch.map(b => b.record),
+        {
+          batchSize: SeedLoaderService.BULK_BATCH_SIZE,
+          // A lone row keeps the historical bare-record insert() call shape
+          // (no array wrapping) so single-record datasets are byte-for-byte
+          // unchanged; only a real batch (>1) uses the array/bulk form.
+          writeBatch: (rows) => rows.length === 1
+            ? this.engine.insert(objectName, rows[0], opts).then((r: any) => [r])
+            : this.engine.insert(objectName, rows, opts),
+          writeOne: (row) => this.engine.insert(objectName, row, opts),
+        },
+      );
+      for (const res of writeResults) {
+        const { recordIndex, externalIdValue, record } = batch[res.index];
+        if (res.ok) {
+          inserted++;
+          const internalId = this.extractId(res.record);
+          if (externalIdValue && internalId) {
+            insertedRecords.get(objectName)!.set(externalIdValue, internalId);
+          }
+        } else {
+          errored++;
+          const error = this.buildWriteError(objectName, record, externalId, recordIndex, res.error);
+          errors.push(error);
+          allErrors.push(error);
+          this.logger.warn(`[SeedLoader] ${error.message}`, { recordIndex });
+        }
+      }
+    };
+
+    // Pin a single `now()` snapshot for the entire dataset so multi-pass
+    // loads see one logical clock — the M9 determinism guarantee for seeds.
+    const seedNow = new Date();
+
+    // Identity/context bound to seed CEL expressions. `os.user` / `os.org`
+    // resolve from here, so `owner_id: cel\`os.user.id\`` works.
+    //
+    // When no real user identity is supplied (the normal case — seeds run
+    // before the first human sign-up), `os.user` is bound to a NULL identity
+    // (`{ id: null }`) rather than left undefined. This makes `os.user.id`
+    // resolve to `null` instead of crashing the expression, so a seed's
+    // `owner_id: cel\`os.user.id\`` simply lands NULL — semantically "owned by
+    // whoever becomes the first admin", which the first-admin handoff
+    // (`claimSeedOwnership`) then fills in. The platform therefore never has to
+    // mint a placeholder `usr_system` row just to satisfy this expression.
+    const seedIdentity = config.identity;
+    const baseEvalCtx = {
+      now: seedNow,
+      // `id: null` is a legitimate seed-time state (the owning admin does not
+      // exist yet) that the formula EvalContext's `user.id: string` type does
+      // not yet model — cast the fallback so `os.user.id` evaluates to null.
+      user: seedIdentity?.user ?? ({ id: null } as unknown as NonNullable<typeof seedIdentity>['user']),
+      // Fall back to the per-tenant organizationId so `os.org.id` resolves
+      // during per-org replay even without an explicit identity.org.
+      org: seedIdentity?.org ?? (config.organizationId ? { id: config.organizationId } : undefined),
+      env: config.env,
+    };
+
+    for (let i = 0; i < dataset.records.length; i++) {
+      // Resolve any embedded Expression envelopes (e.g. `cel\`daysFromNow(30)\``,
+      // `cel\`os.user.id\``) BEFORE reference resolution so downstream lookups
+      // see resolved values.
+      const seedResult = resolveSeedRecord(
+        dataset.records[i] as Record<string, never>,
+        baseEvalCtx,
+      );
+      if (!seedResult.ok) {
+        // LOUD FAILURE: a record whose dynamic values cannot be resolved is
+        // dropped — but never silently. Record an actionable error (so it
+        // surfaces in result.errors and flips success=false) instead of
+        // writing the unresolved Expression envelope into the database.
+        errored++;
+        const error: ReferenceResolutionError = {
+          sourceObject: objectName,
+          field: '(expression)',
+          targetObject: objectName,
+          targetField: '(expression)',
+          attemptedValue: dataset.records[i],
+          recordIndex: i,
+          message:
+            `Cannot resolve dynamic seed values for ${objectName} record #${i}: ${seedResult.error.message}. ` +
+            '`os.user.id` resolves to null at seed time (the owning admin does not exist yet) and ' +
+            'owner-style fields are assigned by the first-admin handoff — so a required, non-owner ' +
+            'field must not depend on it. Provide a literal value or make the field optional.',
+        };
+        errors.push(error);
+        allErrors.push(error);
+        this.logger.warn(`[SeedLoader] ${error.message}`);
+        continue;
+      }
+      const record = { ...(seedResult.value as Record<string, unknown>) };
+
+      // Per-tenant tagging: stamp every seeded row with the target org — the
+      // caller's explicit `config.organizationId`, or (when none was pinned) the
+      // single-org fallback for BUSINESS objects only. A `sys_`/`cloud_`/`ai_`
+      // platform seed never takes the fallback: those stay global/cross-tenant.
+      // A record that supplies its own `organization_id` always wins; objects
+      // without the column ignore the extra key at the engine.
+      const tenantOrg =
+        config.organizationId ??
+        (/^(sys_|cloud_|ai_)/.test(objectName) ? undefined : this.fallbackOrgId);
+      if (tenantOrg && record['organization_id'] == null) {
+        record['organization_id'] = tenantOrg;
+      }
+
+      // Resolve references
+      for (const ref of objectRefs) {
+        const fieldValue = record[ref.field];
+        if (fieldValue === undefined || fieldValue === null) continue;
+
+        // LOUD FAILURE: a reference must be a natural-key string (or an
+        // internal id). An object value — e.g. the wrapper `{ externalId: 'X' }`
+        // — never resolves: it would otherwise fall through unresolved and reach
+        // the driver as a non-bindable value ("SQLite3 can only bind ..."). This
+        // used to be silently skipped (and only crashed on a persistent DB's
+        // update path), so catch it here and report the actionable fix instead.
+        if (typeof fieldValue === 'object') {
+          const wrapped = (fieldValue as Record<string, unknown>).externalId;
+          const hint =
+            wrapped !== undefined
+              ? ` Pass the natural key directly: ${ref.field}: ${JSON.stringify(wrapped)}.`
+              : ` Pass the target's ${ref.targetField} value as a plain string.`;
+          const error: ReferenceResolutionError = {
+            sourceObject: objectName,
+            field: ref.field,
+            targetObject: ref.targetObject,
+            targetField: ref.targetField,
+            attemptedValue: fieldValue,
+            recordIndex: i,
+            message:
+              `Invalid reference for ${objectName}.${ref.field}: expected a ` +
+              `${ref.targetObject}.${ref.targetField} natural-key string but got an object.${hint}`,
+          };
+          errors.push(error);
+          allErrors.push(error);
+          this.logger.warn(`[SeedLoader] ${error.message}`, { recordIndex: i });
+          // Drop the unresolvable value so it never reaches the driver.
+          record[ref.field] = null;
+          continue;
+        }
+
+        // Skip if value looks like an internal ID (not a natural key)
+        if (typeof fieldValue !== 'string' || this.looksLikeInternalId(fieldValue)) continue;
+
+        // Try to resolve via already-inserted records
+        const targetMap = insertedRecords.get(ref.targetObject);
+        const resolvedId = targetMap?.get(String(fieldValue));
+
+        if (resolvedId) {
+          record[ref.field] = resolvedId;
+          referencesResolved++;
+        } else if (!config.dryRun) {
+          // Try to resolve from existing data in the database
+          const dbId = await this.resolveFromDatabase(ref.targetObject, ref.targetField, fieldValue, config.organizationId);
+          if (dbId) {
+            record[ref.field] = dbId;
+            referencesResolved++;
+          } else if (config.multiPass) {
+            // Defer to pass 2
+            record[ref.field] = null;
+            deferredUpdates.push({
+              objectName,
+              recordExternalId: String(record[externalId] ?? ''),
+              field: ref.field,
+              targetObject: ref.targetObject,
+              targetField: ref.targetField,
+              attemptedValue: fieldValue,
+              recordIndex: i,
+            });
+            referencesDeferred++;
+          } else {
+            // Cannot resolve - record error
+            const error: ReferenceResolutionError = {
+              sourceObject: objectName,
+              field: ref.field,
+              targetObject: ref.targetObject,
+              targetField: ref.targetField,
+              attemptedValue: fieldValue,
+              recordIndex: i,
+              message: `Cannot resolve reference: ${objectName}.${ref.field} = '${fieldValue}' → ${ref.targetObject}.${ref.targetField} not found`,
+            };
+            errors.push(error);
+            allErrors.push(error);
+          }
+        } else {
+          // Dry-run: attempt resolution, report error if not found
+          const targetMap2 = insertedRecords.get(ref.targetObject);
+          if (!targetMap2?.has(String(fieldValue))) {
+            const error: ReferenceResolutionError = {
+              sourceObject: objectName,
+              field: ref.field,
+              targetObject: ref.targetObject,
+              targetField: ref.targetField,
+              attemptedValue: fieldValue,
+              recordIndex: i,
+              message: `[dry-run] Reference may not resolve: ${objectName}.${ref.field} = '${fieldValue}' → ${ref.targetObject}.${ref.targetField}`,
+            };
+            errors.push(error);
+            allErrors.push(error);
+          }
+        }
+      }
+
+      // Insert/upsert the record
+      if (!config.dryRun) {
+        if (hasSelfRef) {
+          // Self-referencing dataset: keep the historical sequential
+          // per-record write so a later record can resolve its self-ref
+          // against an earlier one via `insertedRecords` — see `hasSelfRef`.
+          try {
+            const result = await this.writeRecord(
+              objectName, record, mode, externalId, existingRecords
+            );
+
+            if (result.action === 'inserted') inserted++;
+            else if (result.action === 'updated') updated++;
+            else if (result.action === 'skipped') skipped++;
+
+            const externalIdValue = String(record[externalId] ?? '');
+            const internalId = result.id;
+            if (externalIdValue && internalId) {
+              insertedRecords.get(objectName)!.set(externalIdValue, String(internalId));
+            }
+          } catch (err: any) {
+            errored++;
+            const error = this.buildWriteError(objectName, record, externalId, i, err);
+            errors.push(error);
+            allErrors.push(error);
+            this.logger.warn(`[SeedLoader] ${error.message}`, { recordIndex: i });
+          }
+        } else {
+          const decision = this.decideWriteAction(record, mode, externalId, existingRecords);
+          const externalIdValue = String(record[externalId] ?? '');
+
+          if (decision.action === 'skip') {
+            skipped++;
+            if (decision.id && externalIdValue) {
+              insertedRecords.get(objectName)!.set(externalIdValue, decision.id);
+            }
+          } else if (decision.action === 'update') {
+            try {
+              await withTransientRetry(() => this.engine.update(objectName, { ...record, id: decision.id }, opts));
+              updated++;
+              if (externalIdValue) {
+                insertedRecords.get(objectName)!.set(externalIdValue, decision.id);
+              }
+            } catch (err: any) {
+              errored++;
+              const error = this.buildWriteError(objectName, record, externalId, i, err);
+              errors.push(error);
+              allErrors.push(error);
+              this.logger.warn(`[SeedLoader] ${error.message}`, { recordIndex: i });
+            }
+          } else {
+            // Insert: buffer for the batched flush rather than writing now.
+            pendingInserts.push({ recordIndex: i, externalIdValue, record });
+            if (pendingInserts.length >= SeedLoaderService.BULK_BATCH_SIZE) {
+              await flushPendingInserts();
+            }
+          }
+        }
+      } else {
+        // Dry-run: simulate insert tracking
+        const externalIdValue = String(record[externalId] ?? '');
+        if (externalIdValue) {
+          insertedRecords.get(objectName)!.set(externalIdValue, `dry-run-id-${i}`);
+        }
+        inserted++; // Count as "would be inserted"
+      }
+    }
+
+    if (!config.dryRun) {
+      await flushPendingInserts();
+interface SummaryDescriptor {
+  parentObject: string;
+  summaryField: string;
+  /** FK field on the child pointing back to the parent. */
+  fkField: string;
+  fn: 'count' | 'sum' | 'min' | 'max' | 'avg';
+  /** Child field aggregated (unused for count). */
+  sourceField: string;
+}
+
+export class ObjectQL implements IDataEngine {
+  /**
+   * Ambient transaction store (ADR-0034). While a `transaction()` callback
+   * runs, the active transaction handle lives here so that EVERY data
+   * operation — including internal reads done during a write (reference
+   * checks, hooks, expand) — automatically binds to the same connection
+   * instead of asking the pool for another one and deadlocking on the
+   * single-connection SQLite pool.
+   */
+  private readonly txStore = new AsyncLocalStorage<{ transaction: unknown }>();
+
+  private drivers = new Map<string, IDataDriver>();
+  private defaultDriver: string | null = null;
+  private logger: Logger;
+
+  // Datasource mapping rules (imported from defineStack)
+  private datasourceMapping: Array<{
+    namespace?: string;
+    package?: string;
+    objectPattern?: string;
+    default?: boolean;
+    datasource: string;
+    priority?: number;
+  }> = [];
+
+  // Package manifests registry (for defaultDatasource lookup)
+  private manifests = new Map<string, any>();
+
+  // Datasource definitions by name (ADR-0015): carries schemaMode +
+  // external.allowWrites so the write gate (Gate 3) can enforce federation
+  // ownership. Populated from manifests in registerApp and via
+  // registerDatasourceDef. Absent entry ⇒ treated as managed (default DB).
+  private datasourceDefs = new Map<string, { schemaMode?: string; external?: { allowWrites?: boolean } }>();
+
+  // Per-object hooks with priority support
+  private hooks: Map<string, HookEntry[]> = new Map([
+    ['beforeFind', []], ['afterFind', []],
+    ['beforeInsert', []], ['afterInsert', []],
+    ['beforeUpdate', []], ['afterUpdate', []],
+    ['beforeDelete', []], ['afterDelete', []],
+  ]);
+
+  // Middleware chain (onion model)
+  private middlewares: Array<{
+    fn: EngineMiddleware;
+    object?: string;
+  }> = [];
+
+  // Action registry: key = "objectName:actionName"
+  private actions = new Map<string, { handler: (ctx: any) => Promise<any> | any; package?: string }>();
+
+  // Function registry: name → handler. Used by `bindHooksToEngine` to
+  // resolve string-named hook handlers (the JSON-safe form). Populated by
+  // `defineStack({ functions })` via `AppPlugin`, or directly via
+  // `engine.registerFunction(...)`.
+  private functions = new Map<string, FunctionEntry>();
+
+  // Host provided context additions (e.g. Server router)
+  private hostContext: Record<string, any> = {};
+
+  // Realtime service for event publishing
+  private realtimeService?: IRealtimeService;
+
+  // Crypto provider backing `secret`-typed fields. Optional: when absent,
+  // writing an object that declares a secret field fails closed (never
+  // persists cleartext). Injected by the host via setCryptoProvider().
+  private cryptoProvider?: ICryptoProvider;
+
+  // Per-engine SchemaRegistry instance.
+  //
+  // Historically SchemaRegistry was a process-wide singleton of static state,
+  // which broke multi-environment servers: a project kernel would inherit every
+  // object registered by the control plane (e.g. sys_metadata), and
+  // getDriver()'s owner lookup would route CRUD to the wrong database. Each
+  // engine now owns its registry so kernels are fully isolated.
+  private _registry: SchemaRegistry = new SchemaRegistry();
+
+  constructor(hostContext: Record<string, any> = {}) {
+    this.hostContext = hostContext;
+    // Use provided logger or create a new one
+    this.logger = hostContext.logger || createLogger({ level: 'info', format: 'pretty' });
+    // Pick up production hardening switches from env so deployers can
+    // enforce strict-body without code changes:
+    //   OBJECTQL_STRICT_HOOKS=1 → unresolved hooks throw at bind time
+    //   OBJECTQL_WARN_LEGACY_HANDLER=1 → log a deprecation per legacy bind
+    if (process?.env?.OBJECTQL_STRICT_HOOKS === '1') {
+      (this as any)._strictHookBinding = true;
+    }
+    if (process?.env?.OBJECTQL_WARN_LEGACY_HANDLER === '1') {
+      (this as any)._warnLegacyHandler = true;
+    }
+    this.logger.info('ObjectQL Engine Instance Created');
+  }
+
+  /**
+   * Service Status Report
+   * Used by Kernel to verify health and capabilities.
+   */
+  getStatus() {
+      return {
+          name: CoreServiceName.enum.data,
+          status: 'running',
+          version: '0.9.0',
+          features: ['crud', 'query', 'aggregate', 'transactions', 'metadata']
+      };
+  }
+
+  /**
+   * Expose the SchemaRegistry for plugins to register metadata.
+   *
+   * Returns the per-engine instance, NOT the class. Each ObjectQL engine
+   * owns its registry so multi-environment kernels remain isolated.
+   */
+  get registry(): SchemaRegistry {
+    return this._registry;
+  }
+
+  /**
+   * Load and Register a Plugin
+   */
+  async use(manifestPart: any, runtimePart?: any) {
+    this.logger.debug('Loading plugin', { 
+      hasManifest: !!manifestPart, 
+      hasRuntime: !!runtimePart 
+    });
+
+    // 1. Validate / Register Manifest
+    if (manifestPart) {
+      this.registerApp(manifestPart);
+    }
+
+        // calls over `query.fields` would otherwise throw on.
+        if (typeof options.fields === 'string') {
+            options.fields = options.fields.split(',').map((s: string) => s.trim()).filter(Boolean);
+        } else if (options.fields !== undefined && !Array.isArray(options.fields)) {
+            delete options.fields;
+        }
+
+        // Sort/orderBy → orderBy: string → SortNode[] array
+        const sortValue = options.orderBy ?? options.sort;
+        if (typeof sortValue === 'string') {
+            const parsed = sortValue.split(',').map((part: string) => {
+                const trimmed = part.trim();
+                if (trimmed.startsWith('-')) {
+                    return { field: trimmed.slice(1), order: 'desc' as const };
+                }
+                const [field, order] = trimmed.split(/\s+/);
+                return { field, order: (order?.toLowerCase() === 'desc' ? 'desc' : 'asc') as 'asc' | 'desc' };
+            }).filter((s: any) => s.field);
+            options.orderBy = parsed;
+        } else if (Array.isArray(sortValue)) {
+            options.orderBy = sortValue;
+        }
+        delete options.sort;
+
+        // Filter/filters/$filter → where: normalize all filter aliases
+        const filterValue = options.filter ?? options.filters ?? options.$filter ?? options.where;
+        delete options.filter;
+        delete options.filters;
+        delete options.$filter;
+
+        if (filterValue !== undefined) {
+            let parsedFilter = filterValue;
+            // JSON string → object
+            if (typeof parsedFilter === 'string') {
+                try { parsedFilter = JSON.parse(parsedFilter); } catch { /* keep as-is */ }
+            }
+            // Filter AST array → FilterCondition object
+            if (isFilterAST(parsedFilter)) {
+                parsedFilter = parseFilterAST(parsedFilter);
+            }
+            options.where = parsedFilter;
+        }
+
+        // Populate/expand/$expand → expand (Record<string, QueryAST>)
+        const populateValue = options.populate;
+        const expandValue = options.$expand ?? options.expand;
+        const expandNames: string[] = [];
+        if (typeof populateValue === 'string') {
+            expandNames.push(...populateValue.split(',').map((s: string) => s.trim()).filter(Boolean));
+        } else if (Array.isArray(populateValue)) {
+            expandNames.push(...populateValue);
+        }
+        if (!expandNames.length && expandValue) {
+            if (typeof expandValue === 'string') {
+                expandNames.push(...expandValue.split(',').map((s: string) => s.trim()).filter(Boolean));
+            } else if (Array.isArray(expandValue)) {
+                expandNames.push(...expandValue);
+            }
+        }
+        delete options.populate;
+        delete options.$expand;
+        // Clean up non-object expand (e.g. string) BEFORE the Record conversion
+        // below, so that populate-derived names can create the expand Record even
+        // when a legacy string expand was also present.
+        if (typeof options.expand !== 'object' || options.expand === null) {
+            delete options.expand;
+        }
+        // Only set expand if not already an object (advanced usage)
+        if (expandNames.length > 0 && !options.expand) {
+            options.expand = {} as Record<string, any>;
+            for (const rel of expandNames) {
+                options.expand[rel] = { object: rel };
+            }
+        }
+
+        // Boolean fields
+        for (const key of ['distinct', 'count']) {
+            if (options[key] === 'true') options[key] = true;
+            else if (options[key] === 'false') options[key] = false;
+        }
+        
+        // Flat field filters: REST-style query params like ?id=abc&status=open
+        // After extracting all known query parameters, any remaining keys are
+        // treated as implicit field-level equality filters merged into `where`.
+        const knownParams = new Set([
+            'top', 'limit', 'offset',
+            'orderBy',
+            'fields',
+            'where',
+            'expand',
+            'distinct', 'count',
+            'aggregations', 'groupBy',
+            'search', 'searchFields', 'context', 'cursor',
+        ]);
+        if (!options.where) {
+            const implicitFilters: Record<string, unknown> = {};
+            for (const key of Object.keys(options)) {
+                if (!knownParams.has(key)) {
+                    implicitFilters[key] = options[key];
+                    delete options[key];
+                }
+            }
+            if (Object.keys(implicitFilters).length > 0) {
+                options.where = implicitFilters;
+            }
+        }
+        
+        // Route to engine.aggregate() when the query has GROUP BY / aggregations.
+        // engine.find() does not do in-memory aggregation fallback, so without
+        // this branch a spec-shape aggregate request would silently return
+        // ungrouped raw rows on drivers (e.g. SqlDriver) that don't natively
+        // honor groupBy/aggregations in find().
+        const hasGroupBy = Array.isArray(options.groupBy) && options.groupBy.length > 0;
+        const hasAggregations = Array.isArray(options.aggregations) && options.aggregations.length > 0;
+        if (hasGroupBy || hasAggregations) {
+            const records = await this.engine.aggregate(request.object, {
+                where: options.where,
+                groupBy: options.groupBy,
+                aggregations: options.aggregations,
+                context: options.context,
+            } as any);
+            // Apply limit client-side (EngineAggregateOptions doesn't carry limit).
+            // `records` is the full grouped set, so its length IS the real total
+            // and `hasMore` follows from whether the slice dropped any groups.
+            const limited = typeof options.limit === 'number' && options.limit > 0
+                ? records.slice(0, options.limit)
+                : records;
+            return {
+                object: request.object,
+                records: limited,
+                total: records.length,
+                hasMore: limited.length < records.length,
+            };
+        }
+
+        const records = await this.engine.find(request.object, options);
+        // Pagination metadata. When a `limit` is present the response is a single
+        // page, so `records.length` is the page size — NOT the match total. Run a
+        // count over the same `where` so the client can render total pages and know
+        // whether more pages remain (true server-side pagination). Without a limit
+        // the full result set is returned, so its length already IS the total.
+        //
+        // engine.count() only honors `where`; a `search`/`distinct` query can't be
+        // reproduced by it, so for those we skip the count and fall back to a
+        // page-local estimate (a full page implies there may be more) rather than
+        // reporting a wrong total.
+        const pageLimit = typeof options.limit === 'number' && options.limit > 0 ? options.limit : undefined;
+        const pageOffset = typeof options.offset === 'number' && options.offset > 0 ? options.offset : 0;
+        let total = records.length;
+        let hasMore = false;
+        if (pageLimit !== undefined) {
+            const countable = options.search == null && options.distinct == null;
+            if (countable) {
+                try {
+                    total = await this.engine.count(request.object, {
+                        where: options.where,
+                        context: options.context,
+                    } as any);
+                } catch {
+                    // engine.count() has its own find().length fallback; if it still
+                    // throws, degrade to a page-local total rather than failing the list.
+// Copyright (c) 2025 ObjectStack. Licensed under the Apache-2.0 license.
+
+import { coerceRow, type RefResolver, type RefMatch } from './import-coerce.js';
+import type { ExportFieldMeta } from './export-format.js';
+import { bulkWrite, withTransientRetry, type BulkWriteRowResult } from '@objectstack/core';
+
+/**
+ * import-runner — the shared row-processing core for bulk import.
+ *
+ * Both the synchronous `POST /data/:object/import` route and the asynchronous
+ * import-job worker feed rows through {@link runImport}. Extracting the loop
+ * keeps the two paths byte-for-byte identical in coercion, upsert matching, and
+ * per-row reporting — the async worker only adds progress persistence and
+ * cancellation on top.
+ *
+ * Rows resolved to a CREATE are batched through `p.createManyData` (the
+ * engine's array-form `insert()` — one round-trip per batch, with transient
+ * retry and per-row degradation on a logical/validation failure) instead of
+ * one `p.createData` call per row — see framework#2678. A protocol that
+ * doesn't implement `createManyData` falls back to the original per-row
+ * `createData` path unchanged.
+ */
+
+export type ImportAction = 'created' | 'updated' | 'skipped' | 'failed';
+
+export interface ImportRowResult {
+  row: number;
+  ok: boolean;
+  action: ImportAction;
+  id?: string;
+  field?: string;
+  error?: string;
+  code?: string;
+}
+
+/** Running tallies handed to {@link RunImportOptions.onProgress}. */
+export interface ImportProgress {
+  processed: number;
+  total: number;
+  created: number;
+  updated: number;
+  skipped: number;
+  errors: number;
+}
+
+/**
+ * Records exactly what a non-dry-run import changed, so the job can be undone:
+ * created records are deleted, and updated records have the touched fields
+ * restored to their pre-import values. Only the fields the import wrote are
+ * captured (keyed to `before`), keeping the log precise and bounded.
+ */
+export interface ImportUndoLog {
+  /** Ids of records this import created (delete to undo). */
+  created: string[];
+  /** Per updated record: the touched fields' values *before* the import. */
+  updated: Array<{ id: string; before: Record<string, any> }>;
+}
+
+export interface ImportRunSummary extends ImportProgress {
+  ok: number;
+  results: ImportRowResult[];
+  cancelled: boolean;
+  /** Present only when `captureUndo` was set — the reversal instructions. */
+  undoLog?: ImportUndoLog;
+}
+
+/** Minimal protocol surface the runner needs (find / create / update). */
+export interface ImportProtocolLike {
+  findData(args: any): Promise<any>;
+  createData(args: any): Promise<any>;
+  updateData(args: any): Promise<any>;
+  /**
+   * Optional bulk-create primitive. When present, `runImport` batches
+   * CREATE-resolved rows through it instead of one `createData` call per
+   * row — see framework#2678. Must resolve to `{ records: any[] }` with one
+   * record per input row, in the same order.
+   */
+  createManyData?(args: { object: string; records: any[]; context?: any; environmentId?: string }): Promise<{ records: any[] }>;
+}
+
+export interface RunImportOptions {
+  /** Protocol/engine to read & write through. */
+  p: ImportProtocolLike;
+  objectName: string;
+  environmentId?: string;
+  /** Exec context threaded onto reads and (with automation toggle) writes. */
+  context?: any;
+  /** Already-mapped rows (source columns renamed to target fields). */
+  rows: Array<Record<string, any>>;
+  /** Field metadata for value coercion (name→id lookups, select codes, …). */
+  metaMap: Map<string, ExportFieldMeta>;
+  writeMode: 'insert' | 'update' | 'upsert';
+  matchFields: string[];
+  dryRun: boolean;
+  runAutomations: boolean;
+  trimWhitespace: boolean;
+  nullValues?: string[];
+  createMissingOptions: boolean;
+  skipBlankMatchKey: boolean;
+  /**
+   * Progress callback, invoked every {@link RunImportOptions.progressEvery}
+   * processed rows and once at the end. May be async; the runner awaits it so a
+   * DB write of progress completes before the next chunk.
+   */
+  onProgress?: (p: ImportProgress) => void | Promise<void>;
+  /**
+   * Rows between onProgress calls (default 200). Also the flush boundary for
+   * buffered creates — a batch never grows past this before being written,
+   * so progress numbers stay accurate at every reported checkpoint.
+   */
+  progressEvery?: number;
+  /**
+   * Cooperative cancellation. Checked at each progress boundary; when it returns
+   * truthy the runner stops and returns `cancelled: true` with partial results.
+   */
+  shouldCancel?: () => boolean | Promise<boolean>;
+  /**
+   * When true (and not a dry run), accumulate an {@link ImportUndoLog} so the
+   * import can be reverted later. Callers gate this on row count to bound the
+   * stored snapshot size.
+   */
+  captureUndo?: boolean;
+}
+
+/** Extracts a created/updated record's id regardless of which response shape the protocol returned. */
+function extractRecordId(rec: any): string | undefined {
+  const id = rec?.id ?? rec?.record?.id;
+  return id != null ? String(id) : undefined;
+}
+
+function toFailedResult(rowNo: number, err: unknown): ImportRowResult {
+  const code = (err as any)?.code ?? 'IMPORT_ROW_FAILED';
+  const message = typeof (err as any)?.message === 'string' ? (err as any).message.slice(0, 300) : 'Row failed';
+  return { row: rowNo, ok: false, action: 'failed', error: message, code };
+}
+
+/** Upper bound on rows in one createManyData batch (framework#2678 suggests 100-500). */
+const MAX_CREATE_BATCH_SIZE = 200;
+
+export function runImport(opts: RunImportOptions): Promise<ImportRunSummary> {
+  const {
+    p, objectName, environmentId, context, rows, metaMap,
+    writeMode, matchFields, dryRun, runAutomations,
+    trimWhitespace, nullValues, createMissingOptions, skipBlankMatchKey,
+    onProgress, shouldCancel, captureUndo,
+  } = opts;
+  const collectUndo = !!captureUndo && !dryRun;
+  const undoLog: ImportUndoLog = { created: [], updated: [] };
+  // Snapshot only the fields the import touched, so undo restores exactly what
+  // changed. A field absent before the import is recorded as null → undo clears
+  // it. Never captured on dry runs (nothing was written).
+  const captureBefore = (before: Record<string, any>, written: Record<string, any>): Record<string, any> => {
+    const snap: Record<string, any> = {};
+    for (const k of Object.keys(written)) snap[k] = before[k] ?? null;
+    return snap;
+  };
+  const progressEvery = Math.max(1, opts.progressEvery ?? 200);
+
+  const findRows = (r: any): any[] =>
+    Array.isArray(r?.records) ? r.records
+      : Array.isArray(r?.data) ? r.data
+        : Array.isArray(r?.rows) ? r.rows
+          : Array.isArray(r) ? r : [];
+  const findArgsBase = (query: any) => ({
+    object: '',
+    query,
+    ...(environmentId ? { environmentId } : {}),
+    ...(context ? { context } : {}),
+  });
+
+  // Reference resolver: name/email/id → referenced record id. Cached per
+  // (object, display) so a name repeated across rows costs one query.
+  const refCache = new Map<string, RefMatch>();
+  const resolveRef: RefResolver = async (referenceObject, display, meta) => {
+    const cacheKey = `${referenceObject}::${display}`;
+    const cached = refCache.get(cacheKey);
+    if (cached) return cached;
+    // Try an exact id first (authoritative + unique when the user pasted an id),
+    // then the configured display field, then the usual human identifiers.
+    // De-dupe so a field isn't queried twice. The first candidate field to match
+    // wins; if that field matches >1 record we stop and report ambiguity rather
+    // than silently linking the first.
+    const candidates = [...new Set([
+      'id',
+      ...(meta.displayField ? [meta.displayField] : []),
+      'name', 'title', 'label', 'full_name', 'email', 'username',
+    ])];
+    let match: RefMatch = {};
+    for (const f of candidates) {
+      try {
+        const r = await p.findData({
+          ...findArgsBase({ $filter: { [f]: display }, $top: 2 }),
+          object: referenceObject,
+        });
+        const recs = findRows(r);
+        if (recs.length === 0) continue;
+        if (recs.length > 1) { match = { ambiguous: true, matchedField: f }; break; }
+        if (recs[0]?.id != null) { match = { id: String(recs[0].id), matchedField: f }; break; }
+      } catch { /* field absent on target object — try the next candidate */ }
+    }
+    refCache.set(cacheKey, match);
+    return match;
+  };
+
+  // Locate an existing record for update/upsert by matchFields. Returns the
+  // record, or a sentinel: 'blank' (a match field was empty), 'none' (no
+  // match), 'ambiguous' (>1 match — too risky to update).
+  const findExisting = async (
+    data: Record<string, any>,
+  ): Promise<Record<string, any> | 'blank' | 'none' | 'ambiguous'> => {
+    const filter: Record<string, any> = {};
+    for (const f of matchFields) {
+      const v = data[f];
+      if (v === undefined || v === null || v === '') return 'blank';
+      filter[f] = v;
+    }
+    const r = await p.findData({ ...findArgsBase({ $filter: filter, $top: 2 }), object: objectName });
+    const recs = findRows(r);
+    if (recs.length === 0) return 'none';
+    if (recs.length > 1) return 'ambiguous';

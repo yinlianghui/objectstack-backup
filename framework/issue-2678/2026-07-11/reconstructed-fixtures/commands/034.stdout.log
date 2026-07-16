@@ -1,0 +1,254 @@
+2962:    async createManyData(request: { object: string, records: any[], context?: any }): Promise<any> {
+   */
+  protected buildDateBucketExpr(
+    field: string,
+    granularity: 'day' | 'week' | 'month' | 'quarter' | 'year',
+  ): { sql: string; bindings: any[] } | null {
+    if (!this.dateGranularityCapabilities[granularity]) return null;
+
+    if (this.isPostgres) {
+      switch (granularity) {
+        case 'year':    return { sql: `to_char((??)::timestamptz AT TIME ZONE 'UTC', 'YYYY')`, bindings: [field] };
+        case 'month':   return { sql: `to_char((??)::timestamptz AT TIME ZONE 'UTC', 'YYYY-MM')`, bindings: [field] };
+        case 'day':     return { sql: `to_char((??)::timestamptz AT TIME ZONE 'UTC', 'YYYY-MM-DD')`, bindings: [field] };
+        case 'quarter': return { sql: `to_char((??)::timestamptz AT TIME ZONE 'UTC', 'YYYY"-Q"Q')`, bindings: [field] };
+        case 'week':    return { sql: `to_char((??)::timestamptz AT TIME ZONE 'UTC', 'IYYY"-W"IW')`, bindings: [field] };
+      }
+    }
+
+    if (this.isMysql) {
+      switch (granularity) {
+        case 'year':    return { sql: `date_format(convert_tz(??, @@session.time_zone, '+00:00'), '%Y')`, bindings: [field] };
+        case 'month':   return { sql: `date_format(convert_tz(??, @@session.time_zone, '+00:00'), '%Y-%m')`, bindings: [field] };
+        case 'day':     return { sql: `date_format(convert_tz(??, @@session.time_zone, '+00:00'), '%Y-%m-%d')`, bindings: [field] };
+        case 'quarter': return { sql: `concat(date_format(convert_tz(??, @@session.time_zone, '+00:00'), '%Y'), '-Q', quarter(convert_tz(??, @@session.time_zone, '+00:00')))`, bindings: [field, field] };
+        case 'week':    return { sql: `date_format(convert_tz(??, @@session.time_zone, '+00:00'), '%x-W%v')`, bindings: [field] };
+      }
+    }
+
+    if (this.isSqlite) {
+      switch (granularity) {
+        case 'year':    return { sql: `strftime('%Y', ??)`, bindings: [field] };
+        case 'month':   return { sql: `strftime('%Y-%m', ??)`, bindings: [field] };
+        case 'day':     return { sql: `strftime('%Y-%m-%d', ??)`, bindings: [field] };
+        case 'quarter': return { sql: `(strftime('%Y', ??) || '-Q' || ((cast(strftime('%m', ??) as integer) - 1) / 3 + 1))`, bindings: [field, field] };
+        case 'week':    return null; // see capabilities note
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Schema ownership mode (ADR-0015). When not `'managed'`, all
+   * schema-mutating DDL is rejected by {@link assertSchemaMutable}. The
+   * runtime injects this from `Datasource.schemaMode`; defaults to
+   * `'managed'` so existing callers are unaffected.
+   */
+  protected readonly schemaMode: SchemaMode;
+
+  /**
+   * Dev-only auto-reconcile policy (issue #2186). See {@link SqlDriverConfig.autoMigrate}.
+   */
+  protected readonly autoMigrate: 'off' | 'safe';
+
+  /**
+   * Metadata field defs for every table this driver manages, captured during
+   * `initObjects` (tableName → fields). The source of truth that
+   * {@link detectManagedDrift} diffs the physical schema against.
+   */
+  protected managedObjectFields = new Map<string, Record<string, any>>();
+
+  /** Declared indexes per managed table (tableName → indexes[]), captured in `initObjects`. Used to recreate indexes after a SQLite table rebuild. */
+  protected managedObjectIndexes = new Map<string, any[]>();
+
+  /** De-dup set for boot-time drift warnings (keyed by {@link driftKey}). */
+  protected driftWarned = new Set<string>();
+
+  constructor(config: SqlDriverConfig) {
+    // `schemaMode` / `autoMigrate` are ObjectStack concerns, not Knex options —
+    // strip them before handing the config to Knex.
+    const { schemaMode, autoMigrate, ...knexConfig } = config;
+    this.schemaMode = schemaMode ?? 'managed';
+    this.autoMigrate = autoMigrate ?? 'off';
+    this.config = knexConfig;
+    this.knex = knex(knexConfig);
+  }
+
+  /**
+   * DDL gate (ADR-0015 §5.1). Single choke-point asserting that
+   * schema-mutating DDL is only performed on a `managed` datasource.
+   * Federated datasources (`external` / `validate-only`) are guests in a
+   * database ObjectStack does not own and must never run DDL against.
+   */
+  protected assertSchemaMutable(operation: string): void {
+    if (this.schemaMode !== 'managed') {
+      throw new ExternalSchemaModeViolationError(
+        `DDL operation '${operation}' is forbidden: datasource schemaMode='${this.schemaMode}'. ` +
+          `ObjectStack never mutates the schema of an external database.`,
+      );
+    }
+  }
+
+  // ===================================
+  // Lifecycle
+  // ===================================
+
+  async connect(): Promise<void> {
+    // Ensure the database directory exists before any query can trigger
+    // better-sqlite3 to open the file (e.g. loadMetaFromDb on startup).
+    await this.ensureDatabaseExists();
+
+    // SQLite space hygiene (ADR-0057). With the default `auto_vacuum=NONE`,
+    // freed pages are never returned to the OS — a database that briefly grew
+    // (e.g. high-frequency telemetry before retention sweeps run) stays at its
+    // high-water mark forever. INCREMENTAL lets a later `PRAGMA incremental_vacuum`
+    // (run by the lifecycle Reaper, or manually) reclaim that space without a
+    // full blocking VACUUM. NOTE: auto_vacuum only changes layout on a *fresh*
+    // database or after a one-time full VACUUM, so this benefits new dev DBs;
+    // existing files need a single `VACUUM` to adopt it. Harmless / no-op on
+    // :memory: and on already-incremental databases.
+    if (this.isSqlite) {
+      try {
+        await this.knex.raw('PRAGMA auto_vacuum = INCREMENTAL');
+      } catch (e) {
+        this.logger.warn('Failed to set PRAGMA auto_vacuum=INCREMENTAL', e);
+      }
+    }
+  }
+
+  async checkHealth(): Promise<boolean> {
+    try {
+      await this.knex.raw('SELECT 1');
+      for (const key of metadataArrayKeys) {
+          const items = (plugin as any)[key];
+          if (Array.isArray(items) && items.length > 0) {
+              for (const item of items) {
+                  const itemName = resolveMetadataItemName(key, item);
+                  if (itemName) {
+                      const toRegister = item.name === itemName ? item : { ...item, name: itemName };
+                      this._registry.registerItem(pluralToSingular(key), toRegister, 'name' as any, ownerId);
+                  }
+              }
+          }
+      }
+  }
+
+  /**
+   * Register a new storage driver
+   */
+  registerDriver(driver: IDataDriver, isDefault: boolean = false) {
+    if (this.drivers.has(driver.name)) {
+      this.logger.warn('Driver already registered, skipping', { driverName: driver.name });
+      return;
+    }
+
+    this.drivers.set(driver.name, driver);
+    this.logger.info('Registered driver', {
+      driverName: driver.name,
+      version: driver.version
+    });
+
+    if (isDefault || this.drivers.size === 1) {
+      this.defaultDriver = driver.name;
+      this.logger.info('Set default driver', { driverName: driver.name });
+    }
+  }
+
+  /**
+   * Register a Datasource *definition* (ADR-0015).
+   *
+   * Distinct from {@link registerDriver}, which registers a live connection.
+   * This captures the declarative `schemaMode` + `external.allowWrites` so the
+   * write gate ({@link assertWriteAllowed}) can enforce external-datasource
+   * ownership. Safe to call repeatedly; last write wins.
+   */
+  registerDatasourceDef(def: { name: string; schemaMode?: string; external?: { allowWrites?: boolean } }): void {
+    if (!def?.name) return;
+    this.datasourceDefs.set(def.name, { schemaMode: def.schemaMode, external: def.external });
+  }
+
+  /**
+   * Write gate — Gate 3 of ADR-0015 §5.3.
+   *
+   * Blocks insert/update/delete against a federated datasource
+   * (`schemaMode !== 'managed'`) unless BOTH the datasource opts in
+   * (`external.allowWrites`) AND the object opts in (`external.writable`).
+   * Managed datasources (the common case, including the absence of any
+   * definition) are unaffected.
+   */
+  private assertWriteAllowed(objectName: string, operation: 'insert' | 'update' | 'delete'): void {
+    const object = this._registry.getObject(objectName) as any;
+    const dsName = object?.datasource;
+    if (!dsName || dsName === 'default') return;
+      }
+      throw err;
+    }
+  }
+
+  // ============================================
+  // Compatibility / Convenience API
+  // ============================================
+  // These methods provide a higher-level API matching the @objectql/core
+  // ObjectQL interface, enabling painless migration from the legacy layer.
+
+  /**
+   * Register a single object definition.
+   * 
+   * Proxies to SchemaRegistry.registerObject() with sensible defaults.
+   * Fields without a `name` property are auto-assigned from their key.
+   */
+  registerObject(
+    schema: ServiceObject,
+    packageId: string = '__runtime__',
+    namespace?: string
+  ): string {
+    // Auto-assign field names from keys
+    if (schema.fields) {
+      for (const [key, field] of Object.entries(schema.fields)) {
+        if (field && typeof field === 'object' && !('name' in field)) {
+          (field as any).name = key;
+        }
+      }
+    }
+    return this._registry.registerObject(schema, packageId, namespace);
+  }
+
+  /**
+   * Unregister a single object by name.
+   */
+  unregisterObject(name: string, packageId?: string): void {
+    if (packageId) {
+      this._registry.unregisterObjectsByPackage(packageId);
+    } else {
+      // Remove from generic metadata as fallback
+      this._registry.unregisterItem('object', name);
+    }
+  }
+
+  /**
+236:   * Dev-only schema auto-reconcile (issue #2186). When `'safe'`, `initObjects`
+308:      // materialized during `initObjects` — see `syncDeclaredIndexes`.
+342:   * Autonumber field configs per table, captured during initObjects.
+387:   * Per-table tenant-isolation column. Populated during `initObjects` by
+525:   * `initObjects` (tableName → fields). The source of truth that
+530:  /** Declared indexes per managed table (tableName → indexes[]), captured in `initObjects`. Used to recreate indexes after a SQLite table rebuild. */
+597:  async disconnect(): Promise<void> {
+598:    await this.knex.destroy();
+762:    // (`this.knex`), because `initObjects` pre-creates the table outside any data
+764:    // consumer that writes without `initObjects`). If we are already inside the
+801:      // a stale process-level flag. `initObjects` sets it durably up front, so
+953:    // locking on a second one (SQLite pool max=1). `initObjects` normally warms
+1036:    // keyed by object name (matching initObjects/registerExternalObject).
+1577:    await this.initObjects([{ ...objectDef, name: object }]);
+1587:   * explicit tenancy opt-out. Single source of truth for both {@link initObjects}
+1623:   * read-path counterpart to {@link initObjects} (ADR-0015 federation).
+1625:   * `initObjects` is gated by `assertSchemaMutable` and therefore throws for
+1633:   * below in sync with initObjects() if the field-type -> storage mapping changes.
+1710:  async initObjects(objects: Array<{ name: string; fields?: Record<string, any> }>): Promise<void> {
+1713:    this.assertSchemaMutable('initObjects');
+1793:      // Columns created unconditionally by initObjects — skip them when
+1907:   *   `initObjects` last synced (captured in {@link managedObjectFields}).
+2165:   * `initObjects` runs converge on the same identifier (and can detect an
+2482:   * `initObjects`). Returns null when the builder is not table-scoped yet.
+3117:      await adminKnex.destroy();

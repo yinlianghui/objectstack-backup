@@ -1,0 +1,374 @@
+2994:      case 'summary':
+   * Pass 2: Update records to fill deferred references.
+   * @default true
+   */
+  multiPass: z.boolean().default(true)
+    .describe('Enable multi-pass loading for circular dependencies'),
+
+  /**
+   * Default dataset mode when not specified per-dataset.
+   * @default 'upsert'
+   */
+  defaultMode: SeedMode.default('upsert')
+    .describe('Default conflict resolution strategy'),
+
+  /**
+   * Maximum number of records to process in a single batch.
+   * Controls memory usage for large datasets.
+   * @default 1000
+   */
+  batchSize: z.number().int().min(1).default(1000)
+    .describe('Maximum records per batch insert/upsert'),
+
+  /**
+   * Whether to wrap the entire load operation in a transaction.
+   * When true, all-or-nothing semantics apply.
+   * @default false
+   */
+  transaction: z.boolean().default(false)
+    .describe('Wrap entire load in a transaction (all-or-nothing)'),
+
+  /**
+   * Environment filter. Only datasets matching this environment are loaded.
+   * When not specified, all datasets are loaded regardless of env scope.
+   */
+  env: z.enum(['prod', 'dev', 'test']).optional()
+    .describe('Only load datasets matching this environment'),
+
+  /**
+   * Target organization for per-tenant seed loading.
+   *
+   * When set, the loader:
+   *   - Injects `organization_id: <id>` into every record before write
+   *     (unless the record already supplies one).
+   *   - Scopes existing-record lookups (`loadExistingRecords`,
+   *     `resolveFromDatabase`) to `organization_id = <id>`, so `upsert`
+   *     mode finds the per-org copy rather than another tenant's row.
+   *
+   * Use this from a `sys_organization` insert hook to give every new
+   * tenant a private copy of the artifact-shipped demo data (Salesforce
+   * sandbox style). Omit for cross-tenant / platform-wide seeds (e.g.
+   * `sys_permission_set`) — those rows should have `organization_id`
+   * NULL and are not filtered by the default tenant RLS.
+   */
+  organizationId: z.string().min(1).optional()
+    .describe('Target organization id for per-tenant seed replay'),
+
+  /**
+   * Identity bound to `os.user` / `os.org` when evaluating CEL expressions
+   * embedded in seed records (e.g. `owner_id: cel\`os.user.id\``,
+   * `organization_id: cel\`os.org.id\``).
+   *
+   * When omitted, `os.user` / `os.org` are simply unbound — and any record
+   * that references them fails loudly (the record is dropped with an
+   * actionable error rather than persisting the raw Expression envelope into
+   * the column). The runtime supplies a deterministic system user here so
+   * identity-derived seeds resolve even before the first human sign-up.
+   */
+  identity: SeedIdentitySchema.optional()
+    .describe('Identity bound to os.user / os.org when resolving CEL seed values'),
+}).describe('Seed data loader configuration'));
+
+export type SeedLoaderConfig = z.infer<typeof SeedLoaderConfigSchema>;
+
+/** Input type — all fields with defaults are optional */
+export type SeedLoaderConfigInput = z.input<typeof SeedLoaderConfigSchema>;
+
+// ==========================================================================
+// 6. Per-Object Load Result
+// ==========================================================================
+
+/**
+ * Result of loading a single object's dataset.
+ */
+export const SeedLoadResultSchema = lazySchema(() => z.object({
+  /** Target object name */
+  object: z.string().describe('Object that was loaded'),
+
+  /** Import mode used */
+  mode: SeedMode.describe('Import mode used'),
+
+  /** Number of records successfully inserted */
+  inserted: z.number().int().min(0).describe('Records inserted'),
+
+  /** Number of records successfully updated (upsert matched existing) */
+  updated: z.number().int().min(0).describe('Records updated'),
+
+  /** Number of records skipped (mode: ignore, or already exists) */
+  // ==========================================================================
+  // Internal: Write Operations
+  // ==========================================================================
+
+  /**
+   * Seed writes always run as a privileged system context. This bypasses
+   * RBAC checks (so seeds can target system tables like `sys_*`) and
+   * disables the SecurityPlugin's auto-injection of `organization_id` /
+   * `owner_id` — seeds either declare those fields explicitly per
+   * record, or are intentionally cross-tenant / global.
+   *
+   * `skipTriggers` suppresses record-change AUTOMATION (autolaunched flow
+   * triggers) for seed writes: a package's seed is pre-existing END-STATE
+   * reference/sample data, not a stream of user events, so firing
+   * on-create/on-update flows (notifications, escalations, assignments,
+   * approvals) for it is semantically wrong and dangerous — a self-triggering
+   * flow can loop and wedge the whole first-boot (2026-07-06 incident).
+   * Lifecycle HOOKS (derived/default fields, validation) still run.
+   */
+  private static readonly SEED_OPTIONS = { context: { isSystem: true, skipTriggers: true } } as const;
+
+  private async writeRecord(
+    objectName: string,
+    record: Record<string, unknown>,
+    mode: string,
+    externalId: string,
+    existingRecords?: Map<string, any>,
+  ): Promise<{ action: 'inserted' | 'updated' | 'skipped'; id?: string }> {
+    const externalIdValue = record[externalId];
+    const existing = existingRecords?.get(String(externalIdValue ?? ''));
+    const opts = SeedLoaderService.SEED_OPTIONS as any;
+
+    switch (mode) {
+      case 'insert': {
+        const result = await this.engine.insert(objectName, record, opts);
+        return { action: 'inserted', id: this.extractId(result) };
+      }
+
+      case 'update': {
+        if (!existing) {
+          return { action: 'skipped' };
+        }
+        const id = this.extractId(existing);
+        await this.engine.update(objectName, { ...record, id }, opts);
+        return { action: 'updated', id };
+      }
+
+      case 'upsert': {
+        if (existing) {
+          const id = this.extractId(existing);
+          await this.engine.update(objectName, { ...record, id }, opts);
+          return { action: 'updated', id };
+        } else {
+          const result = await this.engine.insert(objectName, record, opts);
+          return { action: 'inserted', id: this.extractId(result) };
+        }
+      }
+
+      case 'ignore': {
+        if (existing) {
+          return { action: 'skipped', id: this.extractId(existing) };
+        }
+        const result = await this.engine.insert(objectName, record, opts);
+        return { action: 'inserted', id: this.extractId(result) };
+      }
+
+      case 'replace': {
+        // Replace mode: just insert (caller should have cleared the table)
+        const result = await this.engine.insert(objectName, record, opts);
+        return { action: 'inserted', id: this.extractId(result) };
+      }
+
+      default: {
+        const result = await this.engine.insert(objectName, record, opts);
+        return { action: 'inserted', id: this.extractId(result) };
+      }
+    }
+  }
+
+  /** Rows per batch for the buffered-insert flush. See framework#2678. */
+  private static readonly BULK_BATCH_SIZE = 200;
+
+  /**
+   * Decide what {@link loadDataset}'s non-self-referencing (batched) path
+   * should do with a record — mirrors {@link writeRecord}'s mode/existing
+   * logic exactly, but WITHOUT performing the write, so insert decisions can
+   * be buffered and flushed as a batch instead of one call per record.
+   */
+  private decideWriteAction(
+    record: Record<string, unknown>,
+    mode: string,
+    externalId: string,
+    existingRecords?: Map<string, any>,
+  ): { action: 'insert' } | { action: 'update'; id: string } | { action: 'skip'; id?: string } {
+    const externalIdValue = record[externalId];
+    const existing = existingRecords?.get(String(externalIdValue ?? ''));
+  });
+
+  it('reports reference_ambiguous when a name matches more than one record', async () => {
+    // Second 张三 makes the name non-unique; the importer must refuse to guess.
+    await engine.insert('user', { id: 'u3', name: '张三', email: 'zhang2@x.com' });
+    const res = await call(route, {
+      format: 'json',
+      rows: [
+        { id: 'a', title: 'x', owner: '张三' },       // ambiguous name
+        { id: 'b', title: 'y', owner: 'zhang2@x.com' }, // unique email → resolves
+      ],
+    });
+    expect(res._json.errors).toBe(1);
+    expect(res._json.results.find((r: any) => !r.ok)).toMatchObject({ field: 'owner', code: 'reference_ambiguous' });
+    const b = await engine.findOne('task', { where: { id: 'b' } });
+    expect(b.owner).toBe('u3');
+  });
+
+  it('accepts a pasted record id directly via the id fast-path', async () => {
+    const res = await call(route, {
+      format: 'json',
+      rows: [{ id: 'c', title: 'z', owner: 'u1' }],
+    });
+    expect(res._json.errors).toBe(0);
+    const c = await engine.findOne('task', { where: { id: 'c' } });
+    expect(c.owner).toBe('u1');
+  });
+
+  it('surfaces per-row coercion errors without aborting the batch', async () => {
+    const res = await call(route, {
+      format: 'json',
+      rows: [
+        { id: 'ok', title: 'fine', score: '42' },
+        { id: 'bad', title: 'nope', score: 'not-a-number' },
+      ],
+    });
+    expect(res._json.ok).toBe(1);
+    expect(res._json.errors).toBe(1);
+    expect(res._json.results.find((r: any) => !r.ok)).toMatchObject({ field: 'score', code: 'invalid_number' });
+  });
+
+  it('dryRun coerces + previews create/update without persisting', async () => {
+    const res = await call(route, {
+      format: 'json', dryRun: true,
+      rows: [{ id: 'z', title: 'preview', done: '否' }],
+    });
+    expect(res._json).toMatchObject({ dryRun: true, ok: 1, created: 1 });
+    expect(await engine.findOne('task', { where: { id: 'z' } })).toBeNull();
+  });
+
+  it('writeMode:update touches an existing match and skips non-matches', async () => {
+    await engine.insert('task', { id: '100', title: 'old', score: 1 });
+    const res = await call(route, {
+      format: 'json', writeMode: 'update', matchFields: ['id'],
+      rows: [
+        { id: '100', title: 'new', score: 2 },   // matches → update
+        { id: '999', title: 'ghost' },            // no match → skip
+      ],
+    });
+    expect(res._json).toMatchObject({ updated: 1, skipped: 1, created: 0 });
+    const row = await engine.findOne('task', { where: { id: '100' } });
+    expect(row).toMatchObject({ title: 'new', score: 2 });
+    expect(await engine.findOne('task', { where: { id: '999' } })).toBeNull();
+  });
+
+  it('writeMode:upsert updates a match by a non-id field, else creates', async () => {
+    await engine.insert('task', { id: '200', title: 'Acme', score: 1 });
+    const res = await call(route, {
+      format: 'json', writeMode: 'upsert', matchFields: ['title'],
+      rows: [
+        { title: 'Acme', score: 9 },     // matches by title → update
+        { title: 'Umbrella', score: 5 }, // no match → create
+      ],
+    });
+    expect(res._json).toMatchObject({ updated: 1, created: 1 });
+    const acme = await engine.findOne('task', { where: { title: 'Acme' } });
+    expect(acme).toMatchObject({ id: '200', score: 9 });
+    const umbrella = await engine.findOne('task', { where: { title: 'Umbrella' } });
+    expect(umbrella?.score).toBe(5);
+  });
+
+  it('rejects update/upsert without matchFields', async () => {
+    const res = await call(route, { format: 'json', writeMode: 'upsert', rows: [{ title: 'x' }] });
+    expect(res._status).toBe(400);
+    expect(res._json.code).toBe('INVALID_REQUEST');
+  });
+
+  it('parses a native xlsx workbook server-side and coerces cells like csv', async () => {
+    const ExcelJS: any = (await import('exceljs')).default ?? (await import('exceljs'));
+    const wb = new ExcelJS.Workbook();
+    const ws = wb.addWorksheet('Sheet1');
+    ws.addRow(['ID', '标题', '完成', '优先级', '分数', '截止', '负责人']);
+    ws.addRow(['1', '写代码', '是', '高', 1200, new Date('2026-06-30T00:00:00Z'), '张三']);
+    ws.addRow(['2', '测试', '否', '低', 3, '2026/07/01', '李四']);
+    const buf = await wb.xlsx.writeBuffer();
+    const xlsxBase64 = Buffer.from(buf).toString('base64');
+
+    const res = await call(route, {
+      format: 'xlsx', xlsxBase64,
+      mapping: { ID: 'id', 标题: 'title', 完成: 'done', 优先级: 'priority', 分数: 'score', 截止: 'due', 负责人: 'owner' },
+    });
+    expect(res._json).toMatchObject({ total: 2, ok: 2, errors: 0, created: 2 });
+    const one = await engine.findOne('task', { where: { id: '1' } });
+    expect(one).toMatchObject({ title: '写代码', done: true, priority: 'high', score: 1200, owner: 'u1' });
+    expect(String(one.due)).toContain('2026-06-30');
+    const two = await engine.findOne('task', { where: { id: '2' } });
+    expect(two).toMatchObject({ title: '测试', done: false, priority: 'low', score: 3, owner: 'u2' });
+  });
+
+  it('reads xlsxBase64 without an explicit format and honors the sheet selector', async () => {
+    const ExcelJS: any = (await import('exceljs')).default ?? (await import('exceljs'));
+    const wb = new ExcelJS.Workbook();
+    wb.addWorksheet('Empty'); // decoy first sheet
+    const ws = wb.addWorksheet('Data');
+    ws.addRow(['id', 'title', 'score']);
+    ws.addRow(['x1', 'from-named-sheet', 7]);
+    const buf = await wb.xlsx.writeBuffer();
+    const xlsxBase64 = Buffer.from(buf).toString('base64');
+
+    const res = await call(route, { xlsxBase64, sheet: 'Data' });
+    expect(res._json).toMatchObject({ total: 1, ok: 1, created: 1 });
+    const row = await engine.findOne('task', { where: { id: 'x1' } });
+    expect(row).toMatchObject({ title: 'from-named-sheet', score: 7 });
+  });
+
+  it('rejects a malformed xlsx payload with 400', async () => {
+    const res = await call(route, { format: 'xlsx', xlsxBase64: Buffer.from('not a workbook').toString('base64') });
+    expect(res._status).toBe(400);
+    expect(res._json.code).toBe('INVALID_REQUEST');
+    expect(String(res._json.error)).toMatch(/xlsx/i);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Named mapping artifacts (#2611) — `mappingName` resolves a registered
+// `mapping` item and applies its fieldMapping pipeline before coercion.
+// ---------------------------------------------------------------------------
+describe('import route — named mapping artifact (#2611)', () => {
+  let route: any;
+  let engine: any;
+
+  const TASK_CSV_MAPPING = {
+    name: 'task_feed_import',
+    label: 'Task feed import',
+    sourceFormat: 'csv',
+    targetObject: 'task',
+    fieldMapping: [
+      { source: 'ID', target: 'id', transform: 'none' },
+      { source: 'Task Title', target: 'title', transform: 'none' },
+      // Source system codes → select LABELS; the built-in metaMap coercion
+      // then turns the label (高/低) into the storage code (high/low) —
+      // the artifact transform and the coercion pipeline COMPOSE.
+      { source: 'Prio', target: 'priority', transform: 'map', params: { valueMap: { P1: '高', P3: '低' } } },
+      { source: 'Assignee', target: 'owner', transform: 'lookup' },
+      { source: 'ignored_by_projection', target: 'score', transform: 'constant', params: { value: 5 } },
+    ],
+    mode: 'upsert',
+    upsertKey: ['id'],
+  };
+
+  beforeEach(async () => {
+    ({ route, engine } = await boot());
+    engine.registry.registerItem('mapping', TASK_CSV_MAPPING as any, 'name');
+    engine.registry.registerItem(
+      'mapping',
+      { ...TASK_CSV_MAPPING, name: 'user_only_mapping', targetObject: 'user' } as any,
+      'name',
+    );
+    engine.registry.registerItem(
+      'mapping',
+      {
+        name: 'task_js_mapping', targetObject: 'task', sourceFormat: 'csv',
+        fieldMapping: [{ source: 'x', target: 'title', transform: 'javascript' }],
+      } as any,
+      'name',
+    );
+    engine.registry.registerItem(
+      'mapping',
+      { ...TASK_CSV_MAPPING, name: 'task_json_mapping', sourceFormat: 'json' } as any,
+      'name',
+    );

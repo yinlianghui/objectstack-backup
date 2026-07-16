@@ -1,0 +1,43 @@
+{
+  "capturedAt": "2026-07-17T00:23:15+08:00",
+  "framework": {
+    "repository": "objectstack-ai/framework",
+    "commit": "98874656ffc50ce1531af52346228ffcdda73fba",
+    "productCodeModified": false
+  },
+  "archiveBase": {
+    "repository": "objectstack-ai/objectstack-backup",
+    "originMainCommit": "958b93c3853d5e46dc403d2d66ee5534880f91cc",
+    "branch": "codex/issue-2678-reconstructed-fixtures"
+  },
+  "runtime": {
+    "node": "v22.14.0",
+    "pnpm": "10.31.0",
+    "tsx": "4.23.0",
+    "artifactTool": "2.8.24",
+    "betterSqlite3": "12.11.1"
+  },
+  "system": {
+    "os": "macOS 15.7.7 (24G720)",
+    "kernel": "Darwin 24.6.0",
+    "architecture": "arm64",
+    "timezone": "Asia/Shanghai"
+  },
+  "disk": {
+    "initialAvailableKiB": 18911648,
+    "stopThresholdKiB": 10485760,
+    "thresholdBreached": false
+  },
+  "testParameters": {
+    "scope": "Issue #2678 problem one only",
+    "rowsPerDataset": 1000,
+    "batchSize": 200,
+    "amountRange": [1, 1000],
+    "database": "real SQLite through @objectstack/driver-sql",
+    "seedMode": "insert",
+    "importMode": "insert",
+    "singleParentCount": 1,
+    "tenParentCount": 10,
+    "wrappers": "count-and-delegate only"
+  }
+}

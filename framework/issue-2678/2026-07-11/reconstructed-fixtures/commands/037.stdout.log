@@ -1,0 +1,164 @@
+413:export class ConcurrentUpdateError extends Error {
+418:    constructor(opts: { currentVersion: string | null; currentRecord: unknown; message?: string }) {
+762:export class ObjectStackProtocolImplementation implements ObjectStackProtocol {
+800:    constructor(
+// Copyright (c) 2025 ObjectStack. Licensed under the Apache-2.0 license.
+
+export { ObjectStackProtocolImplementation, ConcurrentUpdateError, normalizeViewMetadata } from './protocol.js';
+export type { UninstallCleanup, UninstallCleanupOutcome } from './protocol.js';
+
+export { SysMetadataRepository, resetEnvWritableMetadataTypes } from './sys-metadata-repository.js';
+export type {
+  SysMetadataEngine,
+  SysMetadataRepositoryOptions,
+  OverlayState,
+  ExtendedOperation,
+} from './sys-metadata-repository.js';
+
+export {
+  computeMetadataDiagnostics,
+  computeViewReferenceDiagnostics,
+  decorateMetadataItem,
+  decorateMetadataItems,
+} from './metadata-diagnostics.js';
+export type { MetadataDiagnostics } from './metadata-diagnostics.js';
+
+export type { MetadataHostEngine } from './host-engine.js';
+
+export { SeedLoaderService } from './seed-loader.js';
+export { runBuildProbes } from './build-probes.js';
+export type {
+  RuntimeBuildIssue,
+  BuildProbeReport,
+  RunBuildProbesOptions,
+  ProbeEngine,
+  ProbeAnalytics,
+} from './build-probes.js';
+                // (Record<string, FieldDefinition>) — insertion order is
+                // display order. The SchemaForm engine recognises
+                // `additionalProperties` as a Record and dispatches to
+                // the `record` form-field renderer (ADR-0007). The form
+                // layout in `object.form.ts` declares `type: 'record'`
+                // so the inner `additionalProperties` schema is used to
+                // shape each value.
+                type: 'object',
+                default: {},
+                additionalProperties: {
+                    type: 'object',
+                    properties: {
+                        name: { type: 'string' },
+                        label: { type: 'string' },
+                        type: { type: 'string' },
+                        required: { type: 'boolean', default: false },
+                        unique: { type: 'boolean', default: false },
+                        defaultValue: {},
+                        description: { type: 'string' },
+                    },
+                    required: ['type'],
+                },
+            },
+            capabilities: { type: 'object', additionalProperties: true },
+        },
+        required: ['name'],
+        additionalProperties: true,
+    },
+    action: {
+        type: 'object',
+        properties: {
+            name: { type: 'string' },
+            label: { type: 'string' },
+            objectName: { type: 'string' },
+            icon: { type: 'string' },
+            type: { type: 'string', enum: ['url', 'flow', 'api', 'script'] },
+            variant: { type: 'string', enum: ['primary', 'secondary', 'danger', 'ghost', 'outline'] },
+            target: { type: 'string' },
+            method: { type: 'string', enum: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] },
+            body: {
+                type: 'array',
+                default: [],
+                items: {
+                    type: 'object',
+                    properties: {
+                        line: { type: 'string' },
+                    },
+                },
+            },
+            params: {
+                type: 'array',
+                default: [],
+                items: {
+                    type: 'object',
+                    properties: {
+                        name: { type: 'string' },
+                        label: { type: 'string' },
+                        type: { type: 'string' },
+                        required: { type: 'boolean', default: false },
+                    },
+                    required: ['name'],
+                },
+            },
+            confirmText: { type: 'string' },
+            successMessage: { type: 'string' },
+            refreshAfter: { type: 'boolean', default: true },
+1634:  async init() {
+  async use(manifestPart: any, runtimePart?: any) {
+    this.logger.debug('Loading plugin', { 
+      hasManifest: !!manifestPart, 
+      hasRuntime: !!runtimePart 
+    });
+
+    // 1. Validate / Register Manifest
+    if (manifestPart) {
+      this.registerApp(manifestPart);
+    }
+
+    // 2. Execute Runtime
+    if (runtimePart) {
+       const pluginDef = (runtimePart as any).default || runtimePart;
+       if (pluginDef.onEnable) {
+          this.logger.debug('Executing plugin runtime onEnable');
+          
+          const context: ObjectQLHostContext = {
+            ql: this,
+            logger: this.logger,
+            // Expose the driver registry helper explicitly if needed
+            drivers: {
+                register: (driver: IDataDriver) => this.registerDriver(driver)
+            },
+            ...this.hostContext
+          };
+          
+          await pluginDef.onEnable(context);
+          this.logger.debug('Plugin runtime onEnable completed');
+       }
+    }
+  }
+
+  /**
+   * Register a hook
+   * @param event The event name (e.g. 'beforeFind', 'afterInsert')
+   * @param handler The handler function
+   * @param options Optional: target object(s) and priority
+   */
+  registerHook(event: string, handler: HookHandler, options?: {
+    object?: string | string[];
+    priority?: number;
+    packageId?: string;
+    /** Original metadata Hook definition (set by `bindHooksToEngine`). */
+    meta?: any;
+    /** Stable name from metadata (set by `bindHooksToEngine`). */
+    hookName?: string;
+  }) {
+    if (!this.hooks.has(event)) {
+        this.hooks.set(event, []);
+    }
+    const entries = this.hooks.get(event)!;
+    entries.push({
+      handler,
+      object: options?.object,
+      priority: options?.priority ?? 100,
+      packageId: options?.packageId,
+      meta: options?.meta,
+      hookName: options?.hookName,
+    });
+    // Sort by priority (lower runs first)

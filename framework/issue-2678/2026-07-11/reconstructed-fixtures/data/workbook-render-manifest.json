@@ -1,0 +1,44 @@
+[
+  {
+    "sheetName": "README",
+    "range": "A1:D14",
+    "fileName": "readme.png",
+    "bytes": 102134
+  },
+  {
+    "sheetName": "Seed Data",
+    "range": "A1:D28",
+    "fileName": "seed-data.png",
+    "bytes": 144024
+  },
+  {
+    "sheetName": "Import Data",
+    "range": "A1:D28",
+    "fileName": "import-data.png",
+    "bytes": 159195
+  },
+  {
+    "sheetName": "Summary Parents",
+    "range": "A1:D14",
+    "fileName": "summary-parents.png",
+    "bytes": 73836
+  },
+  {
+    "sheetName": "Single Parent",
+    "range": "A1:D28",
+    "fileName": "single-parent.png",
+    "bytes": 243446
+  },
+  {
+    "sheetName": "Ten Parents",
+    "range": "A1:D28",
+    "fileName": "ten-parents.png",
+    "bytes": 197271
+  },
+  {
+    "sheetName": "Expected Results",
+    "range": "A1:G26",
+    "fileName": "expected-results.png",
+    "bytes": 196137
+  }
+]

@@ -1,0 +1,25 @@
+node:internal/modules/run_main:122
+    triggerUncaughtException(
+    ^
+
+Error: Transform failed with 24 errors:
+/Users/<redacted>/Documents/GitHub/issue-2678-reconstructed-fixtures-staging-20260716/source/revalidate-problem-one.ts:63:76: ERROR: Top-level await is currently not supported with the "cjs" output format
+/Users/<redacted>/Documents/GitHub/issue-2678-reconstructed-fixtures-staging-20260716/source/revalidate-problem-one.ts:124:2: ERROR: Top-level await is currently not supported with the "cjs" output format
+/Users/<redacted>/Documents/GitHub/issue-2678-reconstructed-fixtures-staging-20260716/source/revalidate-problem-one.ts:129:0: ERROR: Top-level await is currently not supported with the "cjs" output format
+/Users/<redacted>/Documents/GitHub/issue-2678-reconstructed-fixtures-staging-20260716/source/revalidate-problem-one.ts:142:0: ERROR: Top-level await is currently not supported with the "cjs" output format
+/Users/<redacted>/Documents/GitHub/issue-2678-reconstructed-fixtures-staging-20260716/source/revalidate-problem-one.ts:143:0: ERROR: Top-level await is currently not supported with the "cjs" output format
+...
+    at failureErrorWithLog (/Users/<redacted>/Documents/GitHub/framework-issue-2678-reconstructed-fixtures-20260716/node_modules/.pnpm/esbuild@0.28.1/node_modules/esbuild/lib/main.js:1748:15)
+    at /Users/<redacted>/Documents/GitHub/framework-issue-2678-reconstructed-fixtures-20260716/node_modules/.pnpm/esbuild@0.28.1/node_modules/esbuild/lib/main.js:1017:50
+    at responseCallbacks.<computed> (/Users/<redacted>/Documents/GitHub/framework-issue-2678-reconstructed-fixtures-20260716/node_modules/.pnpm/esbuild@0.28.1/node_modules/esbuild/lib/main.js:884:9)
+    at handleIncomingPacket (/Users/<redacted>/Documents/GitHub/framework-issue-2678-reconstructed-fixtures-20260716/node_modules/.pnpm/esbuild@0.28.1/node_modules/esbuild/lib/main.js:939:12)
+    at Socket.readFromStdout (/Users/<redacted>/Documents/GitHub/framework-issue-2678-reconstructed-fixtures-20260716/node_modules/.pnpm/esbuild@0.28.1/node_modules/esbuild/lib/main.js:862:7)
+    at Socket.emit (node:events:518:28)
+    at addChunk (node:internal/streams/readable:561:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    at Readable.push (node:internal/streams/readable:392:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23) {
+  name: 'TransformError'
+}
+
+Node.js v22.14.0

@@ -1,0 +1,4 @@
+HELP
+{"kind":"formula","name":"fx.COUNTIF","summary":"Counts the number of cells within a range that meet the given condition","category":"statistical","examples":["=COUNTIF(A1:A5, \">0\")"],"notes":["range (range, required): Is the range of cells from which you want to count nonblank cells","criteria (criteria, required): Is the condition in the form of a number, expression, or text that defines which cells will be counted"]}
+INSPECT
+{"kind":"table","sheet":"Boolean Test","address":"A1:B6","rows":6,"cols":2,"values":[[true,0],[false,2],[true,0],[false,2],[null,0],[null,0]]}

@@ -1,0 +1,15 @@
+Inspect result written to file: /Users/<redacted>/Documents/GitHub/issue-2678-reconstructed-fixtures-staging-20260716/data/issue-2678-reconstructed-data-source.xlsx.inspect.ndjson
+{
+  "provenance": "Data source reconstructed from the final report and revalidated; the original temporary fixture no longer exists.",
+  "outputDir": "/Users/<redacted>/Documents/GitHub/issue-2678-reconstructed-fixtures-staging-20260716/data",
+  "workbookPath": "/Users/<redacted>/Documents/GitHub/issue-2678-reconstructed-fixtures-staging-20260716/data/issue-2678-reconstructed-data-source.xlsx",
+  "csvFiles": [
+    "qa_seed_item.csv",
+    "qa_import_item.csv",
+    "qa_summary_parents.csv",
+    "qa_summary_child_single_parent.csv",
+    "qa_summary_child_ten_parents.csv"
+  ],
+  "renderedSheets": 7,
+  "formulaErrorScan": "{\"kind\":\"notice\",\"message\":\"Cell search matched 0 entries.\"}"
+}

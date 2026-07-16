@@ -1,0 +1,623 @@
+// Copyright (c) 2025 ObjectStack. Licensed under the Apache-2.0 license.
+
+import type { IDataEngine, IMetadataService, ISeedLoaderService } from '@objectstack/spec/contracts';
+import type {
+  SeedLoaderRequest,
+  SeedLoaderResult,
+  SeedLoaderConfig,
+  SeedLoaderConfigInput,
+  ObjectDependencyGraph,
+  ObjectDependencyNode,
+  ReferenceResolution,
+  ReferenceResolutionError,
+  SeedLoadResult,
+  Seed,
+} from '@objectstack/spec/data';
+import { SeedLoaderConfigSchema } from '@objectstack/spec/data';
+import { resolveSeedRecord } from '@objectstack/formula';
+import { bulkWrite, withTransientRetry, type BulkWriteRowResult } from '@objectstack/core';
+
+interface Logger {
+  info(message: string, meta?: Record<string, any>): void;
+  warn(message: string, meta?: Record<string, any>): void;
+  error(message: string, error?: Error, meta?: Record<string, any>): void;
+  debug(message: string, meta?: Record<string, any>): void;
+}
+
+/** Default field used for externalId matching on target objects */
+const DEFAULT_EXTERNAL_ID_FIELD = 'name';
+
+/**
+ * SeedLoaderService — Runtime implementation of ISeedLoaderService
+ *
+ * Provides metadata-driven seed data loading with:
+ * - Automatic lookup/master_detail reference resolution via externalId
+ * - Topological dependency ordering (parents before children)
+ * - Multi-pass loading for circular references
+ * - Dry-run validation mode
+ * - Upsert support honoring SeedSchema mode
+ * - Actionable error reporting
+ */
+export class SeedLoaderService implements ISeedLoaderService {
+  private engine: IDataEngine;
+  private metadata: IMetadataService;
+  private logger: Logger;
+  /**
+   * Tenant org to stamp BUSINESS seed rows with when the caller pinned no
+   * explicit `config.organizationId` (resolved per {@link resolveSoleOrganizationId}).
+   * Set once per {@link load}; never applied to `sys_`/`cloud_`/`ai_` platform
+   * seeds (those stay intentionally global/cross-tenant).
+   */
+  private fallbackOrgId?: string;
+
+  constructor(engine: IDataEngine, metadata: IMetadataService, logger: Logger) {
+    this.engine = engine;
+    this.metadata = metadata;
+    this.logger = logger;
+  }
+
+  // ==========================================================================
+  // Public API
+  // ==========================================================================
+
+  async load(request: SeedLoaderRequest): Promise<SeedLoaderResult> {
+    const startTime = Date.now();
+    const config = request.config;
+    const allErrors: ReferenceResolutionError[] = [];
+    const allResults: SeedLoadResult[] = [];
+
+    // When the caller pinned no target org (an in-process publish has no active
+    // user session — the AI build agent's publish path), BUSINESS seed rows
+    // would land `organization_id = NULL` and then vanish under strict
+    // org-scoping. If the tenant has exactly ONE organization, adopt it as a
+    // fallback so business seeds carry the tenant key like a normal write.
+    // Zero/many orgs → leave unset (genuinely ambiguous → keep the historical
+    // global/cross-tenant behavior; the publisher must scope explicitly).
+    this.fallbackOrgId =
+      config.organizationId == null ? await this.resolveSoleOrganizationId() : undefined;
+
+    // 1. Filter datasets by environment
+    const datasets = this.filterByEnv(request.seeds, config.env);
+
+    if (datasets.length === 0) {
+      return this.buildEmptyResult(config, Date.now() - startTime);
+    }
+
+    // 2. Build dependency graph
+    const objectNames = datasets.map(d => d.object);
+    const graph = await this.buildDependencyGraph(objectNames);
+
+    this.logger.info('[SeedLoader] Dependency graph built', {
+      objects: objectNames.length,
+      insertOrder: graph.insertOrder,
+      circularDeps: graph.circularDependencies.length,
+    });
+
+    // 3. Order datasets by topological insert order
+    const orderedDatasets = this.orderDatasets(datasets, graph.insertOrder);
+
+    // 4. Build reference lookup map from metadata (field → target object)
+    const refMap = this.buildReferenceMap(graph);
+
+    // 5. Pass 1: Insert/upsert records, resolving references
+    const insertedRecords = new Map<string, Map<string, string>>(); // object → externalIdValue → internalId
+    const deferredUpdates: DeferredUpdate[] = [];
+
+    for (const dataset of orderedDatasets) {
+      const result = await this.loadDataset(
+        dataset, config, refMap, insertedRecords, deferredUpdates, allErrors
+      );
+      allResults.push(result);
+
+      if (config.haltOnError && result.errored > 0) {
+        this.logger.warn('[SeedLoader] Halting on first error', { object: dataset.object });
+        break;
+      }
+    }
+
+    // 6. Pass 2: Resolve deferred references (circular dependencies)
+    if (config.multiPass && deferredUpdates.length > 0 && !config.dryRun) {
+      this.logger.info('[SeedLoader] Pass 2: resolving deferred references', {
+        count: deferredUpdates.length,
+      });
+      await this.resolveDeferredUpdates(deferredUpdates, insertedRecords, allResults, allErrors, config.organizationId);
+    }
+
+    // 7. Build final result
+    const durationMs = Date.now() - startTime;
+    return this.buildResult(config, graph, allResults, allErrors, durationMs);
+  }
+
+  async buildDependencyGraph(objectNames: string[]): Promise<ObjectDependencyGraph> {
+    const nodes: ObjectDependencyNode[] = [];
+    const objectSet = new Set(objectNames);
+
+    for (const objectName of objectNames) {
+      const objDef = await this.metadata.getObject(objectName) as any;
+      const dependsOn: string[] = [];
+      const references: ReferenceResolution[] = [];
+
+      if (objDef && objDef.fields) {
+        const fields = objDef.fields as Record<string, any>;
+        for (const [fieldName, fieldDef] of Object.entries(fields)) {
+          if (
+            (fieldDef.type === 'lookup' || fieldDef.type === 'master_detail' || fieldDef.type === 'user') &&
+            fieldDef.reference
+          ) {
+            const targetObject = fieldDef.reference as string;
+
+            // Track dependency ordering only for objects within the graph
+            if (objectSet.has(targetObject) && !dependsOn.includes(targetObject)) {
+              dependsOn.push(targetObject);
+            }
+
+            // Track ALL references for resolution (target may exist in database)
+            references.push({
+              field: fieldName,
+              targetObject,
+              targetField: DEFAULT_EXTERNAL_ID_FIELD,
+              fieldType: fieldDef.type as 'lookup' | 'master_detail' | 'user',
+            });
+          }
+        }
+      }
+
+      nodes.push({ object: objectName, dependsOn, references });
+    }
+
+    // Topological sort
+    const { insertOrder, circularDependencies } = this.topologicalSort(nodes);
+
+    return { nodes, insertOrder, circularDependencies };
+  }
+
+  async validate(datasets: Seed[], config?: SeedLoaderConfigInput): Promise<SeedLoaderResult> {
+    const parsedConfig = SeedLoaderConfigSchema.parse({ ...config, dryRun: true });
+    return this.load({ seeds: datasets, config: parsedConfig });
+  }
+
+  // ==========================================================================
+  // Internal: Seed Loading
+  // ==========================================================================
+
+  private async loadDataset(
+    dataset: Seed,
+    config: SeedLoaderConfig,
+    refMap: Map<string, ReferenceResolution[]>,
+    insertedRecords: Map<string, Map<string, string>>,
+    deferredUpdates: DeferredUpdate[],
+    allErrors: ReferenceResolutionError[],
+  ): Promise<SeedLoadResult> {
+    const objectName = dataset.object;
+    const mode = dataset.mode || config.defaultMode;
+    const externalId = dataset.externalId || 'name';
+
+    let inserted = 0;
+    let updated = 0;
+    let skipped = 0;
+    let errored = 0;
+    let referencesResolved = 0;
+    let referencesDeferred = 0;
+    const errors: ReferenceResolutionError[] = [];
+
+    // Ensure the object's record map exists
+    if (!insertedRecords.has(objectName)) {
+      insertedRecords.set(objectName, new Map());
+    }
+
+    // Pre-load existing records for upsert matching. When a target
+    // organization is set, scope the lookup so each tenant gets its
+    // own copy (otherwise upsert would clobber other tenants' rows
+    // that share the same natural key — e.g. `name: 'Acme Corp'`).
+    let existingRecords: Map<string, any> | undefined;
+    if ((mode === 'upsert' || mode === 'update' || mode === 'ignore') && !config.dryRun) {
+      existingRecords = await this.loadExistingRecords(
+        objectName,
+        externalId,
+        config.organizationId,
+      );
+    }
+
+    // Get reference resolutions for this object
+    const objectRefs = refMap.get(objectName) || [];
+
+    // Self-referencing objects (e.g. `employee.manager_id -> employee`) can
+    // have record i reference record j<i from the SAME dataset by natural
+    // key; that only resolves via `insertedRecords` once record j has
+    // actually been written (see the reference-resolution loop below). Batch
+    // writes defer the write past the point the record was resolved, which
+    // would break that same-batch ordering — so self-referencing datasets
+    // keep the historical strictly-sequential per-record write path
+    // (`writeRecord`, unchanged) and opt out of batching entirely. Every
+    // other dataset (the overwhelming majority — contact/lead/opportunity/…
+    // reference OTHER objects, already fully loaded via topological order)
+    // gets the batched path below. See framework#2678.
+    const hasSelfRef = objectRefs.some(ref => ref.targetObject === objectName);
+
+    // Records resolved as inserts (mode 'insert'/'replace', or an unmatched
+    // upsert/ignore) are buffered here and flushed in batches through the
+    // engine's array-form insert() — one round-trip per batch instead of one
+    // per record, with transient-error retry and per-row degradation on a
+  /** Maximum depth for recursive expand to prevent infinite loops */
+  private static readonly MAX_EXPAND_DEPTH = 3;
+  private static readonly MAX_CASCADE_DEPTH = 10;
+  /** In-memory next-value cache per `object.field` for autonumber generation,
+   *  lazily seeded from the current max in the store. */
+  private readonly autonumberCounters = new Map<string, number>();
+
+  /** Lazily-built index: child object name → roll-up summary descriptors on
+   *  parent objects that aggregate it. Invalidated when packages register. */
+  private summaryIndex: Map<string, SummaryDescriptor[]> | null = null;
+
+  /** Invalidate the cached roll-up summary index (call when metadata changes). */
+  private invalidateSummaryIndex(): void {
+    this.summaryIndex = null;
+  }
+
+  /** Scan all registered objects for `summary` fields and index them by the
+   *  child object they aggregate, resolving the child→parent FK field. */
+  private buildSummaryIndex(): Map<string, SummaryDescriptor[]> {
+    const index = new Map<string, SummaryDescriptor[]>();
+    let objects: any[] = [];
+    try { objects = (this._registry as any).getAllObjects?.() ?? []; } catch { objects = []; }
+    for (const parent of objects) {
+      const fields = parent?.fields;
+      if (!fields || typeof fields !== 'object' || Array.isArray(fields)) continue;
+      for (const [summaryField, def] of Object.entries(fields)) {
+        const d: any = def;
+        if (d?.type !== 'summary' || !d.summaryOperations) continue;
+        const so = d.summaryOperations;
+        const childObject = so.object;
+        const fn = so.function;
+        if (!childObject || !fn) continue;
+        // Resolve the FK on the child pointing back to this parent.
+        let fkField: string | undefined = so.relationshipField;
+        if (!fkField) {
+          const child = this._registry.getObject(childObject) as any;
+          const cfields = child?.fields || {};
+          for (const [cfName, cdef] of Object.entries(cfields)) {
+            const cd: any = cdef;
+            if ((cd?.type === 'master_detail' || cd?.type === 'lookup') && cd?.reference === parent.name) {
+              fkField = cfName;
+              break;
+            }
+          }
+        }
+        if (!fkField) continue; // can't resolve the relationship — skip
+        const list = index.get(childObject) ?? [];
+        list.push({ parentObject: parent.name, summaryField, fkField, fn, sourceField: so.field });
+        index.set(childObject, list);
+      }
+    }
+    return index;
+  }
+
+  private getSummaryDescriptors(childObject: string): SummaryDescriptor[] {
+    if (!this.summaryIndex) this.summaryIndex = this.buildSummaryIndex();
+    return this.summaryIndex.get(childObject) ?? [];
+  }
+
+  /**
+   * Recompute roll-up `summary` fields on parent records after a child write.
+   * For each affected parent (the FK value on the changed/old child record), it
+   * aggregates the child collection and writes the result onto the parent's
+   * summary field. Runs in the caller's execution context so it joins the same
+   * transaction (e.g. the cross-object batch) when one is open.
+   */
+  private async recomputeSummaries(
+    childObject: string,
+    records: any,
+    previous: any,
+    execCtx?: ExecutionContext,
+  ): Promise<void> {
+    const descriptors = this.getSummaryDescriptors(childObject);
+    if (descriptors.length === 0) return;
+    const recs = Array.isArray(records) ? records : records ? [records] : [];
+    const prevs = Array.isArray(previous) ? previous : previous ? [previous] : [];
+    for (const desc of descriptors) {
+      const ids = new Set<string>();
+      for (const r of recs) { const v = r?.[desc.fkField]; if (v != null && v !== '') ids.add(String(v)); }
+      for (const p of prevs) { const v = p?.[desc.fkField]; if (v != null && v !== '') ids.add(String(v)); }
+      for (const parentId of ids) {
+        try {
+          const rows = await this.aggregate(childObject, {
+            where: { [desc.fkField]: parentId },
+            aggregations: [{
+              function: desc.fn,
+              ...(desc.fn === 'count' ? {} : { field: desc.sourceField }),
+              alias: 'value',
+            }],
+            context: execCtx,
+          } as any);
+          let value = rows?.[0]?.value;
+          if (value == null) value = (desc.fn === 'count' || desc.fn === 'sum') ? 0 : null;
+          await this.update(desc.parentObject, { id: parentId, [desc.summaryField]: value }, { context: execCtx } as any);
+        } catch (err) {
+          this.logger.warn('Roll-up summary recompute failed', {
+            childObject, parentObject: desc.parentObject, parentId, field: desc.summaryField,
+            error: (err as any)?.message,
+          });
+        }
+      }
+    }
+  }
+
+  /**
+   * Post-process expand: resolve lookup/master_detail fields by batch-loading related records.
+   * 
+   * This is a driver-agnostic implementation that uses secondary queries ($in batches)
+   * to load related records, then injects them into the result set.
+   * 
+   * @param objectName - The source object name
+   * @param records - The records returned by the driver
+   * @param expand - The expand map from QueryAST (field name → nested QueryAST)
+   * @param depth - Current recursion depth (0-based)
+   * @returns Records with expanded lookup fields (IDs replaced by full objects)
+   */
+      const nowSnap = new Date();
+      const defaultedData = Array.isArray(opCtx.data)
+        ? (opCtx.data as any[]).map((row) =>
+            this.applyFieldDefaults(object, row as Record<string, unknown>, opCtx.context, nowSnap),
+          )
+        : this.applyFieldDefaults(object, opCtx.data as Record<string, unknown>, opCtx.context, nowSnap);
+
+      const hookContext: HookContext = {
+          object,
+          event: 'beforeInsert',
+          input: { data: defaultedData, options: opCtx.options },
+          session: this.buildSession(opCtx.context),
+          api: this.buildHookApi(opCtx.context),
+          transaction: opCtx.context?.transaction,
+          ql: this
+      };
+      await this.triggerHooks('beforeInsert', hookContext);
+      // Thread the open transaction (if any) into the driver-facing
+      // options so that knex's `.transacting(trx)` is honoured. Without
+      // this, calls inside a `engine.transaction(...)` block would deadlock
+      // on SQLite's single-connection pool. Also propagates tenantId so
+      // the driver can enforce per-tenant isolation.
+      hookContext.input.options = this.buildDriverOptions(opCtx.context, hookContext.input.options as any);
+
+      try {
+        let result;
+        const schemaForValidation = this._registry.getObject(object);
+        // When the driver generates autonumbers natively (persistent SQL
+        // sequence), the engine defers to it — see #1603.
+        const driverOwnsAutonumber = (driver as any)?.supports?.autonumber === true;
+        if (Array.isArray(hookContext.input.data)) {
+          // Defaults are already resolved above (pre-hook, #2703); the hook may
+          // have overridden or added fields — take its data as-is.
+          const rows = hookContext.input.data as Array<Record<string, unknown>>;
+          for (const r of rows) {
+            await this.applyAutonumbers(object, r as Record<string, unknown>, opCtx.context, driverOwnsAutonumber);
+          }
+          for (const r of rows) {
+            await this.encryptSecretFields(object, r, opCtx.context, hookContext.input.options);
+          }
+          for (const r of rows) {
+            normalizeMultiValueFields(schemaForValidation, r);
+            validateRecord(schemaForValidation, r, 'insert');
+            evaluateValidationRules(schemaForValidation as any, r, 'insert', { logger: this.logger, currentUser: this.buildEvalUser(opCtx.context) });
+          }
+          if (driver.bulkCreate) {
+               result = await driver.bulkCreate(object, rows, hookContext.input.options as any);
+          } else {
+               // Fallback loop
+               result = await Promise.all(rows.map((item) => driver.create(object, item, hookContext.input.options as any)));
+          }
+        } else {
+          // Defaults already resolved pre-hook (#2703); use the hook's data.
+          const row = hookContext.input.data as Record<string, unknown>;
+          await this.applyAutonumbers(object, row, opCtx.context, driverOwnsAutonumber);
+          await this.encryptSecretFields(object, row, opCtx.context, hookContext.input.options);
+          normalizeMultiValueFields(schemaForValidation, row);
+          validateRecord(schemaForValidation, row, 'insert');
+          evaluateValidationRules(schemaForValidation as any, row, 'insert', { logger: this.logger, currentUser: this.buildEvalUser(opCtx.context) });
+          result = await driver.create(object, row, hookContext.input.options as any);
+        }
+
+        hookContext.event = 'afterInsert';
+        // Coerce `boolean` fields (SQLite/libsql return 0/1) to real booleans on
+        // the after-hook view so flow trigger conditions (`record.is_escalated
+        // != true`) and `{record.<bool>}` interpolation see JS booleans, not
+        // ints. A shallow copy — the value returned to the caller is untouched.
+        hookContext.result = Array.isArray(result)
+          ? result.map((r) => coerceBooleanFields(schemaForValidation as any, r as any))
+          : coerceBooleanFields(schemaForValidation as any, result as any);
+        await this.triggerHooks('afterInsert', hookContext);
+
+        // Roll-up: recompute parent summary fields that aggregate this object.
+        await this.recomputeSummaries(object, result, null, opCtx.context);
+
+        // Publish data.record.created event to realtime service
+        if (this.realtimeService) {
+          try {
+            if (Array.isArray(result)) {
+              // Bulk insert - publish event for each record
+              for (const record of result) {
+                const event: RealtimeEventPayload = {
+                  type: 'data.record.created',
+                  object,
+                  payload: {
+                    recordId: record.id,
+                    after: record,
+                  },
+                  timestamp: new Date().toISOString(),
+                };
+                await this.realtimeService.publish(event);
+              }
+              this.logger.debug(`Published ${result.length} data.record.created events`, { object });
+            } else {
+              const event: RealtimeEventPayload = {
+                type: 'data.record.created',
+                object,
+                payload: {
+                  recordId: result.id,
+                  after: result,
+                },
+                timestamp: new Date().toISOString(),
+              };
+              await this.realtimeService.publish(event);
+              this.logger.debug('Published data.record.created event', { object, recordId: result.id });
+            }
+   * Install a metrics recorder used by every subsequent `bindHooks` call.
+   * The recorder's methods are invoked per-execution to count outcomes
+   * (success / error / timeout / capability_rejected), skips, and retries.
+   * Defaults to no-op so the engine pays zero cost when nobody is observing.
+   */
+  setHookMetricsRecorder(recorder: any): void {
+    (this as any)._hookMetricsRecorder = recorder;
+  }
+
+  /** Read the engine's installed metrics recorder, if any. */
+  getHookMetricsRecorder(): any {
+    return (this as any)._hookMetricsRecorder;
+  }
+
+  public async triggerHooks(event: string, context: HookContext) {
+    const entries = this.hooks.get(event) || [];
+    
+    if (entries.length === 0) {
+      this.logger.debug('No hooks registered for event', { event });
+      return;
+    }
+
+    this.logger.debug('Triggering hooks', { event, count: entries.length });
+    
+    for (const entry of entries) {
+      // Per-object matching
+      if (entry.object) {
+        const targets = Array.isArray(entry.object) ? entry.object : [entry.object];
+        if (!targets.includes('*') && !targets.includes(context.object)) {
+          continue; // Skip non-matching hooks
+        }
+      }
+      await entry.handler(context);
+    }
+  }
+
+  // ========================================
+  // Action System
+  // ========================================
+
+  /**
+   * Register a named action on an object.
+   * Actions are custom business logic callable via `repo.execute(actionName, params)`.
+   *
+   * @param objectName Target object
+   * @param actionName Unique action name within the object
+   * @param handler Handler function
+   * @param packageName Optional package owner (for cleanup)
+   */
+  registerAction(objectName: string, actionName: string, handler: (ctx: any) => Promise<any> | any, packageName?: string): void {
+    const key = `${objectName}:${actionName}`;
+    this.actions.set(key, { handler, package: packageName });
+    this.logger.debug('Registered action', { objectName, actionName, package: packageName });
+  }
+
+  /**
+   * Execute a named action on an object.
+   */
+  async executeAction(objectName: string, actionName: string, ctx: any): Promise<any> {
+    const entry = this.actions.get(`${objectName}:${actionName}`);
+    if (!entry) {
+      throw new Error(`Action '${actionName}' on object '${objectName}' not found`);
+    }
+    return entry.handler(ctx);
+  }
+
+  /**
+   * Remove all actions registered by a specific package.
+   */
+  removeActionsByPackage(packageName: string): void {
+    for (const [key, entry] of this.actions.entries()) {
+      if (entry.package === packageName) {
+        this.actions.delete(key);
+      }
+    }
+  }
+
+  /**
+   * Register a middleware function
+   * Middlewares execute in onion model around every data operation.
+   * @param fn The middleware function
+   * @param options Optional: target object filter
+   */
+  registerMiddleware(fn: EngineMiddleware, options?: { object?: string }): void {
+    this.middlewares.push({ fn, object: options?.object });
+    this.logger.debug('Registered middleware', { object: options?.object, total: this.middlewares.length });
+  }
+
+  /**
+   * Execute an operation through the middleware chain
+   */
+  private async executeWithMiddleware(ctx: OperationContext, executor: () => Promise<any>): Promise<any> {
+    const applicable = this.middlewares.filter(m =>
+      !m.object || m.object === '*' || m.object === ctx.object
+    );
+
+    let index = 0;
+    const next = async (): Promise<void> => {
+      if (index < applicable.length) {
+        const mw = applicable[index++];
+        await mw.fn(ctx, next);
+      } else {
+        ctx.result = await executor();
+      }
+    };
+
+    await next();
+    return ctx.result;
+  }
+
+  /**
+   * Build a HookContext.session from ExecutionContext
+   */
+  private buildSession(execCtx?: ExecutionContext): HookContext['session'] {
+    if (!execCtx) return undefined;
+    return {
+      userId: execCtx.userId,
+      tenantId: execCtx.tenantId,
+      positions: execCtx.positions,
+      accessToken: execCtx.accessToken,
+      // Propagate system-elevated flag so hooks can distinguish engine
+      // self-writes (e.g. approval status mirror) from genuine user writes.
+      ...((execCtx as any).isSystem ? { isSystem: true } : {}),
+      // Propagate the automation-suppression flag so the record-change trigger
+      // can skip flow dispatch for seed/bulk writes (ADR: seed loads end-state
+      // data, not user events).
+      ...((execCtx as any).skipTriggers ? { skipTriggers: true } : {}),
+    } as HookContext['session'];
+  }
+
+  /**
+   * Build the acting-user object (ADR-0068 EvalUser shape) surfaced to
+   * validation-time predicates as `current_user` — notably per-option
+   * `visibleWhen` authorization gating (objectui#2284). Returns undefined for
+   * system / unauthenticated writes, where membership predicates then fail-open.
+   */
+  private buildEvalUser(
+    execCtx?: ExecutionContext,
+  ): { id: string; positions: string[]; organizationId: string | null } | undefined {
+    if (!execCtx || execCtx.userId == null) return undefined;
+    return {
+      id: String(execCtx.userId),
+      positions: execCtx.positions ?? [],
+      organizationId: execCtx.tenantId != null ? String(execCtx.tenantId) : null,
+    };
+  }
+
+  /**
+   * Build the DriverOptions blob passed to every IDataDriver call.
+   *
+   * Always carries `tenantId` from the active ExecutionContext so the
+   * driver can enforce per-tenant isolation (SQL driver auto-scopes reads
+   * and auto-injects the tenant column on writes). Existing user-supplied
+   * shapes (transactions, AST extras) are preserved by spreading them
+   * first.
+   *
+   * System / isSystem callers may still cross tenants by clearing
+   * `tenantId` themselves on the resulting object; this helper does not
+   * mask the system path.
+   */
+  private buildDriverOptions(execCtx?: ExecutionContext, base?: any): any {

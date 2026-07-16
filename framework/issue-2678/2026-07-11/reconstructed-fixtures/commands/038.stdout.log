@@ -1,0 +1,252 @@
+ * `saveMetaItem` / `publishMetaItem` / `deleteMetaItem` AFTER the write
+ * landed. `type` is the singular metadata type name. Subscribe via
+ * {@link ObjectStackProtocolImplementation.onMetadataMutation}.
+ */
+export interface MetadataMutationEvent {
+    type: string;
+    name: string;
+    /** Resulting lifecycle state of the row the mutation produced. */
+    state: 'active' | 'draft' | 'deleted';
+    organizationId?: string | null;
+}
+
+export class ObjectStackProtocolImplementation implements ObjectStackProtocol {
+    private engine: MetadataHostEngine;
+    private getServicesRegistry?: () => Map<string, any>;
+    private getFeedService?: () => IFeedService | undefined;
+    /**
+     * Project scope applied to sys_metadata reads/writes. When undefined
+     * (single-kernel deployments), rows land in / come from the
+     * platform-global bucket (`environment_id IS NULL`). When set, every
+     * saveMetaItem insert/update and loadMetaFromDb query is filtered by
+     * `environment_id = environmentId`, so per-project kernels see only their own
+     * metadata even if several projects share the same physical database.
+     */
+    private environmentId?: string;
+
+    /**
+     * Lazily-instantiated SysMetadataRepository per organization. Keyed by
+     * `${organizationId ?? '__env__'}`. Repositories are stateful — they
+     * carry the per-org `seqCounter` and watch subscribers — so we cache
+     * them rather than constructing one per call.
+     */
+    private overlayRepos = new Map<string, SysMetadataRepository>();
+
+    /**
+     * Publish-time materializers keyed by singular metadata type (ADR-0086 P2).
+     * When a draft of a registered type is published, its body is projected
+     * into a data-plane representation the admin surface reads — e.g. a
+     * `permission` set is upserted into `sys_permission_set` with
+     * `managed_by:'package'`. Domain plugins own the projection (the generic
+     * protocol layer must not know `sys_permission_set`'s field shape), so they
+     * register here at init. Best-effort — a materializer failure is surfaced on
+     * the publish response, never thrown (publishing metadata always succeeds
+     * independently; the same contract as `seed` apply).
+     */
+    private publishMaterializers = new Map<string, PublishMaterializer>();
+
+    /** [#2747] Named uninstall cleanups, run by {@link deletePackage}. */
+    private uninstallCleanups = new Map<string, UninstallCleanup>();
+
+    constructor(
+        engine: IDataEngine,
+        getServicesRegistry?: () => Map<string, any>,
+        getFeedService?: () => IFeedService | undefined,
+        environmentId?: string,
+    ) {
+        this.engine = engine as MetadataHostEngine;
+        this.getServicesRegistry = getServicesRegistry;
+        this.getFeedService = getFeedService;
+        this.environmentId = environmentId;
+    }
+
+    /**
+     * Register a publish-time materializer for a metadata type (ADR-0086 P2).
+     * Called by domain plugins at init (e.g. plugin-security registers the
+     * `permission` → `sys_permission_set` projection). The singular type name is
+     * used — `permissions` and `permission` both resolve here. One materializer
+     * per type; a second registration replaces the first (idempotent re-init).
+     */
+    registerPublishMaterializer(type: string, materializer: PublishMaterializer): void {
+        const singular = PLURAL_TO_SINGULAR[type] ?? type;
+        this.publishMaterializers.set(singular, materializer);
+    }
+
+    /**
+     * Register a named uninstall-time data-plane cleanup (ADR-0086 D3, #2747).
+     * Called by domain plugins at init — e.g. plugin-security registers the
+     * cleanup that removes its package-owned `sys_permission_set` rows and
+     * their bindings when the owning package is uninstalled, so grants are
+     * revoked everywhere at once (no ghost grants). One cleanup per name; a
+     * second registration replaces the first (idempotent re-init).
+     */
+    registerUninstallCleanup(name: string, cleanup: UninstallCleanup): void {
+        this.uninstallCleanups.set(name, cleanup);
+    }
+
+    /**
+     * Runtime-mutation listeners (#2588). Every metadata mutation that lands
+     * through this protocol — `saveMetaItem` (draft AND direct-active saves),
+     * `publishMetaItem` (per-item and package publish-drafts), and
+     * `deleteMetaItem` — notifies these listeners AFTER persistence succeeds.
+    return regex.test(objectName);
+  }
+
+  /**
+   * Set datasource mapping rules
+   * Called by ObjectQLPlugin during bootstrap
+   */
+  setDatasourceMapping(rules: Array<{
+    namespace?: string;
+    package?: string;
+    objectPattern?: string;
+    default?: boolean;
+    datasource: string;
+    priority?: number;
+  }>) {
+    this.datasourceMapping = rules;
+    this.logger.info('Datasource mapping rules configured', {
+      ruleCount: rules.length
+    });
+  }
+
+  /**
+   * Initialize the engine and all registered drivers
+   */
+  async init() {
+    this.logger.info('Initializing ObjectQL engine', { 
+      driverCount: this.drivers.size,
+      drivers: Array.from(this.drivers.keys())
+    });
+    
+    const failedDrivers: string[] = [];
+    for (const [name, driver] of this.drivers) {
+      try {
+        await driver.connect();
+        this.logger.info('Driver connected successfully', { driverName: name });
+      } catch (e) {
+        failedDrivers.push(name);
+        this.logger.error('Failed to connect driver', e as Error, { driverName: name });
+      }
+    }
+
+    if (failedDrivers.length > 0) {
+      this.logger.warn(
+        `${failedDrivers.length} of ${this.drivers.size} driver(s) failed initial connect. ` +
+        `Operations may recover via lazy reconnection or fail at query time.`,
+        { failedDrivers }
+      );
+    }
+    
+    this.logger.info('ObjectQL engine initialization complete');
+  }
+
+  async destroy() {
+    this.logger.info('Destroying ObjectQL engine', { driverCount: this.drivers.size });
+    
+    for (const [name, driver] of this.drivers.entries()) {
+      try {
+        await driver.disconnect();
+      } catch (e) {
+        this.logger.error('Error disconnecting driver', e as Error, { driverName: name });
+      }
+packages/metadata-protocol/src/protocol-handshake-install.test.ts:26:  const impl = new ObjectStackProtocolImplementation(engine as any, () => services);
+packages/metadata-protocol/src/mutation-listeners.test.ts:20:  return new ObjectStackProtocolImplementation({} as any);
+packages/metadata-protocol/src/durable-package.test.ts:32:  const impl = new ObjectStackProtocolImplementation(engine as any, () => services);
+packages/rest/src/import-job-integration.test.ts:131:  const protocol = new ObjectStackProtocolImplementation(engine as any);
+packages/rest/src/import-integration.test.ts:125:  const protocol = new ObjectStackProtocolImplementation(engine as any);
+packages/rest/src/export-integration.test.ts:188:  const protocol = new ObjectStackProtocolImplementation(engine as any);
+packages/objectql/src/protocol-destructive.test.ts:44:        protocol = new ObjectStackProtocolImplementation(mockEngine);
+packages/objectql/src/protocol-registry-shadow.test.ts:183:        protocol = new ObjectStackProtocolImplementation(engine);
+packages/objectql/src/protocol-registry-shadow.test.ts:264:        const protocol = new ObjectStackProtocolImplementation(
+packages/objectql/src/protocol-clone-real-engine.test.ts:122:        protocol = new ObjectStackProtocolImplementation(engine);
+packages/runtime/src/seed-loader.test.ts:108:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:129:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:152:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:172:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:198:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:226:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:248:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:264:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:284:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:313:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:333:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:371:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:408:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:437:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:479:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:514:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:547:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:591:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:623:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:649:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:676:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:703:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:738:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:767:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:797:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:830:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:873:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:909:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:947:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:980:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1001:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1023:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1054:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1094:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1125:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1158:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1189:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1217:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1239:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1269:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/runtime/src/seed-loader.test.ts:1299:      const loader = new SeedLoaderService(engine, metadata, logger);
+packages/objectql/src/protocol-data.test.ts:21:        protocol = new ObjectStackProtocolImplementation(mockEngine);
+packages/objectql/src/protocol-data.test.ts:465:            return { protocol: new ObjectStackProtocolImplementation(engine), engine, insert, findOne };
+packages/objectql/src/protocol-save-meta-repo-path-real-engine.test.ts:132:        protocol = new ObjectStackProtocolImplementation(engine);
+packages/objectql/src/protocol-save-meta-repo-path-real-engine.test.ts:233:        protocol = new ObjectStackProtocolImplementation(engine);
+packages/objectql/src/protocol-install-package.test.ts:26:  const protocol = new ObjectStackProtocolImplementation(engine, () => services);
+packages/objectql/src/protocol-references.test.ts:65:        protocol = new ObjectStackProtocolImplementation(mockEngine);
+packages/objectql/src/protocol-commit-history.test.ts:36:  const protocol = new ObjectStackProtocolImplementation(engine as never);
+packages/objectql/src/protocol-commit-history.test.ts:168:    const protocol = new ObjectStackProtocolImplementation(engine as never);
+packages/objectql/src/protocol-package-lifecycle.test.ts:20:        const protocol = new ObjectStackProtocolImplementation({} as never);
+packages/objectql/src/protocol-package-lifecycle.test.ts:68:        const protocol = new ObjectStackProtocolImplementation(engine as never);
+packages/objectql/src/protocol-package-lifecycle.test.ts:136:        const protocol = new ObjectStackProtocolImplementation(engine as never);
+packages/objectql/src/protocol-package-lifecycle.test.ts:197:        const protocol = new ObjectStackProtocolImplementation(engine as never);
+packages/objectql/src/protocol-package-lifecycle.test.ts:209:        const protocol = new ObjectStackProtocolImplementation(engine as never);
+packages/objectql/src/protocol-feed.test.ts:62:    protocol = new ObjectStackProtocolImplementation(engine, undefined, () => feedService);
+packages/objectql/src/protocol-feed.test.ts:70:    const protocolNoFeed = new ObjectStackProtocolImplementation(engine);
+packages/objectql/src/protocol-feed.test.ts:81:    const protocolWithFeed = new ObjectStackProtocolImplementation(engine, () => mockServices, () => feedService);
+packages/objectql/src/protocol-feed.test.ts:291:    const protocolNoFeed = new ObjectStackProtocolImplementation(engine);
+packages/objectql/src/protocol-publish-package-drafts.test.ts:14:  const protocol = new ObjectStackProtocolImplementation({} as never);
+packages/objectql/src/protocol-publish-package-drafts.test.ts:120:    const protocol = new ObjectStackProtocolImplementation({} as never);
+packages/objectql/src/protocol-publish-package-drafts.test.ts:171:    const protocol = new ObjectStackProtocolImplementation({} as never);
+packages/objectql/src/protocol-publish-package-drafts.test.ts:218:    const protocol = new ObjectStackProtocolImplementation({} as never);
+packages/objectql/src/protocol-publish-package-drafts.test.ts:251:    const protocol = new ObjectStackProtocolImplementation({} as never);
+packages/objectql/src/seed-loader-org-fallback.test.ts:30:  const svc = new SeedLoaderService(engine as never, metadata as never, logger as never);
+packages/objectql/src/protocol-lock-enforcement.test.ts:40:    const protocol = new ObjectStackProtocolImplementation(
+packages/objectql/src/protocol-lock-enforcement.test.ts:175:        const protocol = new ObjectStackProtocolImplementation(
+packages/objectql/src/protocol-view-identity-overlay.test.ts:109:        const protocol = new ObjectStackProtocolImplementation(engine);
+packages/objectql/src/protocol-view-identity-overlay.test.ts:138:        const protocol = new ObjectStackProtocolImplementation(engine);
+packages/objectql/src/protocol-view-identity-overlay.test.ts:165:        const protocol = new ObjectStackProtocolImplementation(engine);
+packages/objectql/src/protocol-view-identity-overlay.test.ts:173:        const protocol = new ObjectStackProtocolImplementation(engine);
+packages/objectql/src/metadata-validation-sweep.test.ts:43:    return new ObjectStackProtocolImplementation(mockEngine);
+packages/objectql/src/protocol-meta-types-rich.test.ts:52:        protocol = new ObjectStackProtocolImplementation(mockEngine);
+packages/objectql/src/protocol-meta-types-rich.test.ts:116:        const scoped = new ObjectStackProtocolImplementation(mockEngine, undefined, undefined, 'env_alpha');
+packages/objectql/src/protocol-layered-get.test.ts:36:        protocol = new ObjectStackProtocolImplementation(mockEngine);
+packages/objectql/src/protocol-discovery.test.ts:17:    protocol = new ObjectStackProtocolImplementation(engine);
+packages/objectql/src/protocol-discovery.test.ts:35:    protocol = new ObjectStackProtocolImplementation(engine, () => mockServices);
+packages/objectql/src/protocol-discovery.test.ts:51:    protocol = new ObjectStackProtocolImplementation(engine, () => mockServices);
+packages/objectql/src/protocol-discovery.test.ts:66:    protocol = new ObjectStackProtocolImplementation(engine, () => mockServices);
+packages/objectql/src/protocol-discovery.test.ts:89:    protocol = new ObjectStackProtocolImplementation(engine);
+packages/objectql/src/protocol-discovery.test.ts:106:    protocol = new ObjectStackProtocolImplementation(engine, () => mockServices);
+packages/objectql/src/protocol-discovery.test.ts:121:    protocol = new ObjectStackProtocolImplementation(engine, () => mockServices);
+packages/objectql/src/protocol-discovery.test.ts:144:    protocol = new ObjectStackProtocolImplementation(engine, () => mockServices);
+packages/objectql/src/protocol-discovery.test.ts:162:    protocol = new ObjectStackProtocolImplementation(engine);
+packages/objectql/src/protocol-discovery.test.ts:182:    protocol = new ObjectStackProtocolImplementation(engine, () => mockServices);
+packages/objectql/src/protocol-discovery.test.ts:198:    protocol = new ObjectStackProtocolImplementation(engine, () => mockServices);
+packages/objectql/src/protocol-discovery.test.ts:208:    protocol = new ObjectStackProtocolImplementation(engine, () => mockServices);
+packages/objectql/src/build-probes.test.ts:176:    const protocol = new ObjectStackProtocolImplementation({} as never);
+packages/objectql/src/build-probes.test.ts:200:    const protocol = new ObjectStackProtocolImplementation({} as never);
+packages/objectql/src/protocol-save-meta-repo-path.test.ts:91:        const protocol = new ObjectStackProtocolImplementation(engine);
+packages/objectql/src/protocol-save-meta-repo-path.test.ts:107:        const protocol = new ObjectStackProtocolImplementation(engine);

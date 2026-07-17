@@ -123,6 +123,7 @@ f297b53640e4c00fa890a1d337039e679e519407811dd6fde39fc106fa98333e  framework/issu
 99f846ec48f4d3e5c5004369c81712255cb23b775918ae9a2e705bf11e59dbe2  framework/issue-2678/2026-07-11/reconstructed-fixtures/data/workbook-inspection.json
 5ae1a6443bfeafea1197254860eb49d67e893049e7a70df010ee619e4ea1af25  framework/issue-2678/2026-07-11/reconstructed-fixtures/data/workbook-render-manifest.json
 f4b27e6c889b0936711bc0aa8c1d0e129f51f3138eb53c8fc08b67f948b0e52c  framework/issue-2678/2026-07-11/reconstructed-fixtures/database/problem-one.sqlite
+bd46f9348809852fad0fc720c13130a5830d6c8ab37dda4b67b43b12c96d8459  framework/issue-2678/2026-07-11/reconstructed-fixtures/docs/2026-07-17-simple-local-runner-design.md
 0c3c001689f3afa9a90077f301f5deaa9f7511a4508671f3c16ad1b4d6f42d11  framework/issue-2678/2026-07-11/reconstructed-fixtures/docs/2026-07-17-ui-qa-package-design.md
 989f946640b30e72ffd5386d0812b699d7e5b1224fe949fe40b7ac0d41f30fc0  framework/issue-2678/2026-07-11/reconstructed-fixtures/docs/2026-07-17-ui-qa-package-implementation-plan.md
 0bab814cc3b6fa81c59ae41a299d0615d74a9c01f105da3393f9145785d6004c  framework/issue-2678/2026-07-11/reconstructed-fixtures/environment/runtime.json
@@ -139,7 +140,7 @@ dacefc9230d4bd1483f9dcf2c699b561bc076ece7fa7cdf490fcdc49edbfc181  framework/issu
 5afb11f0d2fbea8d0aa67d46654a5ac7a91f05673694e524bac7e6e7fb461e3a  framework/issue-2678/2026-07-11/reconstructed-fixtures/results/comparison-report.md
 e71789678633f88f30b9c26dd285776a2ff18ffc935694c25a49897bf48db841  framework/issue-2678/2026-07-11/reconstructed-fixtures/results/comparison.json
 3d25d6195645962b01d818810a556bcbf357c7662eeda91ecdf2c60552654520  framework/issue-2678/2026-07-11/reconstructed-fixtures/results/raw-results.json
-48433c3423e47284b179d80419a8bc09eed65f98711eab6003ad2802d03591ea  framework/issue-2678/2026-07-11/reconstructed-fixtures/SHA256SUMS
+6f7e598829d01809bbbbee8d0c42f286e6552b337f3994e79235b69ff0659fe0  framework/issue-2678/2026-07-11/reconstructed-fixtures/SHA256SUMS
 11018b67a636adc841d9a3a1a5b0c1624e156961eb02e5e3bac8388135f687c8  framework/issue-2678/2026-07-11/reconstructed-fixtures/source/build-sha256-manifest.mjs
 4e2e5bf1dc4481fb972c3185a749bfb9be7256d9498488a49c7cc4f38bd9b77f  framework/issue-2678/2026-07-11/reconstructed-fixtures/source/check-markdown-links.mjs
 9e7b5c4158b41fca64289fbeb459a8fdb4e537a3f2d8c612f32702a047a299df  framework/issue-2678/2026-07-11/reconstructed-fixtures/source/compare-results.mjs

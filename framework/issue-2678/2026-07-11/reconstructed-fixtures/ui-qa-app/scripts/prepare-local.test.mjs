@@ -1,5 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 
 import { prepareLocal } from './prepare-local.mjs';
 
@@ -61,4 +65,18 @@ test('validates before verification or build', async () => {
 
   assert.equal(verified, false);
   assert.equal(built, false);
+});
+
+test('run-local shell is valid and has the fixed safe contract', async () => {
+  const packageRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+  const script = path.join(packageRoot, 'run-local.sh');
+  const syntax = spawnSync('sh', ['-n', script], { encoding: 'utf8' });
+  assert.equal(syntax.status, 0, syntax.stderr);
+
+  const source = await fs.readFile(script, 'utf8');
+  assert.match(source, /prepare-local\.mjs/);
+  assert.match(source, /exec node/);
+  assert.match(source, /--mode manual/);
+  assert.match(source, /--port 38421/);
+  assert.doesNotMatch(source, /git clone|pnpm install|git worktree/);
 });

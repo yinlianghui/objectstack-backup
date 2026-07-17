@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "logicalFieldNote": "Input columns exclude generated id; SQLite also adds created_at and updated_at.",
+  "objects": [
+    {
+      "name": "qa_seed_item",
+      "label": "QA Seed Item",
+      "systemFields": false,
+      "fields": {
+        "id": {
+          "name": "id",
+          "label": "ID",
+          "type": "text",
+          "primaryKey": true
+        },
+        "external_key": {
+          "name": "external_key",
+          "label": "External Key",
+          "type": "text",
+          "required": true,
+          "unique": true
+        },
+        "name": {
+          "name": "name",
+          "label": "Name",
+          "type": "text",
+          "required": true
+        },
+        "amount": {
+          "name": "amount",
+          "label": "Amount",
+          "type": "number",
+          "required": true
+        },
+        "active": {
+          "name": "active",
+          "label": "Active",
+          "type": "boolean",
+          "required": true
+        }
+      }
+    },
+    {
+      "name": "qa_import_item",
+      "label": "QA Import Item",
+      "systemFields": false,
+      "fields": {
+        "id": {
+          "name": "id",
+          "label": "ID",
+          "type": "text",
+          "primaryKey": true
+        },
+        "external_key": {
+          "name": "external_key",
+          "label": "External Key",
+          "type": "text",
+          "required": true,
+          "unique": true
+        },
+        "name": {
+          "name": "name",
+          "label": "Name",
+          "type": "text",
+          "required": true
+        },
+        "amount": {
+          "name": "amount",
+          "label": "Amount",
+          "type": "number",
+          "required": true
+        },
+        "active": {
+          "name": "active",
+          "label": "Active",
+          "type": "boolean",
+          "required": true
+        }
+      }
+    },
+    {
+      "name": "qa_summary_parent",
+      "label": "QA Summary Parent",
+      "systemFields": false,
+      "fields": {
+        "id": {
+          "name": "id",
+          "label": "ID",
+          "type": "text",
+          "primaryKey": true
+        },
+        "name": {
+          "name": "name",
+          "label": "Name",
+          "type": "text",
+          "required": true
+        },
+        "total_amount": {
+          "name": "total_amount",
+          "label": "Total Amount",
+          "type": "summary",
+          "summaryOperations": {
+            "object": "qa_summary_child",
+            "field": "amount",
+            "function": "sum",
+            "relationshipField": "parent_id"
+          }
+        }
+      }
+    },
+    {
+      "name": "qa_summary_child",
+      "label": "QA Summary Child",
+      "systemFields": false,
+      "fields": {
+        "id": {
+          "name": "id",
+          "label": "ID",
+          "type": "text",
+          "primaryKey": true
+        },
+        "external_key": {
+          "name": "external_key",
+          "label": "External Key",
+          "type": "text",
+          "required": true,
+          "unique": true
+        },
+        "name": {
+          "name": "name",
+          "label": "Name",
+          "type": "text",
+          "required": true
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "label": "Parent",
+          "type": "master_detail",
+          "reference": "qa_summary_parent",
+          "required": true,
+          "deleteBehavior": "cascade"
+        },
+        "amount": {
+          "name": "amount",
+          "label": "Amount",
+          "type": "number",
+          "required": true
+        }
+      }
+    }
+  ]
+}

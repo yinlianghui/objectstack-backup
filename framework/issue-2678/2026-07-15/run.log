@@ -1,0 +1,26 @@
+
+ RUN  v4.1.10 /Users/yinlianghui/Documents/GitHub/framework-issue-2678-evidence/packages/rest
+
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/issue-2678-minimal-evidence.test.ts [ src/issue-2678-minimal-evidence.test.ts ]
+Error: Failed to resolve entry for package "@objectstack/metadata-protocol". The package may have incorrect main/module/exports specified in its package.json.
+ ❯ src/issue-2678-minimal-evidence.test.ts:8:1
+      6| import { fileURLToPath } from 'node:url';
+      7| import { afterAll, describe, expect, it } from 'vitest';
+      8| import { SeedLoaderService } from '@objectstack/metadata-protocol';
+       | ^
+      9| import { ObjectQL, ObjectStackProtocolImplementation } from '@objectst…
+     10| import { SeedLoaderConfigSchema } from '@objectstack/spec/data';
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  17:19:04
+   Duration  165ms (transform 44ms, setup 0ms, import 0ms, tests 0ms, environment 0ms)
+
+undefined
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run src/issue-2678-minimal-evidence.test.ts --reporter=verbose

@@ -1,0 +1,27 @@
+
+ RUN  v4.1.10 /Users/yinlianghui/Documents/GitHub/framework-issue-2678-evidence/packages/rest
+
+stdout | src/issue-2678-minimal-evidence.test.ts > issue #2678 最小补充证据 > Seed：1,000 行 × 4 列通过真实 SeedLoaderService 批量落库
+[Registry] Registered object: qa_seed_item (own, priority=100) from undefined
+
+stdout | src/issue-2678-minimal-evidence.test.ts > issue #2678 最小补充证据 > Import：1,000 行 × 4 列通过真实 Import Runner 和协议层批量落库
+[Registry] Registered object: qa_import_item (own, priority=100) from undefined
+
+stdout | src/issue-2678-minimal-evidence.test.ts > issue #2678 最小补充证据 > 汇总：1 个父节点在 5 个批次中只重算 5 次
+[Registry] Registered object: qa_summary_parent (own, priority=100) from undefined
+[Registry] Registered object: qa_summary_child (own, priority=100) from undefined
+
+ ✓ src/issue-2678-minimal-evidence.test.ts > issue #2678 最小补充证据 > Seed：1,000 行 × 4 列通过真实 SeedLoaderService 批量落库 265ms
+ ✓ src/issue-2678-minimal-evidence.test.ts > issue #2678 最小补充证据 > Import：1,000 行 × 4 列通过真实 Import Runner 和协议层批量落库 29ms
+ ✓ src/issue-2678-minimal-evidence.test.ts > issue #2678 最小补充证据 > 汇总：1 个父节点在 5 个批次中只重算 5 次 35ms
+stdout | src/issue-2678-minimal-evidence.test.ts > issue #2678 最小补充证据 > 汇总：10 个父节点在 5 个批次中只重算 50 次
+[Registry] Registered object: qa_summary_parent (own, priority=100) from undefined
+[Registry] Registered object: qa_summary_child (own, priority=100) from undefined
+
+ ✓ src/issue-2678-minimal-evidence.test.ts > issue #2678 最小补充证据 > 汇总：10 个父节点在 5 个批次中只重算 50 次 61ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  17:20:06
+   Duration  2.55s (transform 1.41s, setup 0ms, import 2.05s, tests 392ms, environment 0ms)
+

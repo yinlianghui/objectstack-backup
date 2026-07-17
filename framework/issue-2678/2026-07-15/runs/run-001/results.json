@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "runId": "run-001",
+  "status": "harness_load_failed",
+  "businessScenariosExecuted": 0,
+  "testFilesPassed": 0,
+  "testFilesFailed": 1,
+  "error": "Failed to resolve entry for package @objectstack/metadata-protocol because upstream dist artifacts had not been built.",
+  "classification": "test_harness_prerequisite_failure_not_an_issue_2678_product_result",
+  "retainedArtifacts": [
+    "../../run.log",
+    "dependency-build.log"
+  ],
+  "databaseFilesCreated": 0,
+  "resolution": "Built the standard Turbo upstream dependencies, then used a new run ID without overwriting run-001."
+}

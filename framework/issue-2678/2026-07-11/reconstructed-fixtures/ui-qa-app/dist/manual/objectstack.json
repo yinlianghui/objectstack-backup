@@ -1,0 +1,385 @@
+{
+  "manifest": {
+    "id": "com.objectstack.qa.issue2678",
+    "namespace": "qa",
+    "defaultDatasource": "default",
+    "version": "1.0.0",
+    "type": "app",
+    "scope": "project",
+    "name": "Issue 2678 QA",
+    "description": "Reconstructed bulk-write and summary-calculation QA application."
+  },
+  "objects": [
+    {
+      "name": "qa_seed_item",
+      "label": "QA Seed Item",
+      "active": true,
+      "isSystem": false,
+      "abstract": false,
+      "systemFields": false,
+      "datasource": "default",
+      "fields": {
+        "external_key": {
+          "label": "External Key",
+          "type": "text",
+          "required": true,
+          "searchable": false,
+          "multiple": false,
+          "unique": true,
+          "deleteBehavior": "set_null",
+          "hidden": false,
+          "readonly": false,
+          "sortable": true,
+          "index": false,
+          "externalId": false
+        },
+        "name": {
+          "label": "Name",
+          "type": "text",
+          "required": true,
+          "searchable": false,
+          "multiple": false,
+          "unique": false,
+          "deleteBehavior": "set_null",
+          "hidden": false,
+          "readonly": false,
+          "sortable": true,
+          "index": false,
+          "externalId": false
+        },
+        "amount": {
+          "label": "Amount",
+          "type": "number",
+          "required": true,
+          "searchable": false,
+          "multiple": false,
+          "unique": false,
+          "deleteBehavior": "set_null",
+          "hidden": false,
+          "readonly": false,
+          "sortable": true,
+          "index": false,
+          "externalId": false
+        },
+        "active": {
+          "label": "Active",
+          "type": "boolean",
+          "required": true,
+          "searchable": false,
+          "multiple": false,
+          "unique": false,
+          "deleteBehavior": "set_null",
+          "hidden": false,
+          "readonly": false,
+          "sortable": true,
+          "index": false,
+          "externalId": false
+        }
+      },
+      "tenancy": {
+        "enabled": false,
+        "strategy": "shared",
+        "tenantField": "tenant_id",
+        "crossTenantAccess": false
+      }
+    },
+    {
+      "name": "qa_import_item",
+      "label": "QA Import Item",
+      "active": true,
+      "isSystem": false,
+      "abstract": false,
+      "systemFields": false,
+      "datasource": "default",
+      "fields": {
+        "external_key": {
+          "label": "External Key",
+          "type": "text",
+          "required": true,
+          "searchable": false,
+          "multiple": false,
+          "unique": true,
+          "deleteBehavior": "set_null",
+          "hidden": false,
+          "readonly": false,
+          "sortable": true,
+          "index": false,
+          "externalId": false
+        },
+        "name": {
+          "label": "Name",
+          "type": "text",
+          "required": true,
+          "searchable": false,
+          "multiple": false,
+          "unique": false,
+          "deleteBehavior": "set_null",
+          "hidden": false,
+          "readonly": false,
+          "sortable": true,
+          "index": false,
+          "externalId": false
+        },
+        "amount": {
+          "label": "Amount",
+          "type": "number",
+          "required": true,
+          "searchable": false,
+          "multiple": false,
+          "unique": false,
+          "deleteBehavior": "set_null",
+          "hidden": false,
+          "readonly": false,
+          "sortable": true,
+          "index": false,
+          "externalId": false
+        },
+        "active": {
+          "label": "Active",
+          "type": "boolean",
+          "required": true,
+          "searchable": false,
+          "multiple": false,
+          "unique": false,
+          "deleteBehavior": "set_null",
+          "hidden": false,
+          "readonly": false,
+          "sortable": true,
+          "index": false,
+          "externalId": false
+        }
+      },
+      "tenancy": {
+        "enabled": false,
+        "strategy": "shared",
+        "tenantField": "tenant_id",
+        "crossTenantAccess": false
+      }
+    },
+    {
+      "name": "qa_summary_parent",
+      "label": "QA Summary Parent",
+      "active": true,
+      "isSystem": false,
+      "abstract": false,
+      "systemFields": false,
+      "datasource": "default",
+      "fields": {
+        "name": {
+          "label": "Name",
+          "type": "text",
+          "required": true,
+          "searchable": false,
+          "multiple": false,
+          "unique": true,
+          "deleteBehavior": "set_null",
+          "hidden": false,
+          "readonly": false,
+          "sortable": true,
+          "index": false,
+          "externalId": false
+        },
+        "total_amount": {
+          "label": "Total Amount",
+          "type": "summary",
+          "required": false,
+          "searchable": false,
+          "multiple": false,
+          "unique": false,
+          "deleteBehavior": "set_null",
+          "summaryOperations": {
+            "object": "qa_summary_child",
+            "field": "amount",
+            "function": "sum",
+            "relationshipField": "parent_id"
+          },
+          "hidden": false,
+          "readonly": false,
+          "sortable": true,
+          "index": false,
+          "externalId": false
+        }
+      },
+      "tenancy": {
+        "enabled": false,
+        "strategy": "shared",
+        "tenantField": "tenant_id",
+        "crossTenantAccess": false
+      }
+    },
+    {
+      "name": "qa_summary_child",
+      "label": "QA Summary Child",
+      "active": true,
+      "isSystem": false,
+      "abstract": false,
+      "systemFields": false,
+      "datasource": "default",
+      "fields": {
+        "external_key": {
+          "label": "External Key",
+          "type": "text",
+          "required": true,
+          "searchable": false,
+          "multiple": false,
+          "unique": true,
+          "deleteBehavior": "set_null",
+          "hidden": false,
+          "readonly": false,
+          "sortable": true,
+          "index": false,
+          "externalId": false
+        },
+        "name": {
+          "label": "Name",
+          "type": "text",
+          "required": true,
+          "searchable": false,
+          "multiple": false,
+          "unique": false,
+          "deleteBehavior": "set_null",
+          "hidden": false,
+          "readonly": false,
+          "sortable": true,
+          "index": false,
+          "externalId": false
+        },
+        "parent_id": {
+          "label": "Parent",
+          "type": "master_detail",
+          "required": true,
+          "searchable": false,
+          "multiple": false,
+          "unique": false,
+          "reference": "qa_summary_parent",
+          "deleteBehavior": "set_null",
+          "hidden": false,
+          "readonly": false,
+          "sortable": true,
+          "index": false,
+          "externalId": false
+        },
+        "amount": {
+          "label": "Amount",
+          "type": "number",
+          "required": true,
+          "searchable": false,
+          "multiple": false,
+          "unique": false,
+          "deleteBehavior": "set_null",
+          "hidden": false,
+          "readonly": false,
+          "sortable": true,
+          "index": false,
+          "externalId": false
+        }
+      },
+      "tenancy": {
+        "enabled": false,
+        "strategy": "shared",
+        "tenantField": "tenant_id",
+        "crossTenantAccess": false
+      }
+    }
+  ],
+  "apps": [
+    {
+      "name": "qa_issue_2678_app",
+      "label": "Issue 2678 QA",
+      "icon": "flask-conical",
+      "active": true,
+      "isDefault": false,
+      "navigation": [
+        {
+          "id": "qa_data",
+          "label": "QA Data",
+          "icon": "database",
+          "type": "group",
+          "expanded": false,
+          "children": [
+            {
+              "id": "qa_import_items",
+              "label": "Import Items",
+              "type": "object",
+              "objectName": "qa_import_item"
+            },
+            {
+              "id": "qa_summary_parents",
+              "label": "Summary Parents",
+              "type": "object",
+              "objectName": "qa_summary_parent"
+            },
+            {
+              "id": "qa_summary_children",
+              "label": "Summary Children",
+              "type": "object",
+              "objectName": "qa_summary_child"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "data": [
+    {
+      "object": "qa_summary_parent",
+      "externalId": "name",
+      "mode": "insert",
+      "env": [
+        "prod",
+        "dev",
+        "test"
+      ],
+      "records": [
+        {
+          "id": "parent_single",
+          "name": "parent_single"
+        },
+        {
+          "id": "parent_01",
+          "name": "parent_01"
+        },
+        {
+          "id": "parent_02",
+          "name": "parent_02"
+        },
+        {
+          "id": "parent_03",
+          "name": "parent_03"
+        },
+        {
+          "id": "parent_04",
+          "name": "parent_04"
+        },
+        {
+          "id": "parent_05",
+          "name": "parent_05"
+        },
+        {
+          "id": "parent_06",
+          "name": "parent_06"
+        },
+        {
+          "id": "parent_07",
+          "name": "parent_07"
+        },
+        {
+          "id": "parent_08",
+          "name": "parent_08"
+        },
+        {
+          "id": "parent_09",
+          "name": "parent_09"
+        },
+        {
+          "id": "parent_10",
+          "name": "parent_10"
+        }
+      ]
+    }
+  ],
+  "requires": [
+    "ui",
+    "auth"
+  ]
+}

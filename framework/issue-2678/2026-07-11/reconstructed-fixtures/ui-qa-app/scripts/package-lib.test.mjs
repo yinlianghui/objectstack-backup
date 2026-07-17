@@ -5,6 +5,7 @@ import path from 'node:path';
 import {
   artifactForMode,
   frameworkCliArgs,
+  freshUiCliArgs,
   parseStartArgs,
   validateFrameworkRoot,
 } from './package-lib.mjs';
@@ -52,6 +53,16 @@ test('resolves artifacts and CLI invocation without changing Framework', () => {
   assert.deepEqual(
     frameworkCliArgs('/repo/framework', ['--version']).slice(-2),
     ['objectstack', '--version'],
+  );
+});
+
+test('builds a fresh UI command for the selected artifact', () => {
+  assert.deepEqual(
+    freshUiCliArgs('/repo/framework', '/pkg/dist/manual/objectstack.json', 38421).slice(-7),
+    [
+      'dev', '--artifact', '/pkg/dist/manual/objectstack.json',
+      '--fresh', '--ui', '--port', '38421',
+    ],
   );
 });
 

@@ -54,6 +54,16 @@ export function frameworkCliArgs(frameworkRoot, args) {
   ];
 }
 
+export function freshUiCliArgs(frameworkRoot, artifact, port) {
+  return frameworkCliArgs(frameworkRoot, [
+    'dev',
+    '--artifact', path.resolve(artifact),
+    '--fresh',
+    '--ui',
+    '--port', String(port),
+  ]);
+}
+
 export async function validateFrameworkRoot(root) {
   const absolute = path.resolve(root);
   const required = [

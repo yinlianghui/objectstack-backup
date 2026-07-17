@@ -13,12 +13,16 @@ cd /path/to/framework
 
 脚本会自动检查软件包。第一次运行如果缺少 Console，会自动构建；随后启动全新的临时测试数据库。看到网址后使用 `admin@objectos.ai` / `admin123` 登录。
 
-接下来只做 4 步：
+接下来依次导入 3 份 CSV：
 
-1. 打开 **Issue 2678 QA → QA Data → Import Items → Import**。
-2. 选择本软件包中的 `fixtures/csv/qa_import_item.csv`。
-3. 保持 `external_key`、`name`、`amount`、`active` 四个同名字段映射并提交。
-4. 确认新建 1,000 条、失败 0 条。
+1. 打开 **Issue 2678 QA → QA Data → Import Items → Import**，选择 `fixtures/csv/qa_import_item.csv`。
+2. 保持 `external_key`、`name`、`amount`、`active` 四个同名字段映射并提交，确认新建 1,000 条、失败 0 条。
+3. 打开 **Summary Children → Import**，选择 `fixtures/csv/qa_summary_child_single_parent.csv`。
+4. 保持 `external_key`、`name`、`parent_id`、`amount` 四个同名字段映射并提交，确认新建 1,000 条、失败 0 条。
+5. 在 **Summary Children → Import** 再选择 `fixtures/csv/qa_summary_child_ten_parents.csv`，保持相同映射，确认再次新建 1,000 条、失败 0 条。
+6. 打开 **Summary Parents**：`parent_single` 应为 `500500`，`parent_01` 至 `parent_10` 应依次为 `49600`、`49700`、……、`50500`。
+
+最终应有 1,000 条 Import Items、2,000 条 Summary Children 和 11 条 Summary Parents。已完成的一次人工验证可直接查看 [QA 数据库快照](database/manual-ui-result.sqlite)、[汇总结果截图](screenshots/manual-summary-parent-result.png)和[验证记录](ui-verification.md)。
 
 测试完成后回到终端按 `Ctrl+C`，本次临时数据库会自动删除。
 

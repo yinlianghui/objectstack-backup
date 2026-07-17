@@ -139,7 +139,7 @@ dacefc9230d4bd1483f9dcf2c699b561bc076ece7fa7cdf490fcdc49edbfc181  framework/issu
 5afb11f0d2fbea8d0aa67d46654a5ac7a91f05673694e524bac7e6e7fb461e3a  framework/issue-2678/2026-07-11/reconstructed-fixtures/results/comparison-report.md
 e71789678633f88f30b9c26dd285776a2ff18ffc935694c25a49897bf48db841  framework/issue-2678/2026-07-11/reconstructed-fixtures/results/comparison.json
 3d25d6195645962b01d818810a556bcbf357c7662eeda91ecdf2c60552654520  framework/issue-2678/2026-07-11/reconstructed-fixtures/results/raw-results.json
-1b95222d6f69d44d47b365166debd7febacf9066eed17f809f9eba35ffb1fd63  framework/issue-2678/2026-07-11/reconstructed-fixtures/SHA256SUMS
+48433c3423e47284b179d80419a8bc09eed65f98711eab6003ad2802d03591ea  framework/issue-2678/2026-07-11/reconstructed-fixtures/SHA256SUMS
 11018b67a636adc841d9a3a1a5b0c1624e156961eb02e5e3bac8388135f687c8  framework/issue-2678/2026-07-11/reconstructed-fixtures/source/build-sha256-manifest.mjs
 4e2e5bf1dc4481fb972c3185a749bfb9be7256d9498488a49c7cc4f38bd9b77f  framework/issue-2678/2026-07-11/reconstructed-fixtures/source/check-markdown-links.mjs
 9e7b5c4158b41fca64289fbeb459a8fdb4e537a3f2d8c612f32702a047a299df  framework/issue-2678/2026-07-11/reconstructed-fixtures/source/compare-results.mjs
@@ -165,7 +165,7 @@ bc1ea28ccb30aa44263a4ad554196de32c43555f184eb1fd489fc1dd2e82f35c  framework/issu
 5820959ce0f053997eafc7d51de9ad42a1d533f5224d114b13172847640bd7a1  framework/issue-2678/2026-07-11/reconstructed-fixtures/ui-qa-app/objectstack.config.ts
 03697bff604ddf1ab8f1d25ecbcd307a24abe31475c6dd15bd2d44a3cc4081b3  framework/issue-2678/2026-07-11/reconstructed-fixtures/ui-qa-app/objectstack.seeded.config.ts
 8c333cac0552df43feec307c13f4160e461d6982b5776fc63692d15316670e9f  framework/issue-2678/2026-07-11/reconstructed-fixtures/ui-qa-app/package.json
-7f2c9cb1694041490fc10eb396824363d3ca78237f61016877cc3f65f738827d  framework/issue-2678/2026-07-11/reconstructed-fixtures/ui-qa-app/README.md
+2249ae32c72c110af1674eceedfa78ab48fd192ca122938e139527a403da8b8d  framework/issue-2678/2026-07-11/reconstructed-fixtures/ui-qa-app/README.md
 88cde76aff0cfc53c6892246f1602b39e6f03a5b1650b0d3f9d90ed737866983  framework/issue-2678/2026-07-11/reconstructed-fixtures/ui-qa-app/screenshots/manual-table-import-result.jpg
 1b0049fe6309118f3ccf18784825ddeab2eae295e598bcdde0a99d03d7cc9f56  framework/issue-2678/2026-07-11/reconstructed-fixtures/ui-qa-app/scripts/build-artifacts.mjs
 9c60b6bdc512694ce739eceb16718f6e7aa7f87ae41e2c74ee2a9fd5f91d70b1  framework/issue-2678/2026-07-11/reconstructed-fixtures/ui-qa-app/scripts/build-artifacts.test.mjs
@@ -177,7 +177,7 @@ b1b0b503f8c14995f0c0a9247cbe8390814cdcfc92f6c0395194276fd8763ed6  framework/issu
 880d4111209a6ca4897d637f314250435bedd3de28fceb5567af67a913394c57  framework/issue-2678/2026-07-11/reconstructed-fixtures/ui-qa-app/src/app.ts
 2fc3947f52d937f4f5f13b07ee3014b186d5f862cd1571ba6bc184aede186ea9  framework/issue-2678/2026-07-11/reconstructed-fixtures/ui-qa-app/src/objects.generated.ts
 56e8d0cbc2e7212dcddd8455f7fb36ae071921b470e0a883689dabc51c754675  framework/issue-2678/2026-07-11/reconstructed-fixtures/ui-qa-app/src/seed.generated.ts
-94a399f41691c381f08015f2eb8c7f298f3f58d09aec38b68d7c9b1010a81531  framework/issue-2678/2026-07-11/reconstructed-fixtures/ui-qa-app/ui-verification.md
+a03e5180e686977794e00a06a22b8f9fde835abcb4507ef251f5d29f72ab949e  framework/issue-2678/2026-07-11/reconstructed-fixtures/ui-qa-app/ui-verification.md
 7dbe55cf926397e3fdab6527c8ca8d81c52523c04539c7b0968200c1335996f6  framework/issue-2678/2026-07-11/screenshots/f-ui-002-capability-projects-page-not-found.png
 a7b0513dd8a6f08c052260704c79936211912a884ee702b9c20fdd8a921de0a4  framework/issue-2678/2026-07-11/screenshots/ui-01-field-mapping.png
 45c3d4358b6ad779636bf841fc704f5d885a5ce028fb5e89a95b048c0249b085  framework/issue-2678/2026-07-11/screenshots/ui-01-success-result.png

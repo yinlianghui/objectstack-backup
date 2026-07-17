@@ -1,60 +1,60 @@
-# Issue #2678 UI QA Package — Runtime Verification
+# Issue #2678 UI QA 软件包——运行验证记录
 
-## Fixed environment
+## 固定环境
 
-| Item | Value |
+| 项目 | 值 |
 |---|---|
-| Verification time | 2026-07-17 12:44 CST (Asia/Shanghai) |
-| Framework commit | `afa81155fb79846978c3ba6d94876edd21658f1d` (clean before runtime) |
-| Framework CLI | `@objectstack/cli/13.0.0`, invoked directly from `packages/cli/bin/run.js` |
-| Bundled ObjectUI commit | `7a68d78f2a0c3c1f99dafd39b75b4f117a24917b` (`.objectui-sha`) |
+| 验证时间 | 2026-07-17 12:44 CST（Asia/Shanghai） |
+| Framework 提交 | `afa81155fb79846978c3ba6d94876edd21658f1d`（运行前工作树干净） |
+| Framework CLI | `@objectstack/cli/13.0.0`，直接执行 `packages/cli/bin/run.js` |
+| 内置 ObjectUI 提交 | `7a68d78f2a0c3c1f99dafd39b75b4f117a24917b`（`.objectui-sha`） |
 | Node.js / pnpm | `v22.14.0` / `10.31.0` |
-| Browser | Codex in-app Browser, background automation, new tab; no existing user tab or browser profile claimed |
-| Manual artifact SHA-256 | `71274c9ccdda20cd3d991e80c801ec7392be166cc345ba4b898fc10f7d23e9b7` |
-| Seeded artifact SHA-256 | `b67173ac9a0838cc455986185963dbfeb331618af22f987e7f8e5ad201aa1fe0` |
+| 浏览器 | Codex 内置浏览器，后台自动化、新建标签页；未占用用户已有标签页或浏览器 profile |
+| Manual 产物 SHA-256 | `71274c9ccdda20cd3d991e80c801ec7392be166cc345ba4b898fc10f7d23e9b7` |
+| Seeded 产物 SHA-256 | `b67173ac9a0838cc455986185963dbfeb331618af22f987e7f8e5ad201aa1fe0` |
 
-The launcher was checked for package self-pollution. It directly executes the supplied Framework checkout's CLI with `node`, starts with its working directory set to that checkout, and did not add a `packageManager` field or other runtime files to this package.
+已检查启动器不会污染软件包。它使用 `node` 直接执行指定 Framework 源码中的 CLI，并将工作目录设为该 Framework 源码目录；运行后没有向本软件包添加 `packageManager` 字段或其他运行时文件。
 
-## Seeded mode (`38422`)
+## Seeded 模式（`38422`）
 
-The seeded artifact started with a new `--fresh` OS home. Authentication used the documented fresh-run admin. Reads through `/api/v1/data/:object` produced:
+Seeded 产物使用新的 `--fresh` 临时目录启动，并通过文档中的 `--fresh` 管理员账号完成认证。读取 `/api/v1/data/:object` 得到：
 
-| Object | Records | Independent checks |
+| 对象 | 记录数 | 独立校验 |
 |---|---:|---|
-| `qa_import_item` | 1,000 | unique keys 1,000; amount sum 500,500; active true/false 500/500 |
-| `qa_seed_item` | 1,000 | unique keys 1,000; amount sum 500,500; active true/false 500/500 |
-| `qa_summary_child` | 2,000 | amount sum 1,001,000 |
-| `qa_summary_parent` | 11 | persisted summaries matched independent child sums |
+| `qa_import_item` | 1,000 | 唯一键 1,000；金额合计 500,500；active true/false 各 500 |
+| `qa_seed_item` | 1,000 | 唯一键 1,000；金额合计 500,500；active true/false 各 500 |
+| `qa_summary_child` | 2,000 | 金额合计 1,001,000 |
+| `qa_summary_parent` | 11 | 持久化汇总值与独立计算的子记录合计一致 |
 
-`parent_single` had 1,000 children and persisted `total_amount=500500`. `parent_01` through `parent_10` each had 100 children and persisted totals `49600` through `50500`, respectively.
+`parent_single` 包含 1,000 条子记录，持久化值为 `total_amount=500500`。`parent_01` 至 `parent_10` 各包含 100 条子记录，持久化金额依次为 `49600` 至 `50500`。
 
-After `SIGINT`, the fresh OS home no longer existed and no process listened on port `38422`.
+发送 `SIGINT` 后，fresh 临时目录已不存在，端口 `38422` 无进程监听。
 
-## Manual mode (`38421`)
+## Manual 模式（`38421`）
 
-Before importing, the independent fresh run contained exactly 11 fixed parents and zero records in `qa_seed_item`, `qa_import_item`, and `qa_summary_child`.
+导入前，独立的 fresh 环境中恰好包含 11 条固定父记录；`qa_seed_item`、`qa_import_item` 和 `qa_summary_child` 均为 0 条。
 
-The UI opened **Issue 2678 QA → QA Import Item → Import**. It automatically mapped all four columns with high confidence and previewed 1,000 rows. The import result reported **1,000 created**. An API read after the UI operation independently confirmed:
+UI 操作路径为 **Issue 2678 QA → QA Import Item → Import**。系统以高置信度自动映射全部 4 个字段，并预览 1,000 行。导入结果显示**新建 1,000 条**。UI 操作完成后，通过 API 独立确认：
 
-- record count 1,000;
-- unique external keys 1,000;
-- amount sum 500,500;
-- active true/false 500/500;
-- no browser console errors.
+- 记录数 1,000；
+- 唯一 `external_key` 数 1,000；
+- `amount` 合计 500,500；
+- `active=true` 和 `active=false` 各 500 条；
+- 浏览器控制台无错误。
 
-[UI result screenshot](screenshots/manual-table-import-result.jpg)
+[UI 导入结果截图](screenshots/manual-table-import-result.jpg)
 
-After `SIGINT`, the manual fresh OS home no longer existed and no process listened on port `38421`.
+发送 `SIGINT` 后，manual 模式的 fresh 临时目录已不存在，端口 `38421` 无进程监听。
 
-## XLSX boundary
+## XLSX 自动化边界
 
-The Codex in-app Browser control surface does not expose a local-file attachment API, and desktop control is intentionally blocked from operating the Codex app. Therefore this automated run did **not** claim a direct file-picker upload of the XLSX.
+Codex 内置浏览器的控制接口不提供本地文件附加能力，桌面控制也被有意禁止操作 Codex 应用本身。因此，本次自动化验证**没有声称通过文件选择框直接上传了 XLSX**。
 
-Instead, two separately verifiable checks were retained:
+实际保留了两项可以分别复核的检查：
 
-1. The exact bundled ObjectUI `parseSpreadsheetFile` implementation parsed `fixtures/xlsx/qa_import_item.xlsx` as one sheet with the four expected headers, 1,000 data rows, amount sum 500,500, and 500 true values.
-2. The in-app UI import pipeline loaded the same archived rows through its supported paste path, automatically mapped the fields, created 1,000 records, and passed API reconciliation as recorded above.
+1. 使用内置 ObjectUI 的同一套 `parseSpreadsheetFile` 实现解析 `fixtures/xlsx/qa_import_item.xlsx`，结果为 1 个工作表、4 个预期字段、1,000 行数据、金额合计 500,500，以及 500 个 true 值。
+2. 通过内置 UI 导入流程支持的粘贴方式加载同一批归档数据，系统自动完成字段映射、新建 1,000 条记录，并通过上述 API 对账。
 
-This proves the XLSX bytes are accepted by the exact ObjectUI parser and that the UI mapping/write path accepts the same 1,000-row dataset. It does not overstate that the file-picker gesture itself was automated. A human acceptance check can cover that final gesture by choosing `fixtures/xlsx/qa_import_item.xlsx`; no data or mapping changes are expected.
+这些结果证明 XLSX 文件可以被同版本 ObjectUI 解析器接受，也证明 UI 映射和写入链路能够接收同一批 1,000 行数据；但并不夸大为已经自动操作了文件选择框。人工验收时可以直接选择 `fixtures/xlsx/qa_import_item.xlsx` 完成最后这一步，数据和映射不需要调整。
 
-As with any UI acceptance run, this evidence does not prove internal batch-call counts, summary recomputation-call counts, or performance. Those remain covered by the archived backend harness and comparison report.
+与其他 UI 验收一样，这份证据不能证明内部批量调用次数、汇总重算调用次数或性能。这些内容仍由归档中的后端 harness 和比较报告证明。

@@ -27,10 +27,12 @@ ui-qa-app/
 ├── src/
 │   ├── app.ts
 │   ├── objects.generated.ts
-│   └── seed.ts
+│   └── seed.generated.ts
 ├── dist/
 │   ├── manual/objectstack.json
-│   └── seeded/objectstack.json
+│   ├── manual/build-provenance.json
+│   ├── seeded/objectstack.json
+│   └── seeded/build-provenance.json
 ├── fixtures/
 │   ├── csv/
 │   └── xlsx/

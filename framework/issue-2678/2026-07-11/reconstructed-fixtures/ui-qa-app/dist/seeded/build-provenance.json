@@ -1,0 +1,40 @@
+{
+  "mode": "seeded",
+  "frameworkRepository": "objectstack-ai/framework",
+  "frameworkSha": "afa81155fb79846978c3ba6d94876edd21658f1d",
+  "frameworkDirty": false,
+  "frameworkCli": "@objectstack/cli/13.0.0 darwin-arm64 node-v22.14.0",
+  "node": "v22.14.0",
+  "artifactSha256": "b67173ac9a0838cc455986185963dbfeb331618af22f987e7f8e5ad201aa1fe0",
+  "compileOutput": {
+    "success": true,
+    "size": 640991,
+    "handlersBundled": 0,
+    "runtimeModule": null,
+    "runtimeModuleSize": 0,
+    "warnings": [],
+    "stats": {
+      "objects": 4,
+      "objectExtensions": 0,
+      "fields": 14,
+      "views": 0,
+      "pages": 0,
+      "apps": 1,
+      "dashboards": 0,
+      "reports": 0,
+      "actions": 0,
+      "flows": 0,
+      "workflows": 0,
+      "agents": 0,
+      "apis": 0,
+      "positions": 0,
+      "permissions": 0,
+      "themes": 0,
+      "datasources": 0,
+      "translations": 0,
+      "plugins": 0,
+      "devPlugins": 0
+    },
+    "output": "dist/seeded/objectstack.json"
+  }
+}

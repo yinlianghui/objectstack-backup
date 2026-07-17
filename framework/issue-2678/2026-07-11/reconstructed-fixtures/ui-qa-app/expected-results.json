@@ -1,0 +1,116 @@
+{
+  "provenance": "Data source reconstructed from the final report and revalidated; the original temporary fixture no longer exists.",
+  "frameworkSha": "98874656ffc50ce1531af52346228ffcdda73fba",
+  "batchSize": 200,
+  "datasets": {
+    "qa_seed_item": {
+      "file": "qa_seed_item.csv",
+      "rowCount": 1000,
+      "uniqueKeyCount": 1000,
+      "amountMin": 1,
+      "amountMax": 1000,
+      "amountSum": 500500,
+      "activeTrue": 500,
+      "activeFalse": 500,
+      "batchWrites": 5,
+      "singleWrites": 0
+    },
+    "qa_import_item": {
+      "file": "qa_import_item.csv",
+      "rowCount": 1000,
+      "uniqueKeyCount": 1000,
+      "amountMin": 1,
+      "amountMax": 1000,
+      "amountSum": 500500,
+      "activeTrue": 500,
+      "activeFalse": 500,
+      "batches": 5
+    }
+  },
+  "summary": {
+    "singleParent": {
+      "file": "qa_summary_child_single_parent.csv",
+      "rowCount": 1000,
+      "parentCount": 1,
+      "expectedRecomputeCalls": 5,
+      "amountSum": 500500,
+      "parents": [
+        {
+          "id": "parent_single",
+          "name": "parent_single",
+          "expected_child_count": 1000,
+          "expected_total_amount": 500500
+        }
+      ]
+    },
+    "tenParents": {
+      "file": "qa_summary_child_ten_parents.csv",
+      "rowCount": 1000,
+      "parentCount": 10,
+      "expectedRecomputeCalls": 50,
+      "amountSum": 500500,
+      "parents": [
+        {
+          "id": "parent_01",
+          "name": "parent_01",
+          "expected_child_count": 100,
+          "expected_total_amount": 49600
+        },
+        {
+          "id": "parent_02",
+          "name": "parent_02",
+          "expected_child_count": 100,
+          "expected_total_amount": 49700
+        },
+        {
+          "id": "parent_03",
+          "name": "parent_03",
+          "expected_child_count": 100,
+          "expected_total_amount": 49800
+        },
+        {
+          "id": "parent_04",
+          "name": "parent_04",
+          "expected_child_count": 100,
+          "expected_total_amount": 49900
+        },
+        {
+          "id": "parent_05",
+          "name": "parent_05",
+          "expected_child_count": 100,
+          "expected_total_amount": 50000
+        },
+        {
+          "id": "parent_06",
+          "name": "parent_06",
+          "expected_child_count": 100,
+          "expected_total_amount": 50100
+        },
+        {
+          "id": "parent_07",
+          "name": "parent_07",
+          "expected_child_count": 100,
+          "expected_total_amount": 50200
+        },
+        {
+          "id": "parent_08",
+          "name": "parent_08",
+          "expected_child_count": 100,
+          "expected_total_amount": 50300
+        },
+        {
+          "id": "parent_09",
+          "name": "parent_09",
+          "expected_child_count": 100,
+          "expected_total_amount": 50400
+        },
+        {
+          "id": "parent_10",
+          "name": "parent_10",
+          "expected_child_count": 100,
+          "expected_total_amount": 50500
+        }
+      ]
+    }
+  }
+}

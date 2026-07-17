@@ -1,0 +1,11 @@
+{
+  "name": "issue-2678-ui-qa-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test scripts/*.test.mjs",
+    "build": "node scripts/build-artifacts.mjs",
+    "start": "node scripts/start-ui.mjs",
+    "verify": "node scripts/verify-package.mjs"
+  }
+}

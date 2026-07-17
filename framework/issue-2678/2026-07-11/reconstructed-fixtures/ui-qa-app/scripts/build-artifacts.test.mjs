@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -9,6 +10,9 @@ import {
   normalizeCompileOutput,
   parseCsv,
   renderObjectsModule,
+  resolveExcelJs,
+  resolveJsZip,
+  writeSingleSheetWorkbook,
 } from './build-artifacts.mjs';
 
 const packageRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -66,4 +70,42 @@ test('normalizes compile evidence for a portable archive', () => {
       stats: { objects: 4 },
     },
   );
+});
+
+test('writes exactly one worksheet with headers and typed rows', async (context) => {
+  if (!process.env.FRAMEWORK_ROOT) {
+    context.skip('Set FRAMEWORK_ROOT to run the XLSX integration test.');
+    return;
+  }
+  const ExcelJS = await resolveExcelJs(process.env.FRAMEWORK_ROOT);
+  const JSZip = await resolveJsZip(process.env.FRAMEWORK_ROOT);
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'qa-xlsx-test-'));
+  try {
+    const file = path.join(directory, 'sample.xlsx');
+    await writeSingleSheetWorkbook(ExcelJS, JSZip, file, 'Import Items', [
+      { external_key: 'A', name: 'One', amount: 1, active: true },
+      { external_key: 'B', name: 'Two', amount: 2, active: false },
+    ]);
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.readFile(file);
+    assert.equal(workbook.worksheets.length, 1);
+    assert.equal(workbook.worksheets[0].name, 'Import Items');
+    assert.equal(workbook.worksheets[0].rowCount, 3);
+    assert.deepEqual(
+      workbook.worksheets[0].getRow(1).values.slice(1),
+      ['external_key', 'name', 'amount', 'active'],
+    );
+    assert.deepEqual(
+      workbook.worksheets[0].getRow(2).values.slice(1),
+      ['A', 'One', 1, true],
+    );
+    const zip = await JSZip.loadAsync(await fs.readFile(file));
+    assert.ok(
+      Object.values(zip.files).every(
+        (entry) => entry.date.toISOString() === '2026-07-17T00:00:00.000Z',
+      ),
+    );
+  } finally {
+    await fs.rm(directory, { recursive: true, force: true });
+  }
 });

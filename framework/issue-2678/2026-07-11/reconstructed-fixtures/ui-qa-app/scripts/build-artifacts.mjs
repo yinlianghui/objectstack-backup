@@ -3,6 +3,7 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 
 import {
@@ -124,6 +125,46 @@ export function renderSeedModule(groups) {
   ].join('\n');
 }
 
+export async function resolveExcelJs(frameworkRoot) {
+  const requireFromRest = createRequire(path.join(frameworkRoot, 'packages/rest/package.json'));
+  const loaded = requireFromRest('exceljs');
+  return loaded.default ?? loaded;
+}
+
+export async function resolveJsZip(frameworkRoot) {
+  const requireFromRest = createRequire(path.join(frameworkRoot, 'packages/rest/package.json'));
+  const excelPackage = requireFromRest.resolve('exceljs/package.json');
+  const requireFromExcel = createRequire(excelPackage);
+  const loaded = requireFromExcel('jszip');
+  return loaded.default ?? loaded;
+}
+
+export async function writeSingleSheetWorkbook(ExcelJS, JSZip, destination, sheetName, rows) {
+  if (rows.length === 0) throw new Error(`Cannot build empty workbook: ${destination}`);
+  const headers = Object.keys(rows[0]);
+  const workbook = new ExcelJS.Workbook();
+  const fixedDate = new Date('2026-07-17T00:00:00.000Z');
+  workbook.creator = 'ObjectStack Issue 2678 QA';
+  workbook.created = fixedDate;
+  workbook.modified = fixedDate;
+  const worksheet = workbook.addWorksheet(sheetName);
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }];
+  worksheet.addRow(headers);
+  worksheet.getRow(1).font = { bold: true };
+  for (const row of rows) worksheet.addRow(headers.map((header) => row[header]));
+  worksheet.columns.forEach((column) => { column.width = 22; });
+  const zip = await JSZip.loadAsync(Buffer.from(await workbook.xlsx.writeBuffer()));
+  for (const entry of Object.values(zip.files)) entry.date = fixedDate;
+  const deterministic = await zip.generateAsync({
+    type: 'nodebuffer',
+    compression: 'DEFLATE',
+    compressionOptions: { level: 6 },
+    platform: 'UNIX',
+  });
+  await fs.mkdir(path.dirname(destination), { recursive: true });
+  await fs.writeFile(destination, deterministic);
+}
+
 function requiredFrameworkRoot(argv, env = process.env) {
   const index = argv.indexOf('--framework-root');
   const value = index >= 0 ? argv[index + 1] : env.FRAMEWORK_ROOT;
@@ -170,6 +211,40 @@ async function writeGeneratedSources(packageRoot, archiveRoot) {
       renderSeedModule(groups),
     ),
   ]);
+  return groups;
+}
+
+async function buildFixtures(packageRoot, archiveRoot, frameworkRoot, groups) {
+  const csvDir = path.join(packageRoot, 'fixtures/csv');
+  const xlsxDir = path.join(packageRoot, 'fixtures/xlsx');
+  await Promise.all([
+    fs.mkdir(csvDir, { recursive: true }),
+    fs.mkdir(xlsxDir, { recursive: true }),
+  ]);
+  const fixtures = [
+    ['qa_import_item.csv', 'Import Items', groups.importItems],
+    ['qa_summary_child_single_parent.csv', 'Single Parent Children', groups.singleChildren],
+    ['qa_summary_child_ten_parents.csv', 'Ten Parent Children', groups.tenChildren],
+  ];
+  const ExcelJS = await resolveExcelJs(frameworkRoot);
+  const JSZip = await resolveJsZip(frameworkRoot);
+  for (const [csvName, sheetName, rows] of fixtures) {
+    await fs.copyFile(
+      path.join(archiveRoot, 'data', csvName),
+      path.join(csvDir, csvName),
+    );
+    await writeSingleSheetWorkbook(
+      ExcelJS,
+      JSZip,
+      path.join(xlsxDir, csvName.replace(/\.csv$/, '.xlsx')),
+      sheetName,
+      rows,
+    );
+  }
+  await fs.copyFile(
+    path.join(archiveRoot, 'data/expected-results.json'),
+    path.join(packageRoot, 'expected-results.json'),
+  );
 }
 
 async function compileArtifact({
@@ -224,7 +299,8 @@ async function buildArtifacts(frameworkRoot) {
   const scriptPath = fileURLToPath(import.meta.url);
   const packageRoot = path.dirname(path.dirname(scriptPath));
   const archiveRoot = path.dirname(packageRoot);
-  await writeGeneratedSources(packageRoot, archiveRoot);
+  const groups = await writeGeneratedSources(packageRoot, archiveRoot);
+  await buildFixtures(packageRoot, archiveRoot, frameworkRoot, groups);
 
   const stageRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'issue-2678-ui-build-'));
   try {

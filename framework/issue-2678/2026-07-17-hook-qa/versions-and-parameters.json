@@ -74,7 +74,13 @@
   },
   "findings": {
     "recordLevelBulkHookIssue": 2922,
-    "postWriteAfterInsertIssue": 3153
+    "postWriteAfterInsertCandidate": {
+      "memo": "results/product-issue-afterinsert.md",
+      "approval": "pending-maintainer-confirmation",
+      "historicalIssue": 3153,
+      "historicalIssueState": "closed",
+      "activeIssueCreated": false
+    }
   },
   "boundaries": [
     "Historical fixed Framework target only",

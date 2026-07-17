@@ -249,6 +249,8 @@ const reportText = await fs.readFile(path.join(root, "final-report-supplement.md
 for (const requiredPhrase of [
   "45 项通过、38 项失败",
   "#3153",
+  "候选问题备忘",
+  "已关闭",
   "不宣称已复验该修复",
   "本任务未修改 Framework 产品代码",
 ]) {

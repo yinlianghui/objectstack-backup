@@ -8,7 +8,7 @@
 - [逐项比较报告](results/comparison-report.md)
 - [机器可读比较](results/comparison-report.json)
 - [完整 raw results 与事件 trace](results/raw-results.json)
-- 新发现的 post-write 异常已登记 [Framework #3153](https://github.com/objectstack-ai/framework/issues/3153)
+- [post-write 异常候选问题备忘](results/product-issue-afterinsert.md)；曾未经维护者确认创建的 [Framework #3153](https://github.com/objectstack-ai/framework/issues/3153) 已关闭，不是活动 Issue
 
 目标提交的批量写入次数、summary 重算及最终业务金额继续通过，但子记录 Hook 是每批一次 array，而不是每条记录一次 record；`beforeInsert` flat input、字段修改和逐行异常隔离因此失效。83 项分层比较为 45 passed / 38 failed。后续 #2922 / #2941 用于确定记录级契约，不作为本轮受测或通过版本。
 
@@ -29,6 +29,12 @@
 | `manifest.json` / `SHA256SUMS` | 文件清单和 SHA-256 |
 
 三个数据库只含 `qa_*` 表，不含账号、会话或其他系统表，因此保留完整最小 QA 数据库。`commands/004-runtime-versions.stdout.log` 中三个主机唯一标识在归档前显式替换为 `[REDACTED]`；OS、CPU、内存、Node 和 pnpm 信息保留。
+
+## Issue 候选流程
+
+本备忘仓库中的候选问题遵循“一项一文件”：先保存证据、复现、影响、边界、去重结果和建议 Issue 文案，状态保持为“待维护者确认”。只有维护者明确批准后才创建正式 Issue，并在候选文件中回填链接和状态。未经确认不得创建、重开或更新外部 Issue。
+
+`results/product-issue-afterinsert.md` 是本轮唯一需要维护者判断是否上报的候选文件。#3153 的链接只保留为历史操作记录；该 Issue 已由维护者关闭，不表示候选项已获批准。
 
 ## 从固定 Framework 版本复跑
 

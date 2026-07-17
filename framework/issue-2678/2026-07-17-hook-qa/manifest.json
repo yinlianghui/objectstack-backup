@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "archive": "Framework #2678 Problem One supplemental Hook QA",
-  "generatedAtUtc": "2026-07-17T14:49:20.235Z",
+  "generatedAtUtc": "2026-07-17T15:34:00.556Z",
   "frameworkTarget": "98874656ffc50ce1531af52346228ffcdda73fba",
   "fileCount": 116,
-  "totalBytes": 4098181,
+  "totalBytes": 4100145,
   "exclusions": [
     "manifest.json",
     "SHA256SUMS"
@@ -12,8 +12,8 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 3713,
-      "sha256": "ec4db651fefd165ba1d43617d0540be588dc1c3beed4b26dc891a2e5d7b8679d"
+      "bytes": 4406,
+      "sha256": "56523d4e165da2d96e05b9431f35927d346e209ed7d722cff9c0d5339252d222"
     },
     {
       "path": "command-ledger.md",
@@ -457,8 +457,8 @@
     },
     {
       "path": "final-report-supplement.md",
-      "bytes": 7399,
-      "sha256": "0c993a10c6a6dccb78cba85bc7e6c6ed4e10215b9d84fe35151a757217a62c41"
+      "bytes": 7868,
+      "sha256": "3ec964b6ac1e32ce769ae9da0577c055879e2afa590a51c820721ed5ff452b89"
     },
     {
       "path": "inputs/hook-after-error.csv",
@@ -507,8 +507,8 @@
     },
     {
       "path": "results/product-issue-afterinsert.md",
-      "bytes": 2264,
-      "sha256": "1b2813850c86a038d0087b0b8d6603cae9145fee1fcc987c24ab9e5f095d60db"
+      "bytes": 2808,
+      "sha256": "985134a675bec489d82fd13a32850a68271de487507303fe3a84501c7322887a"
     },
     {
       "path": "results/raw-results.json",
@@ -577,8 +577,8 @@
     },
     {
       "path": "source/verify-archive.mjs",
-      "bytes": 10253,
-      "sha256": "eaab3adc519e6b2037e3faa7e0a08a1451dd9b61d3efc8c40668e05316d52da0"
+      "bytes": 10292,
+      "sha256": "34e8e9b013a04c780728f2cb75b89d6b1f4f59efed94ea99950b8ce5813ab165"
     },
     {
       "path": "test-plan.md",
@@ -587,8 +587,8 @@
     },
     {
       "path": "versions-and-parameters.json",
-      "bytes": 2645,
-      "sha256": "3d7d0c32f73fee76405a936d174be745b10371f0b82cd8f9f24e84f0be20a6dd"
+      "bytes": 2864,
+      "sha256": "57e6b8f4f52b4bddf0e9e15c3bc971f9796c84f1b3e2f9f0628e4f4508361eed"
     }
   ]
 }

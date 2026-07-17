@@ -1,11 +1,12 @@
 // GENERATED from ../../source/object-definitions.ts by scripts/build-artifacts.mjs.
-// Current protocol normalization: disabled tenancy explicitly uses strategy "shared".
+// Current protocol normalizations: disabled tenancy uses strategy "shared" and OWD is explicit.
 // Do not edit this copy by hand.
 
 export const objectDefinitions = [
   {
     name: "qa_seed_item",
     label: "QA Seed Item",
+    sharingModel: "public_read_write",
     systemFields: false,
     tenancy: { enabled: false, strategy: "shared" },
     fields: {
@@ -18,6 +19,7 @@ export const objectDefinitions = [
   {
     name: "qa_import_item",
     label: "QA Import Item",
+    sharingModel: "public_read_write",
     systemFields: false,
     tenancy: { enabled: false, strategy: "shared" },
     fields: {
@@ -30,6 +32,7 @@ export const objectDefinitions = [
   {
     name: "qa_summary_parent",
     label: "QA Summary Parent",
+    sharingModel: "public_read_write",
     systemFields: false,
     tenancy: { enabled: false, strategy: "shared" },
     fields: {
@@ -49,6 +52,7 @@ export const objectDefinitions = [
   {
     name: "qa_summary_child",
     label: "QA Summary Child",
+    sharingModel: "controlled_by_parent",
     systemFields: false,
     tenancy: { enabled: false, strategy: "shared" },
     fields: {

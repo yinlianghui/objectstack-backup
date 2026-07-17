@@ -87,13 +87,24 @@ export function renderObjectsModule(canonicalSource) {
   if (matches !== 4) {
     throw new Error(`Expected four legacy disabled-tenancy declarations; found ${matches}.`);
   }
-  const normalized = canonicalSource.replaceAll(
+  let normalized = canonicalSource.replaceAll(
     legacyTenancy,
     'tenancy: { enabled: false, strategy: "shared" },',
   );
+  const sharingModels = {
+    qa_seed_item: 'public_read_write',
+    qa_import_item: 'public_read_write',
+    qa_summary_parent: 'public_read_write',
+    qa_summary_child: 'controlled_by_parent',
+  };
+  for (const [name, sharingModel] of Object.entries(sharingModels)) {
+    const pattern = new RegExp(`(name: "${name}",\\n    label: "[^"]+",)`);
+    if (!pattern.test(normalized)) throw new Error(`Unable to add sharingModel to ${name}.`);
+    normalized = normalized.replace(pattern, `$1\n    sharingModel: "${sharingModel}",`);
+  }
   return [
     '// GENERATED from ../../source/object-definitions.ts by scripts/build-artifacts.mjs.',
-    '// Current protocol normalization: disabled tenancy explicitly uses strategy "shared".',
+    '// Current protocol normalizations: disabled tenancy uses strategy "shared" and OWD is explicit.',
     '// Do not edit this copy by hand.',
     '',
     normalized,
@@ -185,6 +196,17 @@ async function sha256(file) {
   return crypto.createHash('sha256').update(await fs.readFile(file)).digest('hex');
 }
 
+function frameworkCliVersion(frameworkRoot) {
+  const result = spawnSync(process.execPath, frameworkCliArgs(frameworkRoot, ['--version']), {
+    cwd: frameworkRoot,
+    encoding: 'utf8',
+  });
+  if (result.status !== 0) {
+    throw new Error(`Unable to read local Framework CLI version: ${result.stderr?.trim()}`);
+  }
+  return result.stdout.trim();
+}
+
 export function normalizeCompileOutput(output, mode) {
   const { duration: _duration, output: _absoluteOutput, ...stable } = output;
   return {
@@ -255,6 +277,7 @@ async function compileArtifact({
   mode,
   frameworkSha,
   frameworkDirty,
+  cliVersion,
 }) {
   const outputDir = path.join(packageRoot, 'dist', mode);
   const outputFile = path.join(outputDir, 'objectstack.json');
@@ -266,8 +289,8 @@ async function compileArtifact({
     outputFile,
     '--json',
   ]);
-  const result = spawnSync('pnpm', command, {
-    cwd: stageRoot,
+  const result = spawnSync(process.execPath, command, {
+    cwd: frameworkRoot,
     encoding: 'utf8',
   });
   if (result.status !== 0) {
@@ -283,6 +306,7 @@ async function compileArtifact({
     frameworkRepository: 'objectstack-ai/framework',
     frameworkSha,
     frameworkDirty,
+    frameworkCli: cliVersion,
     node: process.version,
     artifactSha256: await sha256(outputFile),
     compileOutput: compileOutput
@@ -323,6 +347,7 @@ async function buildArtifacts(frameworkRoot) {
     );
     const frameworkSha = gitOutput(frameworkRoot, ['rev-parse', 'HEAD']);
     const frameworkDirty = gitOutput(frameworkRoot, ['status', '--porcelain']).length > 0;
+    const cliVersion = frameworkCliVersion(frameworkRoot);
     for (const [mode, configName] of [
       ['manual', 'objectstack.config.ts'],
       ['seeded', 'objectstack.seeded.config.ts'],
@@ -335,6 +360,7 @@ async function buildArtifacts(frameworkRoot) {
         mode,
         frameworkSha,
         frameworkDirty,
+        cliVersion,
       });
     }
   } finally {

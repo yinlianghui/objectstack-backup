@@ -52,6 +52,8 @@ test('generated object source is traceable to the canonical source', async () =>
     4,
   );
   assert.doesNotMatch(generated, /tenancy: \{ enabled: false \},/);
+  assert.equal([...generated.matchAll(/sharingModel: "public_read_write"/g)].length, 3);
+  assert.equal([...generated.matchAll(/sharingModel: "controlled_by_parent"/g)].length, 1);
 });
 
 test('normalizes compile evidence for a portable archive', () => {

@@ -47,9 +47,7 @@ export function artifactForMode(packageRoot, mode) {
 
 export function frameworkCliArgs(frameworkRoot, args) {
   return [
-    '--dir', path.resolve(frameworkRoot),
-    '--filter', '@objectstack/cli',
-    'exec', 'objectstack',
+    path.join(path.resolve(frameworkRoot), 'packages/cli/bin/run.js'),
     ...args,
   ];
 }

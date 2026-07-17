@@ -53,7 +53,7 @@ export async function startUi(argv, env = process.env) {
     adminPassword: 'admin123',
   }, null, 2));
 
-  const child = spawn('pnpm', command, { stdio: 'inherit' });
+  const child = spawn(process.execPath, command, { cwd: frameworkRoot, stdio: 'inherit' });
   let forwarded = false;
   const forward = (signal) => {
     if (!forwarded && child.exitCode === null && child.signalCode === null) {

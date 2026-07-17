@@ -81,7 +81,8 @@
         "strategy": "shared",
         "tenantField": "tenant_id",
         "crossTenantAccess": false
-      }
+      },
+      "sharingModel": "public_read_write"
     },
     {
       "name": "qa_import_item",
@@ -154,7 +155,8 @@
         "strategy": "shared",
         "tenantField": "tenant_id",
         "crossTenantAccess": false
-      }
+      },
+      "sharingModel": "public_read_write"
     },
     {
       "name": "qa_summary_parent",
@@ -205,7 +207,8 @@
         "strategy": "shared",
         "tenantField": "tenant_id",
         "crossTenantAccess": false
-      }
+      },
+      "sharingModel": "public_read_write"
     },
     {
       "name": "qa_summary_child",
@@ -279,7 +282,8 @@
         "strategy": "shared",
         "tenantField": "tenant_id",
         "crossTenantAccess": false
-      }
+      },
+      "sharingModel": "controlled_by_parent"
     }
   ],
   "apps": [

@@ -71,7 +71,7 @@ The UI supports `.xlsx`; legacy `.xls` is intentionally not included. The multi-
 
 Successful UI import confirms that the current UI can accept the reconstructed rows and that the resulting record values can be inspected. It does **not** by itself prove internal batch-call counts, summary recomputation-call counts, or performance. Those conclusions remain backed by the archived backend harness and comparison report in the surrounding `reconstructed-fixtures` directory.
 
-The generated object source applies one explicit current-protocol normalization: each historical `tenancy: { enabled: false }` declaration is compiled as `tenancy: { enabled: false, strategy: "shared" }`. The four historical canonical object definitions and their business fields are otherwise unchanged.
+The generated object source applies two explicit current-protocol normalizations. Each historical `tenancy: { enabled: false }` declaration is compiled as `tenancy: { enabled: false, strategy: "shared" }`. Current OWD declarations are also explicit: the three independent/shared QA objects use `public_read_write`, and the master-detail child uses `controlled_by_parent`. The four historical canonical object definitions and their business fields are otherwise unchanged.
 
 ## Rebuild artifacts (maintainers only)
 

@@ -114,6 +114,9 @@ async function verifyArtifact(packageRoot, mode, expectedCounts) {
   if (!/^[0-9a-f]{40}$/.test(provenance.frameworkSha ?? '')) {
     fail(`${provenanceFile} has an invalid Framework SHA`);
   }
+  if (!/^@objectstack\/cli\/\d+\.\d+\.\d+\b/.test(provenance.frameworkCli ?? '')) {
+    fail(`${provenanceFile} has an invalid local Framework CLI version`);
+  }
   if (provenance.compileOutput?.success !== true) fail(`${provenanceFile} compile did not succeed`);
   return provenance.frameworkSha;
 }

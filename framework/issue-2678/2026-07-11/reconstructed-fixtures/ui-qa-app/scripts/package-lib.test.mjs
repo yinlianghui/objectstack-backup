@@ -51,8 +51,8 @@ test('resolves artifacts and CLI invocation without changing Framework', () => {
     path.join('/pkg', 'dist/manual/objectstack.json'),
   );
   assert.deepEqual(
-    frameworkCliArgs('/repo/framework', ['--version']).slice(-2),
-    ['objectstack', '--version'],
+    frameworkCliArgs('/repo/framework', ['--version']),
+    [path.join('/repo/framework', 'packages/cli/bin/run.js'), '--version'],
   );
 });
 

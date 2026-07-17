@@ -1,0 +1,2195 @@
+{
+  "schemaVersion": 1,
+  "status": "fail",
+  "totalChecks": 83,
+  "passedChecks": 45,
+  "failedChecks": 38,
+  "categorySummary": {
+    "database": {
+      "total": 17,
+      "passed": 10,
+      "failed": 7
+    },
+    "exception": {
+      "total": 5,
+      "passed": 1,
+      "failed": 4
+    },
+    "hook": {
+      "total": 26,
+      "passed": 6,
+      "failed": 20
+    },
+    "observation": {
+      "total": 9,
+      "passed": 9,
+      "failed": 0
+    },
+    "order": {
+      "total": 6,
+      "passed": 2,
+      "failed": 4
+    },
+    "summary": {
+      "total": 5,
+      "passed": 5,
+      "failed": 0
+    },
+    "write": {
+      "total": 15,
+      "passed": 12,
+      "failed": 3
+    }
+  },
+  "knownIssue2922Detected": true,
+  "afterInsertPersistenceMismatchObserved": true,
+  "safety": {
+    "reportedInsertedEqualsPersistedRows": false,
+    "reportedErroredRowsAreAbsent": false
+  },
+  "checks": [
+    {
+      "id": "normal.seed.before.calls",
+      "category": "hook",
+      "expected": 1000,
+      "actual": 5,
+      "pass": false
+    },
+    {
+      "id": "normal.seed.before.shape",
+      "category": "hook",
+      "expected": [
+        "record"
+      ],
+      "actual": [
+        "array"
+      ],
+      "pass": false
+    },
+    {
+      "id": "normal.seed.after.calls",
+      "category": "hook",
+      "expected": 1000,
+      "actual": 5,
+      "pass": false
+    },
+    {
+      "id": "normal.seed.after.shape",
+      "category": "hook",
+      "expected": [
+        "record"
+      ],
+      "actual": [
+        "array"
+      ],
+      "pass": false
+    },
+    {
+      "id": "normal.seed.engine-insert",
+      "category": "write",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "id": "normal.seed.driver-bulk-create",
+      "category": "write",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "id": "normal.seed.driver-create",
+      "category": "write",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "id": "normal.seed.batch-boundaries",
+      "category": "write",
+      "expected": [
+        [
+          "SEED-0001",
+          "SEED-0200"
+        ],
+        [
+          "SEED-0201",
+          "SEED-0400"
+        ],
+        [
+          "SEED-0401",
+          "SEED-0600"
+        ],
+        [
+          "SEED-0601",
+          "SEED-0800"
+        ],
+        [
+          "SEED-0801",
+          "SEED-1000"
+        ]
+      ],
+      "actual": [
+        [
+          "SEED-0001",
+          "SEED-0200"
+        ],
+        [
+          "SEED-0201",
+          "SEED-0400"
+        ],
+        [
+          "SEED-0401",
+          "SEED-0600"
+        ],
+        [
+          "SEED-0601",
+          "SEED-0800"
+        ],
+        [
+          "SEED-0801",
+          "SEED-1000"
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "id": "normal.seed.db.rows",
+      "category": "database",
+      "expected": 1000,
+      "actual": 1000,
+      "pass": true
+    },
+    {
+      "id": "normal.seed.db.hook-markers",
+      "category": "database",
+      "expected": 1000,
+      "actual": 0,
+      "pass": false
+    },
+    {
+      "id": "normal.import.before.calls",
+      "category": "hook",
+      "expected": 1000,
+      "actual": 5,
+      "pass": false
+    },
+    {
+      "id": "normal.import.before.shape",
+      "category": "hook",
+      "expected": [
+        "record"
+      ],
+      "actual": [
+        "array"
+      ],
+      "pass": false
+    },
+    {
+      "id": "normal.import.after.calls",
+      "category": "hook",
+      "expected": 1000,
+      "actual": 5,
+      "pass": false
+    },
+    {
+      "id": "normal.import.after.shape",
+      "category": "hook",
+      "expected": [
+        "record"
+      ],
+      "actual": [
+        "array"
+      ],
+      "pass": false
+    },
+    {
+      "id": "normal.import.engine-insert",
+      "category": "write",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "id": "normal.import.driver-bulk-create",
+      "category": "write",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "id": "normal.import.driver-create",
+      "category": "write",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "id": "normal.import.batch-boundaries",
+      "category": "write",
+      "expected": [
+        [
+          "IMPORT-0001",
+          "IMPORT-0200"
+        ],
+        [
+          "IMPORT-0201",
+          "IMPORT-0400"
+        ],
+        [
+          "IMPORT-0401",
+          "IMPORT-0600"
+        ],
+        [
+          "IMPORT-0601",
+          "IMPORT-0800"
+        ],
+        [
+          "IMPORT-0801",
+          "IMPORT-1000"
+        ]
+      ],
+      "actual": [
+        [
+          "IMPORT-0001",
+          "IMPORT-0200"
+        ],
+        [
+          "IMPORT-0201",
+          "IMPORT-0400"
+        ],
+        [
+          "IMPORT-0401",
+          "IMPORT-0600"
+        ],
+        [
+          "IMPORT-0601",
+          "IMPORT-0800"
+        ],
+        [
+          "IMPORT-0801",
+          "IMPORT-1000"
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "id": "normal.import.db.rows",
+      "category": "database",
+      "expected": 1000,
+      "actual": 1000,
+      "pass": true
+    },
+    {
+      "id": "normal.import.db.hook-markers",
+      "category": "database",
+      "expected": 1000,
+      "actual": 0,
+      "pass": false
+    },
+    {
+      "id": "normal.seed.session",
+      "category": "hook",
+      "expected": {
+        "isSystem": true,
+        "skipTriggers": true
+      },
+      "actual": {
+        "isSystem": true,
+        "skipTriggers": true
+      },
+      "pass": true
+    },
+    {
+      "id": "normal.import.protocol-create-many",
+      "category": "write",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "id": "normal.import.protocol-create-one",
+      "category": "write",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "id": "normal.import.http-errors",
+      "category": "exception",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "id": "normal.single-parent.child-before.calls",
+      "category": "hook",
+      "expected": 1000,
+      "actual": 5,
+      "pass": false
+    },
+    {
+      "id": "normal.single-parent.child-before.shape",
+      "category": "hook",
+      "expected": [
+        "record"
+      ],
+      "actual": [
+        "array"
+      ],
+      "pass": false
+    },
+    {
+      "id": "normal.single-parent.child-after.calls",
+      "category": "hook",
+      "expected": 1000,
+      "actual": 5,
+      "pass": false
+    },
+    {
+      "id": "normal.single-parent.child-after.shape",
+      "category": "hook",
+      "expected": [
+        "record"
+      ],
+      "actual": [
+        "array"
+      ],
+      "pass": false
+    },
+    {
+      "id": "normal.single-parent.child-bulk-create",
+      "category": "write",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "id": "normal.single-parent.child-markers",
+      "category": "database",
+      "expected": 1000,
+      "actual": 0,
+      "pass": false
+    },
+    {
+      "id": "normal.single-parent.aggregate.calls",
+      "category": "summary",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "id": "normal.single-parent.parent-before.calls",
+      "category": "hook",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "id": "normal.single-parent.parent-after.calls",
+      "category": "hook",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "id": "normal.single-parent.parent-update-values",
+      "category": "summary",
+      "expected": [
+        20100,
+        80200,
+        180300,
+        320400,
+        500500
+      ],
+      "actual": [
+        20100,
+        80200,
+        180300,
+        320400,
+        500500
+      ],
+      "pass": true
+    },
+    {
+      "id": "normal.single-parent.parent-previous-values",
+      "category": "hook",
+      "expected": [
+        null,
+        20100,
+        80200,
+        180300,
+        320400
+      ],
+      "actual": [
+        null,
+        20100,
+        80200,
+        180300,
+        320400
+      ],
+      "pass": true
+    },
+    {
+      "id": "normal.ten-parents.child-before.calls",
+      "category": "hook",
+      "expected": 1000,
+      "actual": 5,
+      "pass": false
+    },
+    {
+      "id": "normal.ten-parents.child-before.shape",
+      "category": "hook",
+      "expected": [
+        "record"
+      ],
+      "actual": [
+        "array"
+      ],
+      "pass": false
+    },
+    {
+      "id": "normal.ten-parents.child-after.calls",
+      "category": "hook",
+      "expected": 1000,
+      "actual": 5,
+      "pass": false
+    },
+    {
+      "id": "normal.ten-parents.child-after.shape",
+      "category": "hook",
+      "expected": [
+        "record"
+      ],
+      "actual": [
+        "array"
+      ],
+      "pass": false
+    },
+    {
+      "id": "normal.ten-parents.child-bulk-create",
+      "category": "write",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "id": "normal.ten-parents.child-markers",
+      "category": "database",
+      "expected": 1000,
+      "actual": 0,
+      "pass": false
+    },
+    {
+      "id": "normal.ten-parents.aggregate.calls",
+      "category": "summary",
+      "expected": 50,
+      "actual": 50,
+      "pass": true
+    },
+    {
+      "id": "normal.ten-parents.parent-before.calls",
+      "category": "hook",
+      "expected": 50,
+      "actual": 50,
+      "pass": true
+    },
+    {
+      "id": "normal.ten-parents.parent-after.calls",
+      "category": "hook",
+      "expected": 50,
+      "actual": 50,
+      "pass": true
+    },
+    {
+      "id": "normal.ten-parents.parent-update-values",
+      "category": "summary",
+      "expected": [
+        1920,
+        1940,
+        1960,
+        1980,
+        2000,
+        2020,
+        2040,
+        2060,
+        2080,
+        2100,
+        7840,
+        7880,
+        7920,
+        7960,
+        8000,
+        8040,
+        8080,
+        8120,
+        8160,
+        8200,
+        17760,
+        17820,
+        17880,
+        17940,
+        18000,
+        18060,
+        18120,
+        18180,
+        18240,
+        18300,
+        31680,
+        31760,
+        31840,
+        31920,
+        32000,
+        32080,
+        32160,
+        32240,
+        32320,
+        32400,
+        49600,
+        49700,
+        49800,
+        49900,
+        50000,
+        50100,
+        50200,
+        50300,
+        50400,
+        50500
+      ],
+      "actual": [
+        1920,
+        1940,
+        1960,
+        1980,
+        2000,
+        2020,
+        2040,
+        2060,
+        2080,
+        2100,
+        7840,
+        7880,
+        7920,
+        7960,
+        8000,
+        8040,
+        8080,
+        8120,
+        8160,
+        8200,
+        17760,
+        17820,
+        17880,
+        17940,
+        18000,
+        18060,
+        18120,
+        18180,
+        18240,
+        18300,
+        31680,
+        31760,
+        31840,
+        31920,
+        32000,
+        32080,
+        32160,
+        32240,
+        32320,
+        32400,
+        49600,
+        49700,
+        49800,
+        49900,
+        50000,
+        50100,
+        50200,
+        50300,
+        50400,
+        50500
+      ],
+      "pass": true
+    },
+    {
+      "id": "normal.ten-parents.parent-order",
+      "category": "summary",
+      "expected": [
+        "parent_01",
+        "parent_02",
+        "parent_03",
+        "parent_04",
+        "parent_05",
+        "parent_06",
+        "parent_07",
+        "parent_08",
+        "parent_09",
+        "parent_10",
+        "parent_01",
+        "parent_02",
+        "parent_03",
+        "parent_04",
+        "parent_05",
+        "parent_06",
+        "parent_07",
+        "parent_08",
+        "parent_09",
+        "parent_10",
+        "parent_01",
+        "parent_02",
+        "parent_03",
+        "parent_04",
+        "parent_05",
+        "parent_06",
+        "parent_07",
+        "parent_08",
+        "parent_09",
+        "parent_10",
+        "parent_01",
+        "parent_02",
+        "parent_03",
+        "parent_04",
+        "parent_05",
+        "parent_06",
+        "parent_07",
+        "parent_08",
+        "parent_09",
+        "parent_10",
+        "parent_01",
+        "parent_02",
+        "parent_03",
+        "parent_04",
+        "parent_05",
+        "parent_06",
+        "parent_07",
+        "parent_08",
+        "parent_09",
+        "parent_10"
+      ],
+      "actual": [
+        "parent_01",
+        "parent_02",
+        "parent_03",
+        "parent_04",
+        "parent_05",
+        "parent_06",
+        "parent_07",
+        "parent_08",
+        "parent_09",
+        "parent_10",
+        "parent_01",
+        "parent_02",
+        "parent_03",
+        "parent_04",
+        "parent_05",
+        "parent_06",
+        "parent_07",
+        "parent_08",
+        "parent_09",
+        "parent_10",
+        "parent_01",
+        "parent_02",
+        "parent_03",
+        "parent_04",
+        "parent_05",
+        "parent_06",
+        "parent_07",
+        "parent_08",
+        "parent_09",
+        "parent_10",
+        "parent_01",
+        "parent_02",
+        "parent_03",
+        "parent_04",
+        "parent_05",
+        "parent_06",
+        "parent_07",
+        "parent_08",
+        "parent_09",
+        "parent_10",
+        "parent_01",
+        "parent_02",
+        "parent_03",
+        "parent_04",
+        "parent_05",
+        "parent_06",
+        "parent_07",
+        "parent_08",
+        "parent_09",
+        "parent_10"
+      ],
+      "pass": true
+    },
+    {
+      "id": "normal.single-parent.final-total",
+      "category": "database",
+      "expected": 500500,
+      "actual": 500500,
+      "pass": true
+    },
+    {
+      "id": "normal.ten-parents.final-totals",
+      "category": "database",
+      "expected": [
+        49600,
+        49700,
+        49800,
+        49900,
+        50000,
+        50100,
+        50200,
+        50300,
+        50400,
+        50500
+      ],
+      "actual": [
+        49600,
+        49700,
+        49800,
+        49900,
+        50000,
+        50100,
+        50200,
+        50300,
+        50400,
+        50500
+      ],
+      "pass": true
+    },
+    {
+      "id": "normal.ten-parents.combined-total",
+      "category": "database",
+      "expected": 500500,
+      "actual": 500500,
+      "pass": true
+    },
+    {
+      "id": "normal.sqlite.integrity",
+      "category": "database",
+      "expected": "ok",
+      "actual": "ok",
+      "pass": true
+    },
+    {
+      "id": "normal.sqlite.non-qa-tables",
+      "category": "database",
+      "expected": [],
+      "actual": [],
+      "pass": true
+    },
+    {
+      "id": "normal.seed.record-bulk-order",
+      "category": "order",
+      "expected": [
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SEED-0001",
+            "SEED-0200"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SEED-0201",
+            "SEED-0400"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SEED-0401",
+            "SEED-0600"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SEED-0601",
+            "SEED-0800"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SEED-0801",
+            "SEED-1000"
+          ]
+        }
+      ],
+      "actual": [
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SEED-0001",
+            "SEED-0200"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SEED-0201",
+            "SEED-0400"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SEED-0401",
+            "SEED-0600"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SEED-0601",
+            "SEED-0800"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SEED-0801",
+            "SEED-1000"
+          ]
+        }
+      ],
+      "pass": false
+    },
+    {
+      "id": "normal.import.record-bulk-order",
+      "category": "order",
+      "expected": [
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "IMPORT-0001",
+            "IMPORT-0200"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "IMPORT-0201",
+            "IMPORT-0400"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "IMPORT-0401",
+            "IMPORT-0600"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "IMPORT-0601",
+            "IMPORT-0800"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "IMPORT-0801",
+            "IMPORT-1000"
+          ]
+        }
+      ],
+      "actual": [
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "IMPORT-0001",
+            "IMPORT-0200"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "IMPORT-0201",
+            "IMPORT-0400"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "IMPORT-0401",
+            "IMPORT-0600"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "IMPORT-0601",
+            "IMPORT-0800"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "IMPORT-0801",
+            "IMPORT-1000"
+          ]
+        }
+      ],
+      "pass": false
+    },
+    {
+      "id": "normal.single-parent.record-bulk-order",
+      "category": "order",
+      "expected": [
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SINGLE-0001",
+            "SINGLE-0200"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SINGLE-0201",
+            "SINGLE-0400"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SINGLE-0401",
+            "SINGLE-0600"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SINGLE-0601",
+            "SINGLE-0800"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SINGLE-0801",
+            "SINGLE-1000"
+          ]
+        }
+      ],
+      "actual": [
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SINGLE-0001",
+            "SINGLE-0200"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SINGLE-0201",
+            "SINGLE-0400"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SINGLE-0401",
+            "SINGLE-0600"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SINGLE-0601",
+            "SINGLE-0800"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "SINGLE-0801",
+            "SINGLE-1000"
+          ]
+        }
+      ],
+      "pass": false
+    },
+    {
+      "id": "normal.ten-parents.record-bulk-order",
+      "category": "order",
+      "expected": [
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "TEN-0001",
+            "TEN-0200"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "TEN-0201",
+            "TEN-0400"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "TEN-0401",
+            "TEN-0600"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "TEN-0601",
+            "TEN-0800"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 200,
+          "bulkCount": 1,
+          "afterCount": 200,
+          "beforeShapes": [
+            "record"
+          ],
+          "afterShapes": [
+            "record"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "TEN-0801",
+            "TEN-1000"
+          ]
+        }
+      ],
+      "actual": [
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "TEN-0001",
+            "TEN-0200"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "TEN-0201",
+            "TEN-0400"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "TEN-0401",
+            "TEN-0600"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "TEN-0601",
+            "TEN-0800"
+          ]
+        },
+        {
+          "rows": 200,
+          "beforeCount": 1,
+          "bulkCount": 1,
+          "afterCount": 1,
+          "beforeShapes": [
+            "array"
+          ],
+          "afterShapes": [
+            "array"
+          ],
+          "beforeAllBeforeBulk": true,
+          "afterAllAfterBulk": true,
+          "boundary": [
+            "TEN-0801",
+            "TEN-1000"
+          ]
+        }
+      ],
+      "pass": false
+    },
+    {
+      "id": "normal.single-parent.summary-order",
+      "category": "order",
+      "expected": [
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate"
+      ],
+      "actual": [
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate"
+      ],
+      "pass": true
+    },
+    {
+      "id": "normal.ten-parents.summary-order",
+      "category": "order",
+      "expected": [
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate"
+      ],
+      "actual": [
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate",
+        "engine.aggregate",
+        "hook.beforeUpdate",
+        "driver.update",
+        "hook.afterUpdate"
+      ],
+      "pass": true
+    },
+    {
+      "id": "before-error.before.calls",
+      "category": "hook",
+      "expected": 8,
+      "actual": 1,
+      "pass": false
+    },
+    {
+      "id": "before-error.after.calls",
+      "category": "hook",
+      "expected": 4,
+      "actual": 1,
+      "pass": false
+    },
+    {
+      "id": "before-error.before.keys",
+      "category": "hook",
+      "expected": [
+        "HOOK-BEFORE-01",
+        "HOOK-BEFORE-02",
+        "HOOK-BEFORE-03",
+        "HOOK-BEFORE-01",
+        "HOOK-BEFORE-02",
+        "HOOK-BEFORE-03",
+        "HOOK-BEFORE-04",
+        "HOOK-BEFORE-05"
+      ],
+      "actual": [
+        null
+      ],
+      "pass": false
+    },
+    {
+      "id": "before-error.after.keys",
+      "category": "hook",
+      "expected": [
+        "HOOK-BEFORE-01",
+        "HOOK-BEFORE-02",
+        "HOOK-BEFORE-04",
+        "HOOK-BEFORE-05"
+      ],
+      "actual": [
+        null
+      ],
+      "pass": false
+    },
+    {
+      "id": "before-error.engine-insert",
+      "category": "write",
+      "expected": 6,
+      "actual": 1,
+      "pass": false
+    },
+    {
+      "id": "before-error.driver-bulk-create",
+      "category": "write",
+      "expected": 0,
+      "actual": 1,
+      "pass": false
+    },
+    {
+      "id": "before-error.driver-create-attempts",
+      "category": "write",
+      "expected": 4,
+      "actual": 0,
+      "pass": false
+    },
+    {
+      "id": "before-error.reported-inserted",
+      "category": "exception",
+      "expected": 4,
+      "actual": 5,
+      "pass": false
+    },
+    {
+      "id": "before-error.reported-errored",
+      "category": "exception",
+      "expected": 1,
+      "actual": 0,
+      "pass": false
+    },
+    {
+      "id": "before-error.db.rows",
+      "category": "database",
+      "expected": 4,
+      "actual": 5,
+      "pass": false
+    },
+    {
+      "id": "before-error.db.hook-markers",
+      "category": "database",
+      "expected": 4,
+      "actual": 0,
+      "pass": false
+    },
+    {
+      "id": "before-error.db.rejected-row-persisted",
+      "category": "database",
+      "expected": false,
+      "actual": true,
+      "pass": false
+    },
+    {
+      "id": "before-error.sqlite.integrity",
+      "category": "database",
+      "expected": "ok",
+      "actual": "ok",
+      "pass": true
+    },
+    {
+      "id": "after-error.observed.before.calls",
+      "category": "observation",
+      "expected": 6,
+      "actual": 6,
+      "pass": true
+    },
+    {
+      "id": "after-error.observed.after.calls",
+      "category": "observation",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "id": "after-error.observed.engine-insert",
+      "category": "observation",
+      "expected": 6,
+      "actual": 6,
+      "pass": true
+    },
+    {
+      "id": "after-error.observed.driver-bulk-create",
+      "category": "observation",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "id": "after-error.observed.driver-create-attempts",
+      "category": "observation",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "id": "after-error.observed.driver-create-successes",
+      "category": "observation",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "id": "after-error.observed.reported-inserted",
+      "category": "observation",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "id": "after-error.observed.reported-errored",
+      "category": "observation",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "id": "after-error.observed.db.rows",
+      "category": "observation",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "id": "after-error.safety.reported-inserted-equals-persisted",
+      "category": "exception",
+      "expected": true,
+      "actual": false,
+      "pass": false
+    },
+    {
+      "id": "after-error.safety.reported-errored-rows-absent",
+      "category": "exception",
+      "expected": true,
+      "actual": false,
+      "pass": false
+    },
+    {
+      "id": "after-error.sqlite.integrity",
+      "category": "database",
+      "expected": "ok",
+      "actual": "ok",
+      "pass": true
+    },
+    {
+      "id": "after-error.sqlite.duplicate-keys",
+      "category": "database",
+      "expected": [],
+      "actual": [],
+      "pass": true
+    }
+  ]
+}

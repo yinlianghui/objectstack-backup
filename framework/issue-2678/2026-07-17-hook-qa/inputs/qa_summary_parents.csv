@@ -1,0 +1,12 @@
+id,name,expected_child_count,expected_total_amount
+parent_single,parent_single,1000,500500
+parent_01,parent_01,100,49600
+parent_02,parent_02,100,49700
+parent_03,parent_03,100,49800
+parent_04,parent_04,100,49900
+parent_05,parent_05,100,50000
+parent_06,parent_06,100,50100
+parent_07,parent_07,100,50200
+parent_08,parent_08,100,50300
+parent_09,parent_09,100,50400
+parent_10,parent_10,100,50500

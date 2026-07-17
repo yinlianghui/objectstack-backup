@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "archiveFileCount": 103,
+  "sha256Entries": 102,
+  "manifestFiles": 101,
+  "markdownFilesChecked": 8,
+  "commandCount": 34,
+  "comparison": {
+    "passed": 45,
+    "failed": 38,
+    "total": 83
+  },
+  "sqliteFilesChecked": 3,
+  "failures": []
+}

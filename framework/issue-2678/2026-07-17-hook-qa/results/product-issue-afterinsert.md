@@ -1,0 +1,44 @@
+# 批量写入 `afterInsert` 抛错后，已持久化数据被 fallback 误报为失败
+
+## 发现范围
+
+在 Framework #2678 补充 Hook QA 中，以历史目标提交
+`98874656ffc50ce1531af52346228ffcdda73fba`、真实 `SqlDriver`、真实
+SQLite 和 fresh 最小数据库复现。当前 `main` 尚未在本轮重新运行此探针，故请先确认现状；本 issue
+不声称云端或所有驱动均受影响。
+
+## 复现路径
+
+1. `bulkWrite` 的 `writeBatch` 调用 `engine.insert(object, fiveRows)`；
+2. `driver.bulkCreate` 成功持久化 5 行；
+3. 同步、blocking 的 `afterInsert` Hook 对该批抛出 `QA_AFTER_INSERT_REJECT`；
+4. `engine.insert` 因 Hook 异常 reject，`bulkWrite` 将它判定为批写失败并降级逐行；
+5. 5 次逐行插入都因 `external_key` 唯一约束失败。
+
+实测计数：
+
+- `engine.insert`: 6（1 次批量 + 5 次逐行 fallback）
+- `driver.bulkCreate`: 1，成功
+- `driver.create`: 5 次尝试，0 次成功
+- loader 报告：0 inserted / 5 errored
+- SQLite：5 行全部存在、5 个 `external_key` 均唯一、`PRAGMA integrity_check = ok`
+
+## 问题
+
+调用方看到 5 行全部失败，但数据库已经保留这 5 行。随后按失败结果重试可能得到唯一约束错误，或在没有幂等键的对象中制造重复数据。这里不需要先决定 `afterInsert` 是否必须回滚；最低限度的契约是写入报告不能与最终持久化状态相反。
+
+## 建议方向
+
+- 区分“驱动写入前失败”和“驱动已写入后的 Hook 失败”，后者不能直接进入会重写同一批数据的 fallback；
+- 明确 blocking `afterInsert` 的事务/回滚契约；若无法回滚，应返回或记录已持久化结果，并把 Hook 异常作为 post-write failure；
+- 增加真实或可审计驱动测试，分别断言 Hook 调用、物理写入、返回报告和最终存储值。
+
+## 验收标准
+
+- `afterInsert` 在物理批写后抛错时，调用结果与最终持久化行数不再矛盾；
+- 不会对已持久化批次盲目逐行重写；
+- 新测试独立验证 Hook、批写/fallback、报告值和数据库值。
+
+关联：#2678；记录级批量 Hook 输入形状问题：#2922。
+
+已登记为：https://github.com/objectstack-ai/framework/issues/3153

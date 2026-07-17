@@ -1,0 +1,40 @@
+{
+  "ok": false,
+  "findings": [
+    {
+      "type": "session-cookie",
+      "file": "commands/030-target-engine-lifecycle.stdout.log",
+      "offset": 3202
+    },
+    {
+      "type": "unredacted-host-id",
+      "file": "source/scan-sensitive-evidence.mjs",
+      "label": "Serial Number (system)"
+    },
+    {
+      "type": "unredacted-host-id",
+      "file": "source/scan-sensitive-evidence.mjs",
+      "label": "Hardware UUID"
+    },
+    {
+      "type": "unredacted-host-id",
+      "file": "source/scan-sensitive-evidence.mjs",
+      "label": "Provisioning UDID"
+    },
+    {
+      "type": "unredacted-host-id",
+      "file": "source/verify-archive.mjs",
+      "label": "Serial Number (system)"
+    },
+    {
+      "type": "unredacted-host-id",
+      "file": "source/verify-archive.mjs",
+      "label": "Hardware UUID"
+    },
+    {
+      "type": "unredacted-host-id",
+      "file": "source/verify-archive.mjs",
+      "label": "Provisioning UDID"
+    }
+  ]
+}

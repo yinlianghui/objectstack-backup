@@ -1,0 +1,25 @@
+node:internal/modules/run_main:122
+    triggerUncaughtException(
+    ^
+
+Error: Transform failed with 6 errors:
+/Users/yinlianghui/Documents/GitHub/objectstack-backup-issue-2678-hook-qa/framework/issue-2678/2026-07-17-hook-qa/source/run-hook-qa.ts:38:0: ERROR: Top-level await is currently not supported with the "cjs" output format
+/Users/yinlianghui/Documents/GitHub/objectstack-backup-issue-2678-hook-qa/framework/issue-2678/2026-07-17-hook-qa/source/run-hook-qa.ts:41:49: ERROR: Top-level await is currently not supported with the "cjs" output format
+/Users/yinlianghui/Documents/GitHub/objectstack-backup-issue-2678-hook-qa/framework/issue-2678/2026-07-17-hook-qa/source/run-hook-qa.ts:633:15: ERROR: Top-level await is currently not supported with the "cjs" output format
+/Users/yinlianghui/Documents/GitHub/objectstack-backup-issue-2678-hook-qa/framework/issue-2678/2026-07-17-hook-qa/source/run-hook-qa.ts:634:26: ERROR: Top-level await is currently not supported with the "cjs" output format
+/Users/yinlianghui/Documents/GitHub/objectstack-backup-issue-2678-hook-qa/framework/issue-2678/2026-07-17-hook-qa/source/run-hook-qa.ts:635:36: ERROR: Top-level await is currently not supported with the "cjs" output format
+...
+    at failureErrorWithLog (/Users/yinlianghui/Documents/GitHub/framework-issue-2678-hook-qa-runtime/node_modules/.pnpm/esbuild@0.28.1/node_modules/esbuild/lib/main.js:1748:15)
+    at /Users/yinlianghui/Documents/GitHub/framework-issue-2678-hook-qa-runtime/node_modules/.pnpm/esbuild@0.28.1/node_modules/esbuild/lib/main.js:1017:50
+    at responseCallbacks.<computed> (/Users/yinlianghui/Documents/GitHub/framework-issue-2678-hook-qa-runtime/node_modules/.pnpm/esbuild@0.28.1/node_modules/esbuild/lib/main.js:884:9)
+    at handleIncomingPacket (/Users/yinlianghui/Documents/GitHub/framework-issue-2678-hook-qa-runtime/node_modules/.pnpm/esbuild@0.28.1/node_modules/esbuild/lib/main.js:939:12)
+    at Socket.readFromStdout (/Users/yinlianghui/Documents/GitHub/framework-issue-2678-hook-qa-runtime/node_modules/.pnpm/esbuild@0.28.1/node_modules/esbuild/lib/main.js:862:7)
+    at Socket.emit (node:events:518:28)
+    at addChunk (node:internal/streams/readable:561:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    at Readable.push (node:internal/streams/readable:392:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23) {
+  name: 'TransformError'
+}
+
+Node.js v22.14.0

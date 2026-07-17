@@ -1,0 +1,147 @@
+    }
+
+    const restore = installFlatInput(ctx);
+    const startedAt = Date.now();
+
+    const recordOutcome = (err?: any) => {
+      const elapsed = Date.now() - startedAt;
+      let outcome: HookMetricOutcome = 'success';
+      if (err) {
+        const msg = String(err?.message ?? err ?? '');
+        if (/timed out after/i.test(msg)) outcome = 'timeout';
+        else if (/capability|cap-rejection|capability_rejected/i.test(msg)) outcome = 'capability_rejected';
+        else outcome = 'error';
+      }
+      try { metrics.recordExecution(labelFor(ctx), outcome, elapsed); } catch { /* noop */ }
+    };
+
+    try {
+      // 2. Fire-and-forget for declarative async after* hooks
+      if (fireAndForget) {
+        try { metrics.recordSkip(labelFor(ctx), 'fire_and_forget'); } catch { /* noop */ }
+        // For fire-and-forget we can't keep ctx.input swapped while the
+        // engine moves on — copy what we need, restore, and run async.
+        void runWithErrorPolicy(ctx)
+          .then(() => recordOutcome())
+          .catch((err) => {
+            recordOutcome(err);
+            logger.error('[hook] async handler error (fire-and-forget)', {
+              hook: meta.name,
+              error: (err as any)?.message,
+            });
+          });
+        return;
+      }
+
+      try {
+        await runWithErrorPolicy(ctx);
+        recordOutcome();
+      } catch (err) {
+        recordOutcome(err);
+        throw err;
+      }
+    } finally {
+      restore();
+    }
+  };
+}
+
+/**
+ * Swap `ctx.input` in place for a Proxy that exposes a flat record view
+ * over the engine's `{ data, options, id? }` wrapper. Returns a function
+ * that restores the original `ctx.input` reference. Reads of
+ * `id` / `options` / `ast` / `data` fall through to the wrapper; reads
+ * of any other key fall through to `data`. Writes always go to `data`
+ * (creating it if missing) so the engine's downstream `input.data`
+ * read picks up mutations made by user code as `input.field = value`.
+ */
+function installFlatInput(ctx: HookContext): () => void {
+  const raw: any = ctx.input ?? {};
+  const looksWrapped =
+    raw && typeof raw === 'object' &&
+    ('data' in raw || 'options' in raw || 'id' in raw || 'ast' in raw);
+  if (!looksWrapped) return () => {};
+
+  const ensureData = (): Record<string, unknown> => {
+    if (!raw.data || typeof raw.data !== 'object') {
+      raw.data = {};
+    }
+    return raw.data as Record<string, unknown>;
+  };
+
+  const proxy = new Proxy(raw, {
+    get(target, prop, receiver) {
+      if (prop === 'id' || prop === 'options' || prop === 'ast' || prop === 'data') {
+        return Reflect.get(target, prop, receiver);
+      }
+      const data = target.data;
+      if (data && typeof data === 'object' && prop in data) {
+        return (data as any)[prop];
+      }
+      return Reflect.get(target, prop, receiver);
+    },
+    set(target, prop, value) {
+      if (prop === 'id' || prop === 'options' || prop === 'ast' || prop === 'data') {
+        (target as any)[prop] = value;
+        return true;
+      }
+      ensureData()[prop as string] = value;
+      return true;
+    },
+    has(target, prop) {
+      if (prop === 'id' || prop === 'options' || prop === 'ast' || prop === 'data') {
+        return prop in target;
+      }
+      const data = target.data;
+      if (data && typeof data === 'object' && prop in data) return true;
+      return prop in target;
+    },
+    ownKeys(target) {
+      // Only enumerate the flat record fields. Wrapper keys
+      // (id/options/ast/data) remain accessible via dot/bracket notation
+      // but are hidden from Object.keys/for-in so user code that does
+      // `Object.keys(input).filter(k => input[k] !== previous[k])` only
+      // sees actual record fields.
+      const dataKeys = target.data && typeof target.data === 'object'
+        ? Object.keys(target.data)
+        : [];
+      return Array.from(new Set(dataKeys));
+    },
+    getOwnPropertyDescriptor(target, prop) {
+      const data = target.data;
+      if (data && typeof data === 'object' && prop in data) {
+        return { configurable: true, enumerable: true, writable: true, value: (data as any)[prop] };
+      }
+      // Wrapper keys: still descriptors so `prop in input` works, but
+      // marked non-enumerable so they don't appear in Object.keys().
+      if (prop === 'id' || prop === 'options' || prop === 'ast' || prop === 'data') {
+        const desc = Object.getOwnPropertyDescriptor(target, prop);
+        return desc ? { ...desc, enumerable: false } : undefined;
+      }
+      return Object.getOwnPropertyDescriptor(target, prop);
+    },
+  });
+
+  (ctx as any).input = proxy;
+  return () => {
+    (ctx as any).input = raw;
+  };
+}
+
+/**
+ * Choose the record-shaped object the condition formula should evaluate
+ * against. Order:
+ *   1. ctx.input.data — write operations carry the new record here
+ *   2. ctx.previous   — update/delete carry pre-image here
+ *   3. ctx.input      — fall back to flat input bag (read ops, custom shapes)
+ */
+function pickRecordPayload(ctx: HookContext): any {
+  const input: any = ctx.input ?? {};
+  if (input && typeof input === 'object' && input.data && typeof input.data === 'object') {
+    return input.data;
+  }
+  if (ctx.previous && typeof ctx.previous === 'object') {
+    return ctx.previous;
+  }
+  return input;
+}

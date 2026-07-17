@@ -1,0 +1,47 @@
+
+ RUN  v4.1.10 /Users/yinlianghui/Documents/GitHub/framework-issue-2678-hook-qa-runtime/packages/objectql
+
+[32m2026-07-17T14:15:28.281Z INFO[0m ObjectQL Engine Instance Created
+[32m2026-07-17T14:15:28.282Z INFO[0m ObjectQL Engine Instance Created
+[32m2026-07-17T14:15:28.281Z INFO[0m ObjectQL Engine Instance Created
+[32m2026-07-17T14:15:28.289Z INFO[0m Registered driver {"driverName":"memory","version":"0.0.0"}
+[32m2026-07-17T14:15:28.289Z INFO[0m Set default driver {"driverName":"memory"}
+[32m2026-07-17T14:15:28.290Z INFO[0m Initializing ObjectQL engine {"driverCount":1,"drivers":["memory"]}
+[32m2026-07-17T14:15:28.290Z INFO[0m Driver connected successfully {"driverName":"memory"}
+[32m2026-07-17T14:15:28.290Z INFO[0m ObjectQL engine initialization complete
+[32m2026-07-17T14:15:28.293Z INFO[0m ObjectQL Engine Instance Created
+[32m2026-07-17T14:15:28.294Z INFO[0m ObjectQL Engine Instance Created
+[32m2026-07-17T14:15:28.294Z INFO[0m ObjectQL Engine Instance Created
+[32m2026-07-17T14:15:28.295Z INFO[0m ObjectQL Engine Instance Created
+[32m2026-07-17T14:15:28.296Z INFO[0m ObjectQL Engine Instance Created
+[32m2026-07-17T14:15:28.297Z INFO[0m ObjectQL Engine Instance Created
+[32m2026-07-17T14:15:28.297Z INFO[0m ObjectQL Engine Instance Created
+[32m2026-07-17T14:15:28.298Z INFO[0m ObjectQL Engine Instance Created
+[32m2026-07-17T14:15:28.299Z INFO[0m ObjectQL Engine Instance Created
+[32m2026-07-17T14:15:28.301Z INFO[0m ObjectQL Engine Instance Created
+[32m2026-07-17T14:15:28.302Z INFO[0m Registered driver {"driverName":"memory","version":"0.0.0"}
+[32m2026-07-17T14:15:28.302Z INFO[0m Set default driver {"driverName":"memory"}
+[32m2026-07-17T14:15:28.302Z INFO[0m Initializing ObjectQL engine {"driverCount":1,"drivers":["memory"]}
+[32m2026-07-17T14:15:28.302Z INFO[0m Driver connected successfully {"driverName":"memory"}
+[32m2026-07-17T14:15:28.302Z INFO[0m ObjectQL engine initialization complete
+[32m2026-07-17T14:15:28.305Z INFO[0m ObjectQL Engine Instance Created
+[32m2026-07-17T14:15:28.305Z INFO[0m Registered driver {"driverName":"memory","version":"0.0.0"}
+[32m2026-07-17T14:15:28.305Z INFO[0m Set default driver {"driverName":"memory"}
+[32m2026-07-17T14:15:28.305Z INFO[0m Initializing ObjectQL engine {"driverCount":1,"drivers":["memory"]}
+[32m2026-07-17T14:15:28.305Z INFO[0m Driver connected successfully {"driverName":"memory"}
+[32m2026-07-17T14:15:28.305Z INFO[0m ObjectQL engine initialization complete
+[32m2026-07-17T14:15:28.308Z INFO[0m ObjectQL Engine Instance Created
+[32m2026-07-17T14:15:28.308Z INFO[0m Registered driver {"driverName":"memory","version":"0.0.0"}
+[32m2026-07-17T14:15:28.308Z INFO[0m Set default driver {"driverName":"memory"}
+[32m2026-07-17T14:15:28.308Z INFO[0m Initializing ObjectQL engine {"driverCount":1,"drivers":["memory"]}
+[32m2026-07-17T14:15:28.308Z INFO[0m Driver connected successfully {"driverName":"memory"}
+[32m2026-07-17T14:15:28.308Z INFO[0m ObjectQL engine initialization complete
+[32m2026-07-17T14:15:28.309Z INFO[0m ObjectQL Engine Instance Created
+[32m2026-07-17T14:15:28.316Z INFO[0m ObjectQL Engine Instance Created
+[32m2026-07-17T14:15:28.317Z INFO[0m ObjectQL Engine Instance Created
+
+ Test Files  3 passed (3)
+      Tests  25 passed (25)
+   Start at  22:15:23
+   Duration  5.01s (transform 9.96s, setup 0ms, import 14.18s, tests 208ms, environment 0ms)
+

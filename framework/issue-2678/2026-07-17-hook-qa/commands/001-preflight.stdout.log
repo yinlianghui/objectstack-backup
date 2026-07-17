@@ -1,0 +1,19 @@
+Filesystem   1024-blocks      Used Available Capacity  Mounted on
+/dev/disk3s1   239362496 173620004  11576900    94%    /System/Volumes/Data
+worktree /Users/yinlianghui/Documents/GitHub/framework
+HEAD afa81155fb79846978c3ba6d94876edd21658f1d
+branch refs/heads/main
+
+worktree /Users/yinlianghui/.codex/worktrees/79ec/framework
+HEAD 04ce2db936857dab51c96b5728bd12d55c369458
+branch refs/heads/codex/issue
+
+worktree /Users/yinlianghui/Documents/GitHub/framework-issue-2678-evidence
+HEAD 98874656ffc50ce1531af52346228ffcdda73fba
+branch refs/heads/codex/issue-2678-minimal-evidence
+
+worktree /Users/yinlianghui/Documents/GitHub/framework-pr2680-qa-v2
+HEAD 98874656ffc50ce1531af52346228ffcdda73fba
+branch refs/heads/codex/pr2680-qa-v2
+
+98874656ffc50ce1531af52346228ffcdda73fba

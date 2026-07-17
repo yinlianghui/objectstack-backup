@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "basis": {
+    "frameworkTarget": "98874656ffc50ce1531af52346228ffcdda73fba",
+    "attributionMerge": "21420d9f82ebdcd53a6361ded3d829723bcab18e",
+    "recordHookContractFix": "31d04d484eb80688d7963fbfda2140f6cc665bd0",
+    "issue": 2678,
+    "knownHookIssue": 2922,
+    "batchSize": 200
+  },
+  "normal": {
+    "seed": {
+      "rows": 1000,
+      "beforeInsertCalls": 1000,
+      "afterInsertCalls": 1000,
+      "inputShape": "record",
+      "resultShape": "record",
+      "engineInsertCalls": 5,
+      "driverBulkCreateCalls": 5,
+      "driverCreateCalls": 0,
+      "persistedRows": 1000,
+      "persistedHookMarkers": 1000,
+      "session": { "isSystem": true, "skipTriggers": true },
+      "batchBoundaries": [
+        ["SEED-0001", "SEED-0200"],
+        ["SEED-0201", "SEED-0400"],
+        ["SEED-0401", "SEED-0600"],
+        ["SEED-0601", "SEED-0800"],
+        ["SEED-0801", "SEED-1000"]
+      ]
+    },
+    "import": {
+      "rows": 1000,
+      "beforeInsertCalls": 1000,
+      "afterInsertCalls": 1000,
+      "inputShape": "record",
+      "resultShape": "record",
+      "protocolCreateManyCalls": 5,
+      "protocolCreateOneCalls": 0,
+      "engineInsertCalls": 5,
+      "driverBulkCreateCalls": 5,
+      "driverCreateCalls": 0,
+      "persistedRows": 1000,
+      "persistedHookMarkers": 1000,
+      "httpErrors": 0,
+      "batchBoundaries": [
+        ["IMPORT-0001", "IMPORT-0200"],
+        ["IMPORT-0201", "IMPORT-0400"],
+        ["IMPORT-0401", "IMPORT-0600"],
+        ["IMPORT-0601", "IMPORT-0800"],
+        ["IMPORT-0801", "IMPORT-1000"]
+      ]
+    },
+    "singleParent": {
+      "childRows": 1000,
+      "childBeforeInsertCalls": 1000,
+      "childAfterInsertCalls": 1000,
+      "childDriverBulkCreateCalls": 5,
+      "childPersistedHookMarkers": 1000,
+      "summaryAggregateCalls": 5,
+      "parentBeforeUpdateCalls": 5,
+      "parentAfterUpdateCalls": 5,
+      "parentUpdateValues": [20100, 80200, 180300, 320400, 500500],
+      "parentPreviousValues": [null, 20100, 80200, 180300, 320400],
+      "finalTotal": 500500
+    },
+    "tenParents": {
+      "childRows": 1000,
+      "childBeforeInsertCalls": 1000,
+      "childAfterInsertCalls": 1000,
+      "childDriverBulkCreateCalls": 5,
+      "childPersistedHookMarkers": 1000,
+      "summaryAggregateCalls": 50,
+      "parentBeforeUpdateCalls": 50,
+      "parentAfterUpdateCalls": 50,
+      "parentOrderPerBatch": [
+        "parent_01", "parent_02", "parent_03", "parent_04", "parent_05",
+        "parent_06", "parent_07", "parent_08", "parent_09", "parent_10"
+      ],
+      "cumulativeTotalsByBatch": [
+        [1920, 1940, 1960, 1980, 2000, 2020, 2040, 2060, 2080, 2100],
+        [7840, 7880, 7920, 7960, 8000, 8040, 8080, 8120, 8160, 8200],
+        [17760, 17820, 17880, 17940, 18000, 18060, 18120, 18180, 18240, 18300],
+        [31680, 31760, 31840, 31920, 32000, 32080, 32160, 32240, 32320, 32400],
+        [49600, 49700, 49800, 49900, 50000, 50100, 50200, 50300, 50400, 50500]
+      ],
+      "finalTotals": [49600, 49700, 49800, 49900, 50000, 50100, 50200, 50300, 50400, 50500],
+      "combinedTotal": 500500
+    }
+  },
+  "beforeInsertError": {
+    "rows": 5,
+    "rejectExternalKey": "HOOK-BEFORE-03",
+    "rejectRecordIndex": 2,
+    "beforeInsertCalls": 8,
+    "afterInsertCalls": 4,
+    "beforeCallKeys": [
+      "HOOK-BEFORE-01", "HOOK-BEFORE-02", "HOOK-BEFORE-03",
+      "HOOK-BEFORE-01", "HOOK-BEFORE-02", "HOOK-BEFORE-03",
+      "HOOK-BEFORE-04", "HOOK-BEFORE-05"
+    ],
+    "afterCallKeys": ["HOOK-BEFORE-01", "HOOK-BEFORE-02", "HOOK-BEFORE-04", "HOOK-BEFORE-05"],
+    "engineInsertCalls": 6,
+    "driverBulkCreateCalls": 0,
+    "driverCreateAttempts": 4,
+    "reportedInserted": 4,
+    "reportedErrored": 1,
+    "persistedRows": 4,
+    "persistedHookMarkers": 4,
+    "rejectedRowPersisted": false,
+    "sqliteIntegrity": "ok"
+  },
+  "afterInsertErrorObservation": {
+    "classification": "observational",
+    "inputRows": 5,
+    "triggerExternalKey": "HOOK-AFTER-03",
+    "predictedTargetMechanics": {
+      "beforeInsertCalls": 6,
+      "afterInsertCalls": 1,
+      "engineInsertCalls": 6,
+      "driverBulkCreateCalls": 1,
+      "driverCreateAttempts": 5,
+      "driverCreateSuccesses": 0,
+      "reportedInserted": 0,
+      "reportedErrored": 5,
+      "persistedRows": 5
+    },
+    "safetyInvariants": {
+      "reportedInsertedEqualsPersistedRows": true,
+      "reportedErroredRowsAreAbsent": true
+    },
+    "sqliteIntegrity": "ok"
+  },
+  "orderContract": {
+    "normalBatch": [
+      "beforeInsert(record) x batchRows in input order",
+      "driver.bulkCreate(array) x 1",
+      "afterInsert(record) x batchRows in result order"
+    ],
+    "summarySuffix": [
+      "for each unique parent in first-seen batch order:",
+      "engine.aggregate x 1",
+      "beforeUpdate(record) x 1",
+      "driver.update x 1",
+      "afterUpdate(record) x 1"
+    ],
+    "beforeErrorBatch": [
+      "beforeInsert rows 1..rejectRow then throw",
+      "no driver.bulkCreate",
+      "per-row fallback in original input order",
+      "afterInsert only for persisted good rows"
+    ]
+  },
+  "database": {
+    "systemTablesExpected": 0,
+    "containsAccountsOrSessions": false,
+    "archivePolicy": "complete minimal QA databases"
+  }
+}

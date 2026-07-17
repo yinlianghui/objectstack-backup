@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "scope": "Framework #2678 Problem One supplemental Hook QA",
+  "framework": {
+    "repository": "https://github.com/objectstack-ai/framework",
+    "targetCommit": "98874656ffc50ce1531af52346228ffcdda73fba",
+    "attributionMerge": "21420d9f82ebdcd53a6361ded3d829723bcab18e",
+    "recordHookContractReference": {
+      "issue": 2922,
+      "pullRequest": 2941,
+      "mergeCommit": "31d04d484eb80688d7963fbfda2140f6cc665bd0",
+      "testedInThisArchive": false
+    },
+    "productCodeModified": false
+  },
+  "evidenceRepository": {
+    "repository": "yinlianghui/objectstack-backup",
+    "baseOriginMain": "69999d07b616e9077c3a7f915b132f1ad29c0e69",
+    "branch": "codex/issue-2678-hook-qa"
+  },
+  "execution": {
+    "startedAtUtc": "2026-07-17T14:19:05.144Z",
+    "finishedAtUtc": "2026-07-17T14:19:07.879Z",
+    "node": "v22.14.0",
+    "pnpm": "10.31.0",
+    "os": "macOS 15.7.7 (24G720)",
+    "architecture": "arm64",
+    "cpu": "Apple M1, 8 cores",
+    "memory": "8 GB",
+    "hostUniqueIdentifiers": "redacted from archived system_profiler output"
+  },
+  "parameters": {
+    "driver": "@objectstack/driver-sql SqlDriver",
+    "sqliteClient": "better-sqlite3",
+    "databasePolicy": "fresh independent database per scenario",
+    "batchSize": 200,
+    "writeMode": "insert",
+    "seed": {
+      "dryRun": false,
+      "haltOnError": false,
+      "multiPass": true,
+      "defaultMode": "insert",
+      "transaction": false,
+      "context": {
+        "isSystem": true,
+        "skipTriggers": true
+      }
+    },
+    "import": {
+      "format": "csv",
+      "runAutomations": true
+    }
+  },
+  "inputs": {
+    "reusedFrom": "framework/issue-2678/2026-07-11/reconstructed-fixtures/data",
+    "normalCsvFiles": 5,
+    "exceptionProbeCsvFiles": 2,
+    "normalRows": {
+      "seed": 1000,
+      "import": 1000,
+      "singleParentChildren": 1000,
+      "tenParentChildren": 1000,
+      "parents": 11
+    },
+    "exceptionRowsPerProbe": 5
+  },
+  "validation": {
+    "frameworkBuildTasks": { "passed": 70, "total": 70 },
+    "relevantFrameworkTests": { "passed": 82, "total": 82 },
+    "comparison": { "passed": 45, "failed": 38, "total": 83 },
+    "sqliteFiles": 3,
+    "sqliteIntegrity": "ok for all files",
+    "nonQaTables": 0
+  },
+  "findings": {
+    "recordLevelBulkHookIssue": 2922,
+    "postWriteAfterInsertIssue": 3153
+  },
+  "boundaries": [
+    "Historical fixed Framework target only",
+    "Local SQLite only",
+    "No ObjectUI or browser execution",
+    "No cloud, Turso/libSQL, remote connection, or other driver validation",
+    "No performance conclusion",
+    "No verification of the later #2941 fix"
+  ]
+}

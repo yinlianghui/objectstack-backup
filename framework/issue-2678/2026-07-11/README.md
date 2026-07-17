@@ -26,6 +26,16 @@ The original temporary fixture was deleted. A deterministic data source was reco
 - [Post-test SQLite database](reconstructed-fixtures/database/problem-one.sqlite)
 - [Reconstructed archive SHA-256 manifest](reconstructed-fixtures/SHA256SUMS)
 
+## 2026-07-17 Hook QA supplement
+
+The fixed historical Framework target retains the expected five physical batches and 5/50 summary recomputations, but record-level child Hooks fail: each 200-row batch triggers one array-shaped `beforeInsert` / `afterInsert` instead of 200 record-shaped calls. The supplement keeps Hook, write, summary, exception, order, and final SQLite assertions separate.
+
+- [Hook supplement README](../2026-07-17-hook-qa/README.md)
+- [Final Hook QA supplement (Chinese)](../2026-07-17-hook-qa/final-report-supplement.md)
+- [Comparison report](../2026-07-17-hook-qa/results/comparison-report.md)
+- [Raw results and full trace](../2026-07-17-hook-qa/results/raw-results.json)
+- [Hook supplement SHA-256 manifest](../2026-07-17-hook-qa/SHA256SUMS)
+
 ## Archived working evidence
 
 The files below preserve execution and audit detail. They are not separate

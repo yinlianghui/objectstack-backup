@@ -2,7 +2,7 @@
 
 This directory preserves a **data source reconstructed from the final report and revalidated**. The original temporary fixture was deleted and is not present here. The reconstructed rows are deterministic and were tested at Framework commit `98874656ffc50ce1531af52346228ffcdda73fba` against real SQLite.
 
-Only “Problem One: bulk writes and summary calculation” was retested. Retry, bad-row handling, UI, cancellation, cloud behavior, and other Issue findings were intentionally excluded.
+Only “Problem One: bulk writes and summary calculation” was retested. Retry, bad-row handling, cancellation, cloud behavior, and other Issue findings were intentionally excluded. A later supplementary UI package exercises import and final-value inspection for the same reconstructed rows; it does not replace the backend batch, recomputation, or performance evidence.
 
 ## Outcome
 
@@ -28,8 +28,19 @@ The call wrappers only recorded arguments and delegated to the original product 
 - [Generator](source/generate-fixtures.mjs)
 - [Command ledger](command-ledger.md)
 - [Runtime and parameters](environment/runtime.json)
+- [Copyable UI QA package](ui-qa-app/README.md)
+- [UI runtime verification](ui-qa-app/ui-verification.md)
 - [Archive manifest](manifest.json)
 - [SHA-256 manifest](SHA256SUMS)
+
+## Copyable UI QA package
+
+`ui-qa-app/` can be copied to another directory and run against an existing, installed, and built Framework source checkout. It never clones Framework or creates a Framework worktree. Every launch uses `--fresh`, so each scenario receives a new temporary database that is deleted on exit.
+
+- `manual` provides the four QA objects, the UI shell, and the 11 required parent records for manual CSV/XLSX import.
+- `seeded` initializes all reconstructed rows for immediate final-value inspection.
+
+See the [package instructions](ui-qa-app/README.md) for commands and field mapping. The [runtime record](ui-qa-app/ui-verification.md) separates what was verified in the UI from the file-picker automation boundary. Internal batch-call counts, summary recomputation counts, and performance remain supported only by the backend harness and comparison report above.
 
 ## Same-source data artifacts
 

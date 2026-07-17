@@ -43,7 +43,7 @@ ui-qa-app/
 └── expected-results.json
 ```
 
-`src/objects.generated.ts` is generated from the existing `source/object-definitions.ts`; the four QA object contracts are not independently retyped, and package verification rejects drift. The build also copies the generated fixtures and expected results into `ui-qa-app/`. After that build, launching a copied `ui-qa-app/` directory uses only its own source, `dist/`, scripts, fixtures, and expected results; it does not need access to the surrounding archive. The stack declares both `ui` and `auth` capabilities so `--fresh` can seed a loginable admin and expose the Console. The app metadata contributes navigation entries for `qa_import_item`, `qa_summary_parent`, and `qa_summary_child` so the user can open the relevant lists and import wizard directly.
+`src/objects.generated.ts` is generated from the existing `source/object-definitions.ts`; the four QA objects are not independently retyped. Generation applies two explicit current-protocol normalizations: disabled tenancy also declares `strategy: "shared"`, and OWD is explicit (`public_read_write` for the three independent/shared objects and `controlled_by_parent` for the master-detail child). Object names, business fields, formulas, relationships, and historical source remain unchanged, and package verification rejects other drift. The build also copies the generated fixtures and expected results into `ui-qa-app/`. After that build, launching a copied `ui-qa-app/` directory uses only its own source, `dist/`, scripts, fixtures, and expected results; it does not need access to the surrounding archive. The stack declares both `ui` and `auth` capabilities so `--fresh` can seed a loginable admin and expose the Console. The app metadata contributes navigation entries for `qa_import_item`, `qa_summary_parent`, and `qa_summary_child` so the user can open the relevant lists and import wizard directly.
 
 Two artifacts serve different purposes:
 
@@ -59,7 +59,7 @@ node ui-qa-app/scripts/start-ui.mjs \
   --port 38421
 ```
 
-`--mode` accepts `manual` or `seeded` and defaults to `manual`. The launcher resolves the matching absolute artifact path and invokes the ObjectStack CLI from the supplied Framework checkout with `dev --artifact ... --fresh --ui`. It forwards signals so Framework performs its normal fresh-directory cleanup.
+`--mode` accepts `manual` or `seeded` and defaults to `manual`. The launcher resolves the matching absolute artifact path and directly invokes the supplied checkout's `packages/cli/bin/run.js` with Node and `dev --artifact ... --fresh --ui`. Direct invocation prevents a global CLI from being selected. It forwards signals so Framework performs its normal fresh-directory cleanup.
 
 ## Import Fixtures
 
@@ -99,7 +99,7 @@ The UI run does not by itself prove five protocol batches, five/50 summary recom
 - Verify all generated CSV/XLSX files match the shared expected results.
 - Run backend package verification and archive SHA-256 verification.
 - Start both modes on random high ports with separate fresh state and shut down only the processes started by this task.
-- Exercise the manual XLSX import in the built-in headless browser, capture the key UI result screenshot, and cross-check the API/database result.
+- Parse the actual XLSX with the exact bundled ObjectUI spreadsheet parser. Because the in-app Browser does not expose local-file attachment, exercise the same 1,000 rows through its supported paste import path, capture the UI result screenshot, and cross-check the data API. Preserve the boundary explicitly in `ui-qa-app/ui-verification.md` rather than claiming the file-picker gesture was automated.
 - Do not commit `node_modules`, Framework build output, temporary databases, browser profiles, or transient traces.
 
 ## Non-goals

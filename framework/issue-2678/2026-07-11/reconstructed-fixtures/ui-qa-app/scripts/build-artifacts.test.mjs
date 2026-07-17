@@ -18,11 +18,27 @@ import {
 const packageRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const archiveRoot = path.dirname(packageRoot);
 
+async function fullArchiveAvailable() {
+  try {
+    await Promise.all([
+      fs.stat(path.join(archiveRoot, 'source/object-definitions.ts')),
+      fs.stat(path.join(archiveRoot, 'data/qa_summary_parents.csv')),
+    ]);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 test('parses quoted CSV and preserves row count', () => {
   assert.deepEqual(parseCsv('a,b\n"x,y",2\n'), [{ a: 'x,y', b: '2' }]);
 });
 
-test('builds the exact manual and seeded groups', async () => {
+test('builds the exact manual and seeded groups', async (context) => {
+  if (!await fullArchiveAvailable()) {
+    context.skip('The complete surrounding reconstructed archive is not present.');
+    return;
+  }
   const groups = await buildSeedGroups(path.join(archiveRoot, 'data'));
   assert.equal(groups.parents.length, 11);
   assert.equal(groups.seedItems.length, 1000);
@@ -38,7 +54,11 @@ test('builds the exact manual and seeded groups', async () => {
   });
 });
 
-test('generated object source is traceable to the canonical source', async () => {
+test('generated object source is traceable to the canonical source', async (context) => {
+  if (!await fullArchiveAvailable()) {
+    context.skip('The complete surrounding reconstructed archive is not present.');
+    return;
+  }
   const canonical = await fs.readFile(
     path.join(archiveRoot, 'source/object-definitions.ts'),
     'utf8',

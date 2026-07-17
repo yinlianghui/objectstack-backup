@@ -41,6 +41,30 @@
     "worksheetsVisuallyVerified": 7,
     "formulaErrors": 0
   },
+  "uiQaPackage": {
+    "path": "ui-qa-app",
+    "instructions": "ui-qa-app/README.md",
+    "modes": {
+      "manual": "ui-qa-app/dist/manual/objectstack.json",
+      "seeded": "ui-qa-app/dist/seeded/objectstack.json"
+    },
+    "importFormats": [
+      "csv",
+      "xlsx"
+    ],
+    "verification": "ui-qa-app/ui-verification.md",
+    "screenshot": "ui-qa-app/screenshots/manual-table-import-result.jpg",
+    "buildEnvironment": {
+      "frameworkSha": "afa81155fb79846978c3ba6d94876edd21658f1d",
+      "frameworkCli": "@objectstack/cli/13.0.0",
+      "objectUiSha": "7a68d78f2a0c3c1f99dafd39b75b4f117a24917b"
+    },
+    "artifactSha256": {
+      "manual": "71274c9ccdda20cd3d991e80c801ec7392be166cc345ba4b898fc10f7d23e9b7",
+      "seeded": "b67173ac9a0838cc455986185963dbfeb331618af22f987e7f8e5ad201aa1fe0"
+    },
+    "scopeBoundary": "UI import and final-value inspection only; backend harness remains authoritative for batch calls, summary recomputation calls, and performance."
+  },
   "integrity": {
     "sha256Manifest": "SHA256SUMS",
     "coverage": "Every file below this directory except SHA256SUMS itself"

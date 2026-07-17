@@ -75,7 +75,7 @@ The generated object source applies two explicit current-protocol normalizations
 
 ## Rebuild artifacts (maintainers only)
 
-The package already contains compiled artifacts and import files. Rebuild only when deliberately refreshing them against a prepared Framework checkout:
+The package already contains compiled artifacts and import files. Rebuild only when this directory remains inside the complete `reconstructed-fixtures` archive and you are deliberately refreshing it against a prepared Framework checkout:
 
 ```bash
 node scripts/build-artifacts.mjs --framework-root /path/to/framework

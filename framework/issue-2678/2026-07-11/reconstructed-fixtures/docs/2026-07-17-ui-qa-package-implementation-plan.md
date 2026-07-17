@@ -8,6 +8,10 @@
 
 **Tech Stack:** Node.js 22 ESM, `node:test`, ObjectStack CLI/artifacts, TypeScript metadata, ExcelJS resolved from the existing Framework checkout, SQLite, ObjectUI import wizard.
 
+## Execution note
+
+Implementation completed with two evidence-preserving adjustments. The launcher executes the supplied checkout's `packages/cli/bin/run.js` directly with Node; the originally sketched `pnpm exec objectstack` route could select an unrelated global CLI. The Codex in-app Browser did not expose local-file attachment, so the actual XLSX was validated with the exact bundled ObjectUI parser and the same 1,000 archived rows were imported through the UI's paste path. The precise boundary and API reconciliation are recorded in `ui-qa-app/ui-verification.md`; no direct file-picker automation is claimed.
+
 ## Global Constraints
 
 - Require `--framework-root <absolute path>` or `FRAMEWORK_ROOT`; never clone Framework.
@@ -40,7 +44,7 @@
 - Create `ui-qa-app/dist/{manual,seeded}/build-provenance.json`: compile Framework SHA and artifact hash.
 - Create `ui-qa-app/expected-results.json`: copied expected values.
 - Create `ui-qa-app/README.md`: prerequisites, commands, import steps, expected results, and scope boundary.
-- Create `ui-qa-app/screenshots/manual-xlsx-import.png`: headless-browser acceptance evidence.
+- Create `ui-qa-app/screenshots/manual-table-import-result.jpg`: built-in-browser acceptance evidence.
 - Create `ui-qa-app/ui-verification.md`: UI/API verification record and fixed Framework SHA.
 - Modify `reconstructed-fixtures/README.md`: link the UI QA package and distinguish it from the backend harness.
 - Modify `reconstructed-fixtures/manifest.json`: register the new package and verification evidence.
@@ -229,7 +233,7 @@ Run: `node --test ui-qa-app/scripts/*.test.mjs`
 
 Expected: all helper/generation tests pass.
 
-Run: `node ui-qa-app/scripts/build-artifacts.mjs --framework-root /Users/yinlianghui/Documents/GitHub/framework`
+Run: `node ui-qa-app/scripts/build-artifacts.mjs --framework-root /path/to/framework`
 
 Expected: both CLI compiles exit 0; manual and seeded artifacts exist and list exactly four `qa_*` objects.
 
@@ -259,7 +263,7 @@ git commit -m "feat: add issue 2678 QA app artifacts"
 
 ```js
 test('writes exactly one worksheet with headers and all rows', async () => {
-  const ExcelJS = await resolveExcelJs('/Users/yinlianghui/Documents/GitHub/framework');
+  const ExcelJS = await resolveExcelJs('/path/to/framework');
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'qa-xlsx-test-'));
   const file = path.join(dir, 'sample.xlsx');
   await writeSingleSheetWorkbook(ExcelJS, file, 'Import Items', [
@@ -290,7 +294,7 @@ Resolve `exceljs` with `createRequire(<framework-root>/packages/rest/package.jso
 
 Add package verification assertions for exact row counts (`1000` each), exact headers, single worksheet, `amount` sum `500500`, and parent distributions (`1000` single-parent; ten groups of `100`). Also assert the combined audit workbook is absent from `ui-qa-app/fixtures/`.
 
-Run: `node ui-qa-app/scripts/build-artifacts.mjs --framework-root /Users/yinlianghui/Documents/GitHub/framework`
+Run: `node ui-qa-app/scripts/build-artifacts.mjs --framework-root /path/to/framework`
 
 Expected: three CSV and three XLSX files are generated; each XLSX contains one data sheet and 1,001 used rows including its header.
 
@@ -344,7 +348,7 @@ Document prerequisites, `manual`/`seeded` commands, seeded admin credentials, se
 
 - [ ] **Step 5: Verify the copyable package**
 
-Run: `node ui-qa-app/scripts/verify-package.mjs --framework-root /Users/yinlianghui/Documents/GitHub/framework`
+Run: `node ui-qa-app/scripts/verify-package.mjs --framework-root /path/to/framework`
 
 Expected: JSON summary with `ok: true`, four objects, two artifacts, three CSV files, three single-sheet XLSX files, and zero forbidden paths.
 
@@ -367,7 +371,7 @@ git commit -m "feat: add fresh UI launcher and package verification"
 
 - [ ] **Step 1: Check UI runtime prerequisite without changing source**
 
-Run: `test -f /Users/yinlianghui/Documents/GitHub/framework/packages/console/dist/index.html || pnpm -C /Users/yinlianghui/Documents/GitHub/framework objectui:build`
+Run: `test -f /path/to/framework/packages/console/dist/index.html || pnpm -C /path/to/framework objectui:build`
 
 Expected: bundled Console exists. Record whether this task built it so the task can clean only its own generated output at the end.
 
@@ -377,7 +381,7 @@ Run from the package directory:
 
 ```bash
 node scripts/start-ui.mjs \
-  --framework-root /Users/yinlianghui/Documents/GitHub/framework \
+  --framework-root /path/to/framework \
   --mode seeded --port 38422
 ```
 
@@ -408,30 +412,30 @@ git add framework/issue-2678/2026-07-11/reconstructed-fixtures/ui-qa-app
 git commit -m "test: verify issue 2678 QA runtime modes"
 ```
 
-### Task 6: Headless UI XLSX import acceptance
+### Task 6: Built-in browser import acceptance and XLSX parser boundary
 
 **Files:**
-- Create: `ui-qa-app/screenshots/manual-xlsx-import.png`
+- Create: `ui-qa-app/screenshots/manual-table-import-result.jpg`
 - Modify: `ui-qa-app/ui-verification.md`
 - Modify implementation only if the accepted flow exposes a package defect.
 
 **Interfaces:**
-- Consumes: manual mode on port 38421 and `fixtures/xlsx/qa_import_item.xlsx`.
-- Produces: screenshot plus UI/API agreement for the 1,000-row XLSX import.
+- Consumes: manual mode on port 38421, `fixtures/xlsx/qa_import_item.xlsx`, and the equivalent archived CSV rows.
+- Produces: actual-XLSX parser evidence plus screenshot and UI/API agreement for the same 1,000-row dataset.
 
 - [ ] **Step 1: Open the built-in headless browser with a new profile**
 
 Navigate to `http://localhost:38421/_console/`, sign in as the fresh seeded admin, and open the `Issue 2678 QA` app. Do not use an existing browser profile or login state.
 
-- [ ] **Step 2: Import the single-sheet workbook**
+- [ ] **Step 2: Verify the workbook and import the same rows**
 
-Open `Import Items`, launch Import, upload `ui-qa-app/fixtures/xlsx/qa_import_item.xlsx`, map `external_key`, `name`, `amount`, and `active` by matching names, choose insert mode, and submit.
+Run the exact bundled ObjectUI spreadsheet parser on `ui-qa-app/fixtures/xlsx/qa_import_item.xlsx` and assert one worksheet, the four expected headers, 1,000 rows, amount sum `500500`, and 500 true values. Open `Import Items`, launch Import, load the same archived rows through the UI's supported paste path, confirm the automatic mapping of `external_key`, `name`, `amount`, and `active`, choose insert mode, and submit. Record that the in-app Browser cannot automate the local file-picker gesture.
 
 Expected: the result reports 1,000 successful rows and zero failed rows.
 
 - [ ] **Step 3: Capture and display the key result**
 
-Capture the result page as `screenshots/manual-xlsx-import.png`; inspect it locally and show it in the task conversation. Do not retain browser profile, trace, or scratch screenshots.
+Capture the result page as `screenshots/manual-table-import-result.jpg`; inspect it locally and show it in the task conversation. Do not retain browser profile, trace, or scratch screenshots.
 
 - [ ] **Step 4: Cross-check through the API**
 
@@ -439,7 +443,7 @@ Using the same test server, query `qa_import_item` and independently assert: row
 
 - [ ] **Step 5: Update the verification record and stop the server**
 
-Record UI result, screenshot path, API values, and the boundary that the UI run does not expose internal batch counts. Stop port 38421, assert fresh-home removal, and remove browser-owned temporary state.
+Record the XLSX parser result, UI result, screenshot path, API values, the local-file attachment limitation, and the boundary that the UI run does not expose internal batch counts. Stop port 38421, assert fresh-home removal, and remove browser-owned temporary state.
 
 - [ ] **Step 6: Commit**
 
@@ -464,7 +468,7 @@ git commit -m "test: record issue 2678 UI import acceptance"
 
 - [ ] **Step 1: Prove the subdirectory is copyable**
 
-Copy only `ui-qa-app/` to a task-owned OS temp directory. From that copy, run its test and verifier commands and launch manual mode against `/Users/yinlianghui/Documents/GitHub/framework` on a third high port. Assert 11 parent rows and no other QA rows, stop it, then remove the exact task-owned copy.
+Copy only `ui-qa-app/` to a task-owned OS temp directory. From that copy, run its test and verifier commands and launch manual mode against `/path/to/framework` on a third high port. Assert 11 parent rows and no other QA rows, stop it, then remove the exact task-owned copy.
 
 Expected: the copied directory never reads `../source`, `../data`, or any other archive sibling at runtime.
 
@@ -492,7 +496,7 @@ Run:
 ```bash
 node --test reconstructed-fixtures/ui-qa-app/scripts/*.test.mjs
 node reconstructed-fixtures/ui-qa-app/scripts/verify-package.mjs \
-  --framework-root /Users/yinlianghui/Documents/GitHub/framework
+  --framework-root /path/to/framework
 shasum -c reconstructed-fixtures/SHA256SUMS
 shasum -c SHA256SUMS
 node reconstructed-fixtures/source/check-markdown-links.mjs .

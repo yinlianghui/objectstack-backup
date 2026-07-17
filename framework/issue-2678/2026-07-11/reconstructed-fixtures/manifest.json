@@ -54,6 +54,47 @@
     ],
     "verification": "ui-qa-app/ui-verification.md",
     "screenshot": "ui-qa-app/screenshots/manual-table-import-result.jpg",
+    "manualInputs": [
+      "ui-qa-app/fixtures/csv/qa_import_item.csv",
+      "ui-qa-app/fixtures/csv/qa_summary_child_single_parent.csv",
+      "ui-qa-app/fixtures/csv/qa_summary_child_ten_parents.csv"
+    ],
+    "manualVerification": {
+      "verifiedAt": "2026-07-17T17:14:18+08:00",
+      "database": {
+        "path": "ui-qa-app/database/manual-ui-result.sqlite",
+        "scope": "QA-only export; all sys/auth/session tables excluded",
+        "sha256": "adbd645f32d7845b04d6418b4b2aaa6aabd6d5a0276eb780671351dcf93075b1",
+        "integrityCheck": "ok"
+      },
+      "summaryScreenshot": {
+        "path": "ui-qa-app/screenshots/manual-summary-parent-result.png",
+        "sha256": "3d21d9044dcd265cc567ca8cdb5888b4c4a809ac1e884d5063f5809bcc2a8a05"
+      },
+      "rowCounts": {
+        "qa_import_item": 1000,
+        "qa_seed_item": 0,
+        "qa_summary_child": 2000,
+        "qa_summary_parent": 11
+      },
+      "amountSums": {
+        "qa_import_item": 500500,
+        "qa_summary_child": 1001000,
+        "parent_single": 500500,
+        "parent_01_through_parent_10": [
+          49600,
+          49700,
+          49800,
+          49900,
+          50000,
+          50100,
+          50200,
+          50300,
+          50400,
+          50500
+        ]
+      }
+    },
     "buildEnvironment": {
       "frameworkSha": "afa81155fb79846978c3ba6d94876edd21658f1d",
       "frameworkCli": "@objectstack/cli/13.0.0",

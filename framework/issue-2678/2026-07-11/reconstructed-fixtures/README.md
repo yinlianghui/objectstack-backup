@@ -30,6 +30,8 @@ The call wrappers only recorded arguments and delegated to the original product 
 - [Runtime and parameters](environment/runtime.json)
 - [Copyable UI QA package](ui-qa-app/README.md)
 - [UI runtime verification](ui-qa-app/ui-verification.md)
+- [Manual UI QA-only SQLite snapshot](ui-qa-app/database/manual-ui-result.sqlite)
+- [Manual summary result screenshot](ui-qa-app/screenshots/manual-summary-parent-result.png)
 - [Archive manifest](manifest.json)
 - [SHA-256 manifest](SHA256SUMS)
 
@@ -41,6 +43,8 @@ The call wrappers only recorded arguments and delegated to the original product 
 - `seeded` initializes all reconstructed rows for immediate final-value inspection.
 
 See the [package instructions](ui-qa-app/README.md) for commands and field mapping. The [runtime record](ui-qa-app/ui-verification.md) separates what was verified in the UI from the file-picker automation boundary. Internal batch-call counts, summary recomputation counts, and performance remain supported only by the backend harness and comparison report above.
+
+On 2026-07-17, a complete human file-picker run imported the byte-preserved [`qa_import_item.csv`](ui-qa-app/fixtures/csv/qa_import_item.csv), [`qa_summary_child_single_parent.csv`](ui-qa-app/fixtures/csv/qa_summary_child_single_parent.csv), and [`qa_summary_child_ten_parents.csv`](ui-qa-app/fixtures/csv/qa_summary_child_ten_parents.csv) in one fresh manual environment. All three imports reported 1,000 creates and 0 failures. The retained [QA-only SQLite snapshot](ui-qa-app/database/manual-ui-result.sqlite) contains 1,000 import rows, 2,000 summary children, and 11 parents with `parent_single=500500` and `parent_01` through `parent_10=49600` through `50500`; `integrity_check` returned `ok`. System authentication/session tables were intentionally excluded. The [Summary Parents screenshot](ui-qa-app/screenshots/manual-summary-parent-result.png) records the corresponding UI state.
 
 ## Same-source data artifacts
 

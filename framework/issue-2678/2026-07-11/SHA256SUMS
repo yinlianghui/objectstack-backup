@@ -123,8 +123,8 @@ f297b53640e4c00fa890a1d337039e679e519407811dd6fde39fc106fa98333e  framework/issu
 99f846ec48f4d3e5c5004369c81712255cb23b775918ae9a2e705bf11e59dbe2  framework/issue-2678/2026-07-11/reconstructed-fixtures/data/workbook-inspection.json
 5ae1a6443bfeafea1197254860eb49d67e893049e7a70df010ee619e4ea1af25  framework/issue-2678/2026-07-11/reconstructed-fixtures/data/workbook-render-manifest.json
 f4b27e6c889b0936711bc0aa8c1d0e129f51f3138eb53c8fc08b67f948b0e52c  framework/issue-2678/2026-07-11/reconstructed-fixtures/database/problem-one.sqlite
-065c256f5d521379d1caff9c3854d6d89f93a534c65a12ef973bce651674d98a  framework/issue-2678/2026-07-11/reconstructed-fixtures/docs/2026-07-17-ui-qa-package-design.md
-db51e88dfdf9b21106d0178f218ae214604ad3d9b95dbca21ce39bfa114d4655  framework/issue-2678/2026-07-11/reconstructed-fixtures/docs/2026-07-17-ui-qa-package-implementation-plan.md
+36f0c7f4f6e21b355d8f3ebbb9805af8759a9a084168c49acb07362b9c514dae  framework/issue-2678/2026-07-11/reconstructed-fixtures/docs/2026-07-17-ui-qa-package-design.md
+1a4e59cf07782048e78e2b3cf9feb6a5345e2337975e2c8721a2e29d9911eaf6  framework/issue-2678/2026-07-11/reconstructed-fixtures/docs/2026-07-17-ui-qa-package-implementation-plan.md
 0bab814cc3b6fa81c59ae41a299d0615d74a9c01f105da3393f9145785d6004c  framework/issue-2678/2026-07-11/reconstructed-fixtures/environment/runtime.json
 caec4214a9d5e7cbd5ea47888091e4f5ad6d4bb22acc5ae8a6fd87b05872086e  framework/issue-2678/2026-07-11/reconstructed-fixtures/manifest.json
 bf2b1c971dce3df4e632343cc5a9f53523b67d5c9d5cb9a5676a41044cd2d551  framework/issue-2678/2026-07-11/reconstructed-fixtures/plan.md
@@ -139,7 +139,7 @@ dacefc9230d4bd1483f9dcf2c699b561bc076ece7fa7cdf490fcdc49edbfc181  framework/issu
 5afb11f0d2fbea8d0aa67d46654a5ac7a91f05673694e524bac7e6e7fb461e3a  framework/issue-2678/2026-07-11/reconstructed-fixtures/results/comparison-report.md
 e71789678633f88f30b9c26dd285776a2ff18ffc935694c25a49897bf48db841  framework/issue-2678/2026-07-11/reconstructed-fixtures/results/comparison.json
 3d25d6195645962b01d818810a556bcbf357c7662eeda91ecdf2c60552654520  framework/issue-2678/2026-07-11/reconstructed-fixtures/results/raw-results.json
-f8f0cb195ac9e0857e95a529450ba0aee29a56ece0e1a3d8615aec952676db21  framework/issue-2678/2026-07-11/reconstructed-fixtures/SHA256SUMS
+bbec9413f3879a44cc0c0f7fda024e4bcc936cc9776f463d6da16e6dbdb1b27f  framework/issue-2678/2026-07-11/reconstructed-fixtures/SHA256SUMS
 11018b67a636adc841d9a3a1a5b0c1624e156961eb02e5e3bac8388135f687c8  framework/issue-2678/2026-07-11/reconstructed-fixtures/source/build-sha256-manifest.mjs
 4e2e5bf1dc4481fb972c3185a749bfb9be7256d9498488a49c7cc4f38bd9b77f  framework/issue-2678/2026-07-11/reconstructed-fixtures/source/check-markdown-links.mjs
 9e7b5c4158b41fca64289fbeb459a8fdb4e537a3f2d8c612f32702a047a299df  framework/issue-2678/2026-07-11/reconstructed-fixtures/source/compare-results.mjs

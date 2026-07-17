@@ -209,7 +209,7 @@ export const qaApp = {
 } as const;
 ```
 
-Both configs call `defineStack()` with manifest id `com.objectstack.qa.issue2678`, namespace `qa`, version `1.0.0`, type `app`, `requires: ['ui']`, the generated objects, and `[qaApp]`. The manual config uses `parentSeed`; the seeded config uses `fullSeed`.
+Both configs call `defineStack()` with manifest id `com.objectstack.qa.issue2678`, namespace `qa`, version `1.0.0`, type `app`, `requires: ['ui', 'auth']`, the generated objects, and `[qaApp]`. The manual config uses `parentSeed`; the seeded config uses `fullSeed`.
 
 - [ ] **Step 5: Stage and compile without writing into Framework**
 

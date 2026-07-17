@@ -43,7 +43,7 @@ ui-qa-app/
 └── expected-results.json
 ```
 
-`src/objects.generated.ts` is generated from the existing `source/object-definitions.ts`; the four QA object contracts are not independently retyped, and package verification rejects drift. The build also copies the generated fixtures and expected results into `ui-qa-app/`. After that build, launching a copied `ui-qa-app/` directory uses only its own source, `dist/`, scripts, fixtures, and expected results; it does not need access to the surrounding archive. The app metadata contributes navigation entries for `qa_import_item`, `qa_summary_parent`, and `qa_summary_child` so the user can open the relevant lists and import wizard directly.
+`src/objects.generated.ts` is generated from the existing `source/object-definitions.ts`; the four QA object contracts are not independently retyped, and package verification rejects drift. The build also copies the generated fixtures and expected results into `ui-qa-app/`. After that build, launching a copied `ui-qa-app/` directory uses only its own source, `dist/`, scripts, fixtures, and expected results; it does not need access to the surrounding archive. The stack declares both `ui` and `auth` capabilities so `--fresh` can seed a loginable admin and expose the Console. The app metadata contributes navigation entries for `qa_import_item`, `qa_summary_parent`, and `qa_summary_child` so the user can open the relevant lists and import wizard directly.
 
 Two artifacts serve different purposes:
 

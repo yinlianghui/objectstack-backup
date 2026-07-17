@@ -1,0 +1,150 @@
+  private async recomputeSummaries(
+    childObject: string,
+    records: any,
+    previous: any,
+    execCtx?: ExecutionContext,
+  ): Promise<void> {
+    const descriptors = this.getSummaryDescriptors(childObject);
+    if (descriptors.length === 0) return;
+    const recs = Array.isArray(records) ? records : records ? [records] : [];
+    const prevs = Array.isArray(previous) ? previous : previous ? [previous] : [];
+    for (const desc of descriptors) {
+      const ids = new Set<string>();
+      for (const r of recs) { const v = r?.[desc.fkField]; if (v != null && v !== '') ids.add(String(v)); }
+      for (const p of prevs) { const v = p?.[desc.fkField]; if (v != null && v !== '') ids.add(String(v)); }
+      for (const parentId of ids) {
+        try {
+          const rows = await this.aggregate(childObject, {
+            where: { [desc.fkField]: parentId },
+            aggregations: [{
+              function: desc.fn,
+              ...(desc.fn === 'count' ? {} : { field: desc.sourceField }),
+              alias: 'value',
+            }],
+            context: execCtx,
+          } as any);
+          let value = rows?.[0]?.value;
+          if (value == null) value = (desc.fn === 'count' || desc.fn === 'sum') ? 0 : null;
+          await this.update(desc.parentObject, { id: parentId, [desc.summaryField]: value }, { context: execCtx } as any);
+        } catch (err) {
+          this.logger.warn('Roll-up summary recompute failed', {
+            childObject, parentObject: desc.parentObject, parentId, field: desc.summaryField,
+            error: (err as any)?.message,
+          });
+        }
+      }
+    }
+  }
+
+  /**
+   * Post-process expand: resolve lookup/master_detail fields by batch-loading related records.
+   * 
+   * This is a driver-agnostic implementation that uses secondary queries ($in batches)
+   * to load related records, then injects them into the result set.
+   * 
+   * @param objectName - The source object name
+   * @param records - The records returned by the driver
+   * @param expand - The expand map from QueryAST (field name → nested QueryAST)
+      data,
+      options,
+      context: options?.context,
+    };
+
+    await this.executeWithMiddleware(opCtx, async () => {
+      // Resolve field `defaultValue`s (including the `current_user` token)
+      // BEFORE the beforeInsert hook runs, so a hook that DERIVES one field
+      // from another can read the defaulted value instead of a stale `null`
+      // (#2703). The hook still has final say — it runs after and may override
+      // any defaulted field. `applyFieldDefaults` returns a fresh copy and only
+      // fills fields left `undefined`, so client-supplied values are untouched.
+      const nowSnap = new Date();
+      const defaultedData = Array.isArray(opCtx.data)
+        ? (opCtx.data as any[]).map((row) =>
+            this.applyFieldDefaults(object, row as Record<string, unknown>, opCtx.context, nowSnap),
+          )
+        : this.applyFieldDefaults(object, opCtx.data as Record<string, unknown>, opCtx.context, nowSnap);
+
+      const hookContext: HookContext = {
+          object,
+          event: 'beforeInsert',
+          input: { data: defaultedData, options: opCtx.options },
+          session: this.buildSession(opCtx.context),
+          api: this.buildHookApi(opCtx.context),
+          transaction: opCtx.context?.transaction,
+          ql: this
+      };
+      await this.triggerHooks('beforeInsert', hookContext);
+      // Thread the open transaction (if any) into the driver-facing
+      // options so that knex's `.transacting(trx)` is honoured. Without
+      // this, calls inside a `engine.transaction(...)` block would deadlock
+      // on SQLite's single-connection pool. Also propagates tenantId so
+      // the driver can enforce per-tenant isolation.
+      hookContext.input.options = this.buildDriverOptions(opCtx.context, hookContext.input.options as any);
+
+      try {
+        let result;
+        const schemaForValidation = this._registry.getObject(object);
+        // When the driver generates autonumbers natively (persistent SQL
+        // sequence), the engine defers to it — see #1603.
+        const driverOwnsAutonumber = (driver as any)?.supports?.autonumber === true;
+        if (Array.isArray(hookContext.input.data)) {
+          // Defaults are already resolved above (pre-hook, #2703); the hook may
+          // have overridden or added fields — take its data as-is.
+          const rows = hookContext.input.data as Array<Record<string, unknown>>;
+          for (const r of rows) {
+            await this.applyAutonumbers(object, r as Record<string, unknown>, opCtx.context, driverOwnsAutonumber);
+          }
+          for (const r of rows) {
+            await this.encryptSecretFields(object, r, opCtx.context, hookContext.input.options);
+          }
+          for (const r of rows) {
+            normalizeMultiValueFields(schemaForValidation, r);
+            validateRecord(schemaForValidation, r, 'insert');
+            evaluateValidationRules(schemaForValidation as any, r, 'insert', { logger: this.logger, currentUser: this.buildEvalUser(opCtx.context) });
+          }
+          if (driver.bulkCreate) {
+               result = await driver.bulkCreate(object, rows, hookContext.input.options as any);
+          } else {
+               // Fallback loop
+               result = await Promise.all(rows.map((item) => driver.create(object, item, hookContext.input.options as any)));
+          }
+        } else {
+          // Defaults already resolved pre-hook (#2703); use the hook's data.
+          const row = hookContext.input.data as Record<string, unknown>;
+          await this.applyAutonumbers(object, row, opCtx.context, driverOwnsAutonumber);
+          await this.encryptSecretFields(object, row, opCtx.context, hookContext.input.options);
+          normalizeMultiValueFields(schemaForValidation, row);
+          validateRecord(schemaForValidation, row, 'insert');
+          evaluateValidationRules(schemaForValidation as any, row, 'insert', { logger: this.logger, currentUser: this.buildEvalUser(opCtx.context) });
+          result = await driver.create(object, row, hookContext.input.options as any);
+        }
+
+        hookContext.event = 'afterInsert';
+        // Coerce `boolean` fields (SQLite/libsql return 0/1) to real booleans on
+        // the after-hook view so flow trigger conditions (`record.is_escalated
+        // != true`) and `{record.<bool>}` interpolation see JS booleans, not
+        // ints. A shallow copy — the value returned to the caller is untouched.
+        hookContext.result = Array.isArray(result)
+          ? result.map((r) => coerceBooleanFields(schemaForValidation as any, r as any))
+          : coerceBooleanFields(schemaForValidation as any, result as any);
+        await this.triggerHooks('afterInsert', hookContext);
+
+        // Roll-up: recompute parent summary fields that aggregate this object.
+        await this.recomputeSummaries(object, result, null, opCtx.context);
+
+        // Publish data.record.created event to realtime service
+        if (this.realtimeService) {
+          try {
+            if (Array.isArray(result)) {
+              // Bulk insert - publish event for each record
+              for (const record of result) {
+                const event: RealtimeEventPayload = {
+                  type: 'data.record.created',
+                  object,
+                  payload: {
+                    recordId: record.id,
+                    after: record,
+                  },
+                  timestamp: new Date().toISOString(),
+                };
+                await this.realtimeService.publish(event);

@@ -1,0 +1,6 @@
+external_key,name,amount,active
+HOOK-BEFORE-01,good_before_01,1,true
+HOOK-BEFORE-02,good_before_02,2,false
+HOOK-BEFORE-03,reject_me,3,true
+HOOK-BEFORE-04,good_before_04,4,false
+HOOK-BEFORE-05,good_before_05,5,true

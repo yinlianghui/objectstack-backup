@@ -1,0 +1,6 @@
+external_key,name,amount,active
+HOOK-AFTER-01,good_after_01,1,true
+HOOK-AFTER-02,good_after_02,2,false
+HOOK-AFTER-03,reject_after,3,true
+HOOK-AFTER-04,good_after_04,4,false
+HOOK-AFTER-05,good_after_05,5,true

@@ -1,11 +1,11 @@
 37d05cb609d5ebe20e2c4555b9e4f7d88f0f506faff7a3ff27637ea07debed0f  framework/issue-2678/2026-07-11/audit-cancellation.md
 afbaf5e7e444972cbd53a2a11b3ae47741ad04dad9e07f1bf9e3384693f035ac  framework/issue-2678/2026-07-11/audit-core.md
 40bcacd4f47c1b4649b755d31a4010e33ff6e16e6d5e3a801c50ebefafda093b  framework/issue-2678/2026-07-11/audit-peripheral.md
-30ab7c3f682836edef8db798c4eb465f0c8d3cab0dbd02af560ab81fdb1b8204  framework/issue-2678/2026-07-11/final-qa-report.md
+3fc9158aa2b65d156667fac9ed050b82b04fc028a801745f21df56c7071e6012  framework/issue-2678/2026-07-11/final-qa-report.md
 30753c80cde9cc450905b4308f332d397c8175ffb21d647742496a7058e7f496  framework/issue-2678/2026-07-11/issue-repro-audit-plan.md
 43dccdce3b5f991ff4ca5088f7ffb4f7864488a4c6e73e7d448171fbbd6dcfed  framework/issue-2678/2026-07-11/issue-repro-audit-report.md
 2fd01045ecf7023b95655799099f1ebc0a11805c92a416b6f0f18e2577e45afb  framework/issue-2678/2026-07-11/qa-report.md
-a927ee8faf6c236b30a1f2cdf616b574fa60024a83456380eaaf84fcb1c4862d  framework/issue-2678/2026-07-11/README.md
+392c83a7aeea4a4b0bbe251ab1e65d2e55d33d7b4b6ddb188ab474e3275220c5  framework/issue-2678/2026-07-11/README.md
 5fe202aa2f779f53c05fb3e64a261083667706450d55b88ab0555a5fb4560492  framework/issue-2678/2026-07-11/reconstructed-fixtures/command-ledger.md
 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  framework/issue-2678/2026-07-11/reconstructed-fixtures/commands/001-disk-before.stderr.log
 7fe137d31e9d7877a0754d8181b75e4772112c86019362649efe7cf1ce7289ae  framework/issue-2678/2026-07-11/reconstructed-fixtures/commands/001-disk-before.stdout.log

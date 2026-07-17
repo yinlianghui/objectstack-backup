@@ -1,0 +1,45 @@
+Scope: all 76 workspace projects
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +1364
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 1364, reused 294, downloaded 0, added 0
+Progress: resolved 1364, reused 827, downloaded 0, added 0
+Progress: resolved 1364, reused 1364, downloaded 0, added 21
+Progress: resolved 1364, reused 1364, downloaded 0, added 182
+Progress: resolved 1364, reused 1364, downloaded 0, added 254
+Progress: resolved 1364, reused 1364, downloaded 0, added 399
+Progress: resolved 1364, reused 1364, downloaded 0, added 519
+Progress: resolved 1364, reused 1364, downloaded 0, added 677
+Progress: resolved 1364, reused 1364, downloaded 0, added 771
+Progress: resolved 1364, reused 1364, downloaded 0, added 825
+Progress: resolved 1364, reused 1364, downloaded 0, added 877
+Progress: resolved 1364, reused 1364, downloaded 0, added 905
+Progress: resolved 1364, reused 1364, downloaded 0, added 932
+Progress: resolved 1364, reused 1364, downloaded 0, added 982
+Progress: resolved 1364, reused 1364, downloaded 0, added 1074
+Progress: resolved 1364, reused 1364, downloaded 0, added 1156
+Progress: resolved 1364, reused 1364, downloaded 0, added 1274
+Progress: resolved 1364, reused 1364, downloaded 0, added 1364, done
+
+devDependencies:
++ @changesets/cli 2.31.0
++ @types/node 26.1.0
++ @typescript-eslint/parser 8.62.1
++ eslint 10.6.0
++ tsup 8.5.1
++ tsx 4.23.0
++ turbo 2.10.3
++ typescript 6.0.3
+
+apps/docs postinstall$ fumadocs-mdx
+apps/docs postinstall: [MDX] generated files in 23.85020899999995ms
+apps/docs postinstall: Done
+╭ Warning ─────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│   Ignored build scripts: sqlite3@5.1.7.                                      │
+│   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+│   to run scripts.                                                            │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+Done in 22.8s using pnpm v10.31.0

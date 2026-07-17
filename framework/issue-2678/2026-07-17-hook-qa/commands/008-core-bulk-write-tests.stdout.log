@@ -1,0 +1,9 @@
+
+ RUN  v4.1.10 /Users/yinlianghui/Documents/GitHub/framework-issue-2678-hook-qa-runtime/packages/core
+
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  22:15:03
+   Duration  229ms (transform 40ms, setup 0ms, import 55ms, tests 13ms, environment 0ms)
+

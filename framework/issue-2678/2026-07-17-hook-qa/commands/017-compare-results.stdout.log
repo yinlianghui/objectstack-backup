@@ -1,0 +1,7 @@
+{
+  "status": "fail",
+  "checks": 83,
+  "failed": 38,
+  "output": "comparison-report.json",
+  "markdown": "comparison-report.md"
+}
